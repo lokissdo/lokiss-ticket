@@ -32,6 +32,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    const UPDATED_AT = null;
     protected $hidden = [
         'password',
         'remember_token',
