@@ -6,14 +6,12 @@ var defaultAddress={
     "town":`<option data-code="null" value="null">Chọn phường / xã </option>`
 }
 window.onload=()=>{
-    fetch("https://provinces.open-api.vn/api/?depth=3")
+    fetch("/api/addresses")
     .then(response => response.json())
-    .then(res =>{
-       // console.log(res);
-        data=res
+    .then(data =>{
         var html=province.innerHTML;
         for (let i=0;i<data.length;i++){
-            html+=` <option data-code="${data[i].code}" value="${i}"> ${data[i].name} </option>`
+            html+=` <option data-code="${data[i].code}" value="${data[i].code}"> ${data[i].name} </option>`
         }
         province.innerHTML=html;
 
@@ -21,9 +19,9 @@ window.onload=()=>{
         province.onchange=()=>{
             if(province.value!="null"){
              let html=defaultAddress.district;       
-             let temp=data[province.value].districts;
+            const temp = data.find(element => element.code===province.value).districts;
              for (let i=0;i<temp.length;i++){
-                 html+=` <option data-code="${data[i].code}" value="${i}"> ${temp[i].name} </option>`
+                 html+=` <option data-code="${data[i].code}" value="${data[i].code}"> ${temp[i].name} </option>`
              }
              district.innerHTML=html;
             }
