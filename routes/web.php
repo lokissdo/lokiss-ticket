@@ -19,7 +19,7 @@ use Laravel\Socialite\Facades\Socialite;
 // })->name('welcome');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
-//Route::post('/register', [AuthController::class, 'registering'])->name('registering');
+Route::post('/register', [AuthController::class, 'registering'])->name('registering');
 Route::get('/auth/redirect/{provider}', function ($provider) {
     return Socialite::driver($provider)->redirect();
 })->name('social.redirect');
