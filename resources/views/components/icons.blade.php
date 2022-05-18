@@ -7,7 +7,7 @@
         </svg>
     </button>
 </a>
-<a href="{{ route('social.redirect', 'google') }}" class="text-decoration-none">
+<a href="{{ route('social.redirect', 'twitter') }}" class="text-decoration-none">
     <button type="button" class="btn btn-link btn-floating mx-1">
         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#d00d13" class="bi bi-google"
             viewBox="0 0 16 16">
