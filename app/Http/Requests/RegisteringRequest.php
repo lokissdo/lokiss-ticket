@@ -46,14 +46,14 @@ class RegisteringRequest extends FormRequest
                 'bail',
                 'required',
                 'string',
-                'min:0',
+                'min:6',
                 'max:25',
             ],
             'name' => [
                 'bail',
                 'required',
                 'string',
-                'min:0',
+                'min:1',
                 'max:255',
             ],
             'address' => [
@@ -94,6 +94,8 @@ class RegisteringRequest extends FormRequest
             'required' => ':attribute bắt buộc phải điền',
             'unique'   => ':attribute đã được đăng ký',
             'exists'    => ':attribute không hợp lệ',
+            'min'    => ':attribute phải có ít nhất :min ký tự',
+            'max'=>':attribute phải có nhiều nhất :max ký tự',
         ];
     }
 
