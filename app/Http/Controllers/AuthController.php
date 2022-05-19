@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRoleEnum;
 use App\Events\UserRegisteredEvent;
+use App\Http\Requests\AuthenticatingRequest;
 use App\Http\Requests\RegisteringRequest;
 use App\Mail\NotifyMail;
 use App\Models\User;
@@ -11,19 +12,24 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 use App\Jobs\SendEmailJob as Job;
-const DEFAULT_ROLE=0;
+use Illuminate\Support\Facades\View;
+const DEFAULT_ROLE=1;
 class AuthController extends Controller
 {
     public function login()
     {
+        if(session()->has('user')){
+            return redirect()->route(session('user')['role'].'.index');
+        }
+        View::share('title', 'Đăng nhập');
         return view('auth/login');
     }
 
     public function register()
     {
+        View::share('title', 'Đăng ký');
         return view('auth/register');
     }
     public function registering(RegisteringRequest $request)
@@ -45,7 +51,11 @@ class AuthController extends Controller
         $user = User::query()
             ->where('email', $data->getEmail())
             ->first();
-        if (is_null($user)) $user = new User();
+        $toDispatch=0;
+        if (is_null($user)) {
+            $user = new User();
+            $toDispatch=1;
+        }
         $user->email = $data->getEmail();
         $user->name   = $data->getName();
         $user->avatar = $data->getAvatar();
@@ -55,10 +65,30 @@ class AuthController extends Controller
         ]);
         $roleIndex=is_null($user->role)?DEFAULT_ROLE:$user->role;
         $role = strtolower(UserRoleEnum::getKeys($roleIndex)[0]);
-        // Auth::attempt([
-        //     'email' => $user->email,
-        //     'password' => $user->password
-        // ]);
+        session(['user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'role' => $role
+        ]]);
+       if($toDispatch) dispatch(new Job($user));
         return redirect()->route("$role.index");
+    }
+    public function authenticate(AuthenticatingRequest $request){
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $roleName = strtolower(UserRoleEnum::getKeys($user->role)[0]);
+            session(['user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'role' => $roleName
+            ]]);
+            return redirect()->route("$roleName.index");
+        }
+        return redirect()->route("login")->withErrors(['email' => 'Email or password is incorrect.']);
     }
 }
