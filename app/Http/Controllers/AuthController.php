@@ -31,8 +31,11 @@ class AuthController extends Controller
         $toInsert=$request->validated();
         $toInsert['password']= bcrypt($toInsert['password']);
         $user = User::create($toInsert);
-        Job::dispatch(new Job($user));
-        return view('auth/login');
+        dispatch(new Job($user));
+        //$email = new NotifyMail($user);
+       // Mail::to($user->email)->send($email);
+        $request->session()->flash('message', 'Successfully registered.');
+        return redirect()->route("login");
     }
     public function callback($provider)
     {

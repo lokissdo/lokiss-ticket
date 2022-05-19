@@ -9,14 +9,19 @@
                 <div class="col-md-6 w-100 mb-2">
                     <div class="form-outline">
                         <label class="form-label" for="form3Example2">Your name</label>
-                        <input type="text" name="name" id="form3Example2" class="form-control" value="{{old('name')}}" />
-                       
+                        <input type="text" name="name" id="form3Example2" class="form-control" value="{{old('name')}}" />           
                     </div>
                 </div>
             </div>
 
             {{-- address --}}
+            @if (!is_null(old('address')))
+            <script> const preAddressCode = {{old('address')}};</script>  
+            @endif
 
+            @if (!is_null(old('address2')))
+            <script> const preAddress2Code = {{old('address2')}};</script>  
+            @endif
           <div class="row">
             <div class="col-md-6 mb-2">
               <label  for="select_pro"> Tỉnh / thành </label>

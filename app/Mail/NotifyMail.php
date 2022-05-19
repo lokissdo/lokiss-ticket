@@ -29,7 +29,7 @@ class NotifyMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Welcome to TicketWeb')
+        return $this->subject('Welcome to Ticket Coach Web')
                     ->view('mails.registerednotification',['user'=>$this->user]);
     }
 }

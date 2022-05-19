@@ -70,7 +70,12 @@
 
                    <div class="card bg-glass">
                        <div class="card-body px-4 py-5 px-md-5">
-                           @if ($errors->any())
+                         @if(isset($error)) 
+                            <div class="alert alert-danger">
+                                 <ul><li>{{ $error }}</li></ul>
+                             </div>
+                         @endif
+                         @if ($errors->any())
                                <div class="alert alert-danger">
                                    <ul>
                                        @foreach ($errors->all() as $error)

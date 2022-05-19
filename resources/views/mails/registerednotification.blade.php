@@ -4,11 +4,11 @@
     <title>Ticket Coach Website</title>
 </head>
 <body>
-    <h1>Hello {{$user->name}}</h1>
-    <h2>We are pleased to welcome you to my Ticket Coach Website</h2>
-    <h2>Enjoy your time with the most reasonable ticket for your trip at 
-        <a href="{{route('auth.login')}}">Ticket Coach Website</a>
-    </h2>   
+    <div>Hello <strong>{{$user->name}}</strong> </div>
+    <div>We are pleased to welcome you to my Ticket Coach Website</div>
+    <div>Enjoy your time with the most reasonable ticket for your trip at 
+        <a href="{{route('login')}}">Ticket Coach Website</a>
+    </div>   
     <p>Thank you so much !</p>
 </body>
 </html> 
