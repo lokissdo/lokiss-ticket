@@ -1,4 +1,6 @@
    <link href="/css/app.css" rel="stylesheet">
+   <link rel="shortcut icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
+   <title>{{$title?$title:'Home'}}|{{config('app.name')}}</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    @stack('css')
    <section class="background-radial-gradient overflow-hidden">
@@ -70,7 +72,12 @@
 
                    <div class="card bg-glass">
                        <div class="card-body px-4 py-5 px-md-5">
-                           @if ($errors->any())
+                         @if(isset($error)) 
+                            <div class="alert alert-danger">
+                                 <ul><li>{{ $error }}</li></ul>
+                             </div>
+                         @endif
+                         @if ($errors->any())
                                <div class="alert alert-danger">
                                    <ul>
                                        @foreach ($errors->all() as $error)
