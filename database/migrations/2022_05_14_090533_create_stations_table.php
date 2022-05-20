@@ -16,7 +16,9 @@ class CreateStationsTable extends Migration
         Schema::create('stations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamps();
+            $table->string('address');
+            $table->string('adddress2');
+            $table->integer('order');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionsTable extends Migration
+class CreateSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->timestamp('arrival_time');
+            $table->foreignId('arrival_name')->constrained('stations','id');
+            $table->timestamp('destination_time');
+            $table->foreignId('destination_name')->constrained('stations','id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+
         });
     }
 
@@ -27,6 +31,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('schedules');
     }
 }

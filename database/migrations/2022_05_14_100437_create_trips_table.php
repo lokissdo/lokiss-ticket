@@ -16,6 +16,10 @@ class CreateTripsTable extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('coach_id')->constrained();
+            $table->foreignId('schedule_id')->constrained();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->bigInteger('price');
+            $table->boolean('middle_station');
         });
     }
 

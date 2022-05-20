@@ -44,8 +44,8 @@ class AuthenticatingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'required' => ':attribute bắt buộc phải điền',
-            'string'=>':attribute phải là chuỗi',
+            'required' => ':attribute bắt buộc phải điền.',
+            'string'=>':attribute phải là chuỗi.',
         ];
     }
 
