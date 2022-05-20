@@ -19,6 +19,7 @@ class CreateServiceProvidersTable extends Migration
             $table->string('address');
             $table->string('phone_number');
             $table->float('rates',3,2);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

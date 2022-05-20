@@ -19,7 +19,7 @@ class Ratings extends Migration
             $table->tinyInteger('rate');
             $table->string('comment', 400);
             $table->primary(['trip_id', 'user_id']);
-
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
