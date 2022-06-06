@@ -17,9 +17,7 @@ class CreateTicketsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('trip_id')->constrained();
             $table->tinyInteger('seat_position');
-            $table->timestamp('arrival_time');
             $table->foreignId('arrival_name')->constrained('stations','id');
-            $table->timestamp('destination_time');
             $table->foreignId('destination_name')->constrained('stations','id');
             $table->primary(['trip_id','seat_position']);
         });
