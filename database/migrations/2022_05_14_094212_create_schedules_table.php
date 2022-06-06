@@ -16,11 +16,10 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->timestamp('arrival_time');
-            $table->foreignId('arrival_name')->constrained('stations','id');
+            $table->foreignId('arrival_province_id')->constrained('stations','id');
+            $table->foreignId('service_provider_id')->constrained();
             $table->timestamp('destination_time');
-            $table->foreignId('destination_name')->constrained('stations','id');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-
+            $table->foreignId('destination_province_id')->constrained('stations','id');
         });
     }
 

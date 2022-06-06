@@ -46,9 +46,7 @@ class AuthController extends Controller
     }
     public function callback($provider)
     {
-
         $data = Socialite::driver($provider)->user();
-
         $user = User::query()
             ->where('email', $data->getEmail())
             ->first();
@@ -73,7 +71,7 @@ class AuthController extends Controller
             'avatar' => $user->avatar,
             'role' => $role
         ]]);
-       if($toDispatch) dispatch(new Job($user));
+        if($toDispatch) dispatch(new Job($user));
         return redirect()->route("$role.index");
     }
     public function loggingIn(AuthenticatingRequest $request){
