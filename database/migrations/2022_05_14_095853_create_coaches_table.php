@@ -18,6 +18,7 @@ class CreateCoachesTable extends Migration
             $table->foreignId('service_provider_id')->constrained();
             $table->tinyInteger('seat_numbers');
             $table->tinyInteger('type');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

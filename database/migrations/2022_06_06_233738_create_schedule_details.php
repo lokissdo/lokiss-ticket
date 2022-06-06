@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Arrivals extends Migration
+class CreateScheduleDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class Arrivals extends Migration
      */
     public function up()
     {
-        Schema::create('arrivals', function (Blueprint $table) {
-            $table->foreignId('trip_id')->constrained();
+        Schema::create('schedule_details', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('schedule_id')->constrained();
             $table->foreignId('station_id')->constrained();
-            $table->timestamp('time');
-            $table->tinyInteger('order');
-            $table->primary(['trip_id', 'station_id']);
-        });
-    }   
-
+            $table->foreignId('next_station_id')->nullable()->constrained('stations','id');
+    });
+    }
     /**
      * Reverse the migrations.
      *
@@ -29,6 +27,6 @@ class Arrivals extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('arrivals');
+        Schema::dropIfExists('schedule_details');
     }
 }

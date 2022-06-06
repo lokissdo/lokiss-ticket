@@ -14,10 +14,12 @@ class CreateTicketsTable extends Migration
     public function up()
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->foreignId('trip_id')->constrained();
-            $table->bigInteger('price');
             $table->tinyInteger('seat_position');
+            $table->foreignId('arrival_name')->constrained('stations','id');
+            $table->foreignId('destination_name')->constrained('stations','id');
+            $table->primary(['trip_id','seat_position']);
         });
     }
 

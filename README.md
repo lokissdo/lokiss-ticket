@@ -4,7 +4,7 @@ Just a specialized website project in a course
 <br>
 <br>
 <br>
-Bảng trong cơ sở dữ liệu (dự tính): https://docs.google.com/spreadsheets/d/1qSmPgkLzO0pvQRSkxNZzpHBzsQbchTiI7CAen35-1Tk/edit#gid=0 
+Bảng trong cơ sở dữ liệu : https://docs.google.com/spreadsheets/d/1qSmPgkLzO0pvQRSkxNZzpHBzsQbchTiI7CAen35-1Tk/edit#gid=0 
 <br>
 Các tính năng: https://docs.google.com/spreadsheets/d/1G8XXdRL5UcUHRU9frpTXkwnjY4Wd6DChSPLZvfRQ7oc/edit#gid=0
 <br>

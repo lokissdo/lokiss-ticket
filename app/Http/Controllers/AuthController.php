@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use App\Jobs\SendEmailJob as Job;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 const DEFAULT_ROLE=1;
 class AuthController extends Controller
@@ -45,9 +46,7 @@ class AuthController extends Controller
     }
     public function callback($provider)
     {
-
         $data = Socialite::driver($provider)->user();
-
         $user = User::query()
             ->where('email', $data->getEmail())
             ->first();
@@ -72,10 +71,10 @@ class AuthController extends Controller
             'avatar' => $user->avatar,
             'role' => $role
         ]]);
-       if($toDispatch) dispatch(new Job($user));
+        if($toDispatch) dispatch(new Job($user));
         return redirect()->route("$role.index");
     }
-    public function authenticate(AuthenticatingRequest $request){
+    public function loggingIn(AuthenticatingRequest $request){
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -89,6 +88,6 @@ class AuthController extends Controller
             ]]);
             return redirect()->route("$roleName.index");
         }
-        return redirect()->route("login")->withErrors(['email' => 'Email or password is incorrect.']);
+        return Redirect::back()->withErrors(['Email or password is incorrect.',]);
     }
 }
