@@ -1,0 +1,14 @@
+:root{
+    --sidebar-heigth: 96vh;
+}
+
+.sidebar{
+    height:var(--sidebar-heigth);
+    width: 300px;
+    border-radius: 30px;
+   background-color: #212529;
+   margin-right: 3vw;
+}
+.height-100{
+    height:100%;
+}

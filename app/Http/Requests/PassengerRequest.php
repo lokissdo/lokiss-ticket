@@ -14,7 +14,7 @@ class PassengerRequest extends FormRequest
      */
     public function authorize($request): bool
     {
-        if ($request->session()->has('users') && $request->session()->get('users')->role == 'passenger') {
+        if ($request->session()->has('user') && $request->session()->get('user')->role == 'passenger') {
             return true;
         }
         return false;
