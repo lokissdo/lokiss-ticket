@@ -15,9 +15,9 @@
     @stack('css')
 </head>
 <body>
-    @include('layout.sidebar')
+    @yield('sidebar')
     @yield('content')
     @yield('footer')
-    @stack('css')
+    @stack('js')
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PassengerController;
+use App\Http\Middleware\isPassenger;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Loggedin;
 /*
@@ -15,7 +16,7 @@ use App\Http\Middleware\Loggedin;
 */
 Route::group([
     'as' => 'passenger.',
-    'middleware' => [Loggedin::class],
+    'middleware' => [Loggedin::class,isPassenger::class],
 ], function () {
     Route::get('/', [PassengerController::class, 'index'])->name('index');
     // Route::get('/{user}', [PassengerController::class, 'show'])->name('show');

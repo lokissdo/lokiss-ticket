@@ -29,14 +29,14 @@
         </li>
         <li>
           <a href="#" class="nav-link text-white">
-            <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-            Products
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+            Customers
           </a>
         </li>
         <li>
           <a href="#" class="nav-link text-white">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-            Customers
+            Service Provider
           </a>
         </li>
       </ul>

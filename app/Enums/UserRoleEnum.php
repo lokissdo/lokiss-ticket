@@ -4,15 +4,10 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-/**
- * @method static static OptionOne()
- * @method static static OptionTwo()
- * @method static static OptionThree()
- */
 final class UserRoleEnum extends Enum
 {
-    const Employer  =   0;
-    const Passenger =   1;
-    const Admin     =   2;
-    const Employee  =   3;
+    const EMPLOYER  =   0;
+    const PASSENGER =   1;
+    const ADMIN     =   2;
+    const EMPLOYEE  =   3;
 }
