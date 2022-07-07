@@ -16,9 +16,9 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Jobs\SendEmailJob as Job;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
-const DEFAULT_ROLE=1;
 class AuthController extends Controller
 {
+    private const DEFAULT_ROLE=1;
     public function login()
     {
         if(session()->has('user')){
@@ -27,7 +27,11 @@ class AuthController extends Controller
         View::share('title', 'Đăng nhập');
         return view('auth/login');
     }
-
+    public function signOut()
+    {
+        session()->flush();
+        return redirect()->route("login");
+    }
     public function register()
     {
         View::share('title', 'Đăng ký');
@@ -41,7 +45,7 @@ class AuthController extends Controller
         dispatch(new Job($user));
         //$email = new NotifyMail($user);
        // Mail::to($user->email)->send($email);
-        $request->session()->flash('message', 'Successfully registered.');
+        session()->flash('message', 'Successfully registered.');
         return redirect()->route("login");
     }
     public function callback($provider)
@@ -62,7 +66,7 @@ class AuthController extends Controller
         if(!$user->email) return redirect()->route("register",[
             'error'=>"Your account doesn't include email"
         ]);
-        $roleIndex=is_null($user->role)?DEFAULT_ROLE:$user->role;
+        $roleIndex=is_null($user->role)?self::DEFAULT_ROLE:$user->role;
         $role = strtolower(UserRoleEnum::getKeys($roleIndex)[0]);
         session(['user' => [
             'id' => $user->id,

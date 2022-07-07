@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\CreateProviderProcessed;
+use App\Events\DeletedProviderProcessed;
 use App\Events\UserRegisteredEvent;
+use App\Listeners\AssignEmployeesRole;
 use App\Listeners\SendEmailNotification;
+use App\Listeners\SetDefaultRoleForEmployees;
+use App\Listeners\SetEmployerRole;
 use App\Models\User;
 use App\Observers\UserObserver;
+use Google\Service\DisplayVideo\AssignedUserRole;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -32,5 +38,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Event::listen(
+            DeletedProviderProcessed::class,
+            [SetDefaultRoleForEmployees::class, 'handle']
+        );
+        Event::listen(
+            CreateProviderProcessed::class,
+            [SetEmployerRole::class, 'handle']
+        );
     }
 }

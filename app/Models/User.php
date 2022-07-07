@@ -45,4 +45,8 @@ class User extends Authenticatable
      */
     protected $casts = [
     ];
+    public function getAddressNameAttribute()
+    {
+        return  District::where('code',$this->address2)->first()->name.', '.Province::where('code', $this->address)->first()->name;
+    }
 }
