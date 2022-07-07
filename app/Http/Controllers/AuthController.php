@@ -27,7 +27,11 @@ class AuthController extends Controller
         View::share('title', 'Đăng nhập');
         return view('auth/login');
     }
-
+    public function signOut()
+    {
+        session()->flush();
+        return redirect()->route("login");
+    }
     public function register()
     {
         View::share('title', 'Đăng ký');

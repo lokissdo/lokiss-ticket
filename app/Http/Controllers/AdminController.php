@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\CreateProviderProcessed;
 use App\Events\DeletedProviderProcessed;
+use App\Http\Requests\ProviderEditRequest;
 use App\Http\Requests\ProviderRegisteringRequest;
 use App\Models\Province;
 use App\Models\ServiceProvider;
@@ -61,7 +62,7 @@ class AdminController extends Controller
         ServiceProvider::destroy($id);
         return redirect()->route('admin.provider.index'); 
     }
-    public function provider_update(int $id,ProviderRegisteringRequest $request)
+    public function provider_update(int $id,ProviderEditRequest $request)
     {
         $toUpdate=ServiceProvider::find($id);
         $toUpdate->employer_id=User::query()->where('email', $request->email)->first()->id;

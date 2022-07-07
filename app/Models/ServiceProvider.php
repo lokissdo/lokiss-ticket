@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Enums\UserRoleEnum;
 
 class ServiceProvider extends Model
 {
@@ -25,5 +28,17 @@ class ServiceProvider extends Model
     public function getEmailAttribute()
     {
         return  User::find($this->employer_id)->email;
+    }
+    static function getEmployeesList($id)
+    {
+        $ids = DB::table('employees_list')
+        ->select('id')
+        ->where('employees_list.service_provider_id', $id);
+      $employees_list=User::joinSub($ids, 'employee_ids', function ($join) {
+            $join->on('users.id', '=', 'employee_ids.id');
+        })
+        ->get();
+        $employees_list->append('address_name');
+        return $employees_list;
     }
 }
