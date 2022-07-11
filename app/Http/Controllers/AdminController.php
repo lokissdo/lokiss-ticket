@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnum;
 use App\Events\CreateProviderProcessed;
 use App\Events\DeletedProviderProcessed;
 use App\Http\Requests\ProviderEditRequest;
@@ -65,7 +66,15 @@ class AdminController extends Controller
     public function provider_update(int $id,ProviderEditRequest $request)
     {
         $toUpdate=ServiceProvider::find($id);
-        $toUpdate->employer_id=User::query()->where('email', $request->email)->first()->id;
+        $newuser=User::query()->where('email', $request->email)->first();
+        $olduser=User::find($toUpdate->employer_id);
+        if($newuser != $olduser){
+            $newuser->role=UserRoleEnum::EMPLOYER;
+            $newuser->save();
+            $olduser->role=UserRoleEnum::PASSENGER;
+            $olduser->save();
+        }
+        $toUpdate->employer_id=$newuser->id;
         $toUpdate->phone_number=$request->phone_number;
         $toUpdate->name=$request->name;
         $toUpdate->address=$request->address;

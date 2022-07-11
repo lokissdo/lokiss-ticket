@@ -18,7 +18,6 @@ class CreateStationsTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('adddress2');
-            $table->integer('order');
         });
     }
 

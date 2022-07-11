@@ -21,9 +21,9 @@ Route::group([
     Route::get('/', [EmployerController::class, 'index'])->name('index');
     Route::get('/employee', [EmployerController::class, 'employee_index'])->name('employee.index');
     Route::get('/employee/create', [EmployerController::class, 'employee_create'])->name('employee.create');
-    // Route::post('/employee/store', [EmployerController::class, 'employee_store'])->name('employee.store');
+    Route::delete('/employee/destroy/{id}', [EmployerController::class, 'employee_destroy'])->name('employee.destroy');
+    Route::post('/employee/store', [EmployerController::class, 'employee_store'])->name('employee.store');
     // Route::get('/employee/edit/{id}', [EmployerController::class, 'employee_edit'])->name('employee.edit');
     // Route::post('/employee/update/{id}', [EmployerController::class, 'employee_update'])->name('employee.update');
-    // Route::delete('/employee/destroy/{id}', [EmployerController::class, 'employee_destroy'])->name('employee.destroy');
 
 });

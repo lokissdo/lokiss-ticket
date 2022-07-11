@@ -28,3 +28,5 @@ Route::get('/auth/redirect/{provider}', function ($provider) {
     return Socialite::driver($provider)->redirect();
 })->name('social.redirect');
 Route::get('/auth/callback/{provider}',  [AuthController::class, 'callback'])->name('social.callback');
+
+

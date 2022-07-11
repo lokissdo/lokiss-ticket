@@ -4,16 +4,15 @@ namespace App\Providers;
 
 use App\Events\CreateProviderProcessed;
 use App\Events\DeletedProviderProcessed;
-use App\Events\UserRegisteredEvent;
-use App\Listeners\AssignEmployeesRole;
-use App\Listeners\SendEmailNotification;
+use App\Events\DeleteEmployee;
 use App\Listeners\SetDefaultRoleForEmployees;
 use App\Listeners\SetEmployerRole;
-use App\Models\User;
-use App\Observers\UserObserver;
-use Google\Service\DisplayVideo\AssignedUserRole;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Listeners\SetPassengerRoleforEmployee;
+// use App\Models\User;
+// use App\Observers\UserObserver;
+// use Google\Service\DisplayVideo\AssignedUserRole;
+// use Illuminate\Auth\Events\Registered;
+// use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -45,6 +44,10 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(
             CreateProviderProcessed::class,
             [SetEmployerRole::class, 'handle']
+        );
+        Event::listen(
+            DeleteEmployee::class,
+            [SetPassengerRoleforEmployee::class, 'handle']
         );
     }
 }
