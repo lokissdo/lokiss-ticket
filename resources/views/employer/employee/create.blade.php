@@ -4,12 +4,12 @@
         <link rel="stylesheet" href={{ asset('css/admin/provider_create.css') }}>
     @endpush
 @section('sidebar')
-    @include('admin.sidebar')
+    @include('employer.sidebar')
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
-            <a class="nav-link " id="show_employees"href={{route('employer.employee.index')}}>Xem</a>
+            <a class="nav-link " id="show_list"href={{route('employer.employee.index')}}>Xem</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href={{route('employer.employee.create')}}>Thêm</a>
@@ -55,7 +55,8 @@
 </div>
 @push('js')
     <script src="{{ asset('js/components/address.js') }}"></script>
-    <script src="{{ asset('js/employer/create_employee.js') }}"></script>
+    <script>const object="Nhân viên";</script>
+    <script src="{{ asset('js/components/create_object.js') }}"></script>
 
 @endpush
 

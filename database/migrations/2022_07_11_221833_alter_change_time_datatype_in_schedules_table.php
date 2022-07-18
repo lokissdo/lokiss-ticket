@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStationsTable extends Migration
+class AlterChangeTimeDatatypeInSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateStationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('address');
-            $table->string('address2');
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->smallInteger('arrival_time')->change();
+            $table->smallInteger('departure_time')->change();
+
         });
     }
 
@@ -28,6 +27,8 @@ class CreateStationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stations');
+        Schema::table('schedules', function (Blueprint $table) {
+            //
+        });
     }
 }

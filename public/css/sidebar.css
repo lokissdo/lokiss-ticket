@@ -3,8 +3,11 @@
 }
 
 .sidebar{
+    position: sticky;
+    top: 2vh;
     height:var(--sidebar-heigth);
     width: 300px;
+    padding-right: 300px;
     border-radius: 30px;
    background-color: #212529;
    margin-right: 3vw;

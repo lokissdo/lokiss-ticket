@@ -21,6 +21,7 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
-        "font-awesome": "^4.7.0"
+        "font-awesome": "^4.7.0",
+        "nice-select2": "^2.0.0"
     }
 }

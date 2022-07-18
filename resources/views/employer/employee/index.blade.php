@@ -1,23 +1,23 @@
 @extends('layout.master')
 @section('content')
-@push('css')
-<link rel="stylesheet" href={{asset('css/admin.css')}}>
-@endpush
+    @push('css')
+        <link rel="stylesheet" href={{ asset('css/admin.css') }}>
+    @endpush
 @section('sidebar')
-@include('employer.sidebar')
+    @include('employer.sidebar')
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 
-      <ul class="nav nav-tabs d-flex justify-content-end">
+    <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
-          <a class="nav-link active"href={{route('employer.employee.index')}}>Xem</a>
+            <a class="nav-link active"href={{ route('employer.employee.index') }}>Xem</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href={{route('employer.employee.create')}}>Thêm</a>
+            <a class="nav-link" href={{ route('employer.employee.create') }}>Thêm</a>
         </li>
-      </ul>
-      <h2> Nhà xe <strong>{{Session::get('user')['service_provider_name']}}</strong></h2>
-      <div>Danh sách nhân viên</div>
+    </ul>
+    <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <div>Danh sách nhân viên</div>
     <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
@@ -31,17 +31,18 @@
         <tbody>
             @foreach ($employees as $employee)
                 <tr>
-                    <th scope="row">{{$employee['id']}}</th>
-                    <td>{{$employee['name']}}</td>
-                    <td>{{$employee['email']}}</td>
-                    <td>{{$employee['address_name']}}</td>
+                    <th scope="row">{{ $employee['id'] }}</th>
+                    <td>{{ $employee['name'] }}</td>
+                    <td>{{ $employee['email'] }}</td>
+                    <td>{{ $employee['address_name'] }}</td>
 
                     <td>
-                        <form id="delete_form"  method="POST" action={{route('employer.employee.destroy',['id' => $employee['id']])}} >
-                          @method('DELETE')
-                          <button id="delete_employee" class="btn btn-danger btn-sm" type="submit">
-                            Xóa
-                          </button>
+                        <form id="delete_form" method="POST"
+                            action={{ route('employer.employee.destroy', ['id' => $employee['id']]) }}>
+                            @method('DELETE')
+                            <button id="delete_employee" class="btn btn-danger btn-sm" type="submit">
+                                Xóa
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -50,14 +51,14 @@
     </table>
 </div>
 <script type="text/javascript">
-const deleteButton=document.querySelector("#delete_employee");
-const form=document.querySelector("#delete_form");
-
-deleteButton.onclick=(e)=>{
-  e.preventDefault();
-if(window.confirm('Bạn có chắc chắn muốn xóa nhà xe  này?')){
-  form.submit();
-}
-}
-  </script>
+    const deleteButtons = document.querySelectorAll("#delete_employee");
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.onclick = (e) => {
+            e.preventDefault();
+            if (window.confirm('Bạn có chắc chắn muốn xóa nhân viên  này?')) {
+              e.target.parentNode.submit();
+            }
+        }
+    });
+</script>
 @endsection

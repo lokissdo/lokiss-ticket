@@ -22,6 +22,6 @@ Route::group([
         Route::get('/schedule/index', [ServiceProviderController::class, 'schedule_index'])->name('schedule.index');
         Route::get('/schedule/create', [ServiceProviderController::class, 'schedule_create'])->name('schedule.create');
         Route::post('/schedule/store', [ServiceProviderController::class, 'schedule_store'])->name('schedule.store');
-
+        Route::delete('/schedule/destroy/{id}', [ServiceProviderController::class, 'schedule_destroy'])->name('schedule.destroy');
        // Route::delete('/{user}', [PassengerController::class, 'destroy'])->name('destroy');
 });

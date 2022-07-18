@@ -25,7 +25,7 @@ class EmployerController extends Controller
         session(['user' => $user]);
         View::share('title', 'Home');
         return view('employer.index');
-    }    
+    }  
     public function employee_index()
     {
         View::share('title', 'Employer|Employees');

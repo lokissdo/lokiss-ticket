@@ -26,6 +26,7 @@
                 <th scope="col">Địa điểm khởi hành</th>
                 <th scope="col">Giờ đến</th>
                 <th scope="col">Địa điểm đến</th>
+                <th scope="col">Số ngày di chuyển</th>
                 <th scope="col">###</th>
             </tr>
         </thead>
@@ -33,33 +34,35 @@
             @foreach ($schedules as $schedule)
                 <tr>
                     <th scope="row">{{$schedule['id']}}</th>
-                    <td>{{$schedule['arrival_time']}}</td>
-                    <td>{{$schedule['arrival_province']}}</td>
-                    <td>{{$schedule['departure_time']}}</td>
+                    <td>{{$schedule['departure_time_str']}}</td>
                     <td>{{$schedule['departure_province']}}</td>
 
-                    {{-- <td>
-                        <form id="delete_form"  method="POST" action={{route('employer.employee.destroy',['id' => $employee['id']])}} >
+                    <td>{{$schedule['arrival_time_str']}}</td>
+                    <td>{{$schedule['arrival_province']}}</td>
+                    <td>{{$schedule['total_days']}}</td>
+
+                    <td>
+                        <form id="delete_form"  method="POST" action={{route('serviceprovider.schedule.destroy',['id' => $schedule['id']])}} >
                           @method('DELETE')
-                          <button id="delete_employee" class="btn btn-danger btn-sm" type="submit">
+                          <button id="delete_schedule" class="btn btn-danger btn-sm" type="submit">
                             Xóa
                           </button>
                         </form>
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </div>
 <script type="text/javascript">
-// const deleteButton=document.querySelector("#delete_employee");
-// const form=document.querySelector("#delete_form");
-
-// deleteButton.onclick=(e)=>{
-//   e.preventDefault();
-// if(window.confirm('Bạn có chắc chắn muốn xóa nhà xe  này?')){
-//   form.submit();
-// }
-// }
+const deleteButtons=document.querySelectorAll("#delete_schedule");
+deleteButtons.forEach(deleteButton => {
+        deleteButton.onclick = (e) => {
+            e.preventDefault();
+            if (window.confirm('Bạn có chắc chắn muốn xóa nhân viên  này?')) {
+              e.target.parentNode.submit();
+            }
+        }
+    });
   </script>
 @endsection
