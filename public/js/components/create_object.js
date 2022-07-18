@@ -3,7 +3,9 @@ const $ = document.querySelector.bind(document);
 const form = $("form");
 const uri = form.getAttribute("action");
 const message = $("#message_display");
+
 function SubmitFormHandler(e) {
+    e.preventDefault();
     // const formEntries=new FormData(form).entries();
     // const data = Object.fromEntries(formEntries);
     // console.log(data)
@@ -31,14 +33,14 @@ function SubmitFormHandler(e) {
                 html += " </ul> </div>";
             } else {
                 html =
-                    '<div class="alert alert-success">Thêm nhà sản xuất thành công<ul>';
+                    `<div class="alert alert-success">Thêm ${object} thành công<ul>`;
                 window.location.href =
-                    $("#show-providers").getAttribute("href");
+                    $("#show_list").getAttribute("href");
             }
             message.innerHTML = html;
         });
     // .catch((e) => console.log(e, "Pls don't dp that"));
-    e.preventDefault();
+    
 }
 form.addEventListener("submit", SubmitFormHandler);
 function ErrorHandler(e) {

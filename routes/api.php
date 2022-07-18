@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StationController;
 use App\Models\Addresses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/addresses', [Addresses::class,'getDetailAddresses'])->name('addresses');
+Route::get('/stations', [StationController::class,'getAllStations'])->name('stations');
+

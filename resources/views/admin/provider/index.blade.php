@@ -52,14 +52,14 @@
     </table>
 </div>
 <script type="text/javascript">
-const deleteButton=document.querySelector("#delete_provider");
-const form=document.querySelector("#delete_form");
-
-deleteButton.onclick=(e)=>{
-  e.preventDefault();
-if(window.confirm('Bạn có chắc chắn muốn xóa nhà xe  này?')){
-  form.submit();
-}
-}
+const deleteButtons = document.querySelectorAll("#delete_provider");
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.onclick = (e) => {
+            e.preventDefault();
+            if (window.confirm('Bạn có chắc chắn muốn xóa nhân viên  này?')) {
+              e.target.parentNode.submit();
+            }
+        }
+    });
   </script>
 @endsection

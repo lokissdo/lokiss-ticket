@@ -9,7 +9,7 @@
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
-            <a class="nav-link " id="show-providers" href={{ route('admin.provider.index') }}>Xem</a>
+            <a class="nav-link " id="show_list" href={{ route('admin.provider.index') }}>Xem</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" href={{ route('admin.provider.create') }}>Thêm</a>
@@ -72,7 +72,8 @@
 </div>
 @push('js')
     <script src="{{ asset('js/components/address.js') }}"></script>
-    <script src="{{ asset('js/admin/create_provider.js') }}"></script>
+    <script>const object="Nhà xe";</script>
+    <script src="{{ asset('js/components/create_object.js') }}"></script>
 
 @endpush
 

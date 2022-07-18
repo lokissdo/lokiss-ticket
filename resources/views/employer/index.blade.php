@@ -7,7 +7,6 @@
 @include('employer.sidebar')
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
-
       <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
           <a class="nav-link active"href={{route('employer.employee.index')}}>Xem</a>

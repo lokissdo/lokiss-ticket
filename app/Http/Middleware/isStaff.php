@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-class isEmPloyee
+class isStaff
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,8 @@ class isEmPloyee
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->get('user')['role']!='employee') {
+        $role=$request->session()->get('user')['role'];
+        if ($role!='employee' && $role!='employer' ) {
             return redirect()->route('login');
         }
         return $next($request);
