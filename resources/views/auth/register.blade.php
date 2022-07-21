@@ -78,5 +78,5 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('js/auth/register.js') }}"></script>
+    <script src="{{ asset('js/components/address2.js') }}"></script>
 @endpush

@@ -7,8 +7,10 @@ use App\Events\CreateProviderProcessed;
 use App\Events\DeletedProviderProcessed;
 use App\Http\Requests\ProviderEditRequest;
 use App\Http\Requests\ProviderRegisteringRequest;
+use App\Http\Requests\StationRegisteringRequest;
 use App\Models\Province;
 use App\Models\ServiceProvider;
+use App\Models\Station;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -48,6 +50,25 @@ class AdminController extends Controller
         return view('admin.provider.index')->with([
             'providers'=>$providers->toArray()
             ]);
+    }
+    public function station_index()
+    {
+        View::share('title', 'Station');
+        $stations=Station::all();
+        return view('admin.station.index')->with([
+            'stations'=>$stations->toArray()
+            ]);
+    }
+    public function station_create()
+    {
+        View::share('title', 'StationCreation');
+        return view('admin.station.create');
+    }
+    public function station_store(StationRegisteringRequest $request)
+    {
+        $toInsert=$request->only('address2','name','address');
+        return Station::create($toInsert);
+
     }
     public function provider_edit(int $id)
     {

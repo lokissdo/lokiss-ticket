@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateScheduleRequest;
 use App\Models\Schedule;
 use App\Models\ScheduleDetail;
+use App\Models\Station;
 use Google\Auth\Cache\Item;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 class ServiceProviderController extends Controller
 {
     public function schedule_index(){
         View::share('title', 'Schedules');
+
+        //Schedule
         $schedules=Schedule::where('service_provider_id',session()->get('user')['service_provider_id'])->get();
         $schedules->append('departure_province');
         $schedules->append('arrival_province');
@@ -20,8 +24,27 @@ class ServiceProviderController extends Controller
         $schedules->append('departure_time_str');
         $schedules->append('total_days');
 
+        // Schedule details
+        $sche_ids = DB::table('schedules')
+            ->select('id')
+            ->where('schedules.service_provider_id',session()->get('user')['service_provider_id']);
+        $list_stations=ScheduleDetail::joinSub($sche_ids, 'sche_ids', function ($join) {
+            $join->on('schedule_details.schedule_id', '=', 'sche_ids.id');
+        });
+        $unordered_schedules=Station::joinSub($list_stations, 'list_stations', function ($join) {
+            $join->on('stations.id', '=', 'list_stations.station_id');
+        })->get()->toArray();
+        $ordered_schedules=[];
+        foreach($unordered_schedules as $each){
+            $ordered_schedules[$each['id']][]=$each;
+        }
+        foreach($ordered_schedules as $key=>$each){
+            $ordered_schedules[$key]=Station::OrderStations($each);
+        }
+        
         return view("service_provider.schedule.index")->with([
-            'schedules'=>$schedules->toArray()
+            'schedules'=>$schedules->toArray(),
+            'schedule_details'=>$ordered_schedules,
             ]);
     }
     public function schedule_create()

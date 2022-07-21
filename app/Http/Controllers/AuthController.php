@@ -21,6 +21,9 @@ class AuthController extends Controller
     private const DEFAULT_ROLE=1;
     public function login()
     {
+        // if (Auth::viaRemember()) {
+        //     dd(Auth::user());
+        // }
         if(session()->has('user')){
             return redirect()->route(session('user')['role'].'.index');
         }
@@ -80,7 +83,7 @@ class AuthController extends Controller
     }
     public function loggingIn(AuthenticatingRequest $request){
         $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials,isset($request->isRemembered))) {
             $user = Auth::user();
             $roleName = strtolower(UserRoleEnum::getKeys($user->role)[0]);
             session(['user' => [

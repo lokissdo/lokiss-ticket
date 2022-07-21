@@ -111,7 +111,12 @@ class CreateScheduleRequest extends FormRequest
                         $fail('Pls dont do that');
                         break;
                     }
-                 }  
+                 }
+                 $first=Station::find($value[0]);
+                 $last=Station::find($value[count($value)-1]);  
+                 if($first->address != $this->departure_province_code ||$last->address != $this->arrival_province_code ){
+                    $fail('Bến xe khởi hành và đến phải thuộc tỉnh khởi hành và đến');
+                 }
                 },
             ],
         ];

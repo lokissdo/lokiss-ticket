@@ -10,10 +10,10 @@
 
     <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
-            <a class="nav-link active"href={{ route('admin.provider.index') }}>Xem</a>
+            <a class="nav-link active"href={{ route('admin.station.index') }}>Xem</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href={{ route('admin.provider.create') }}>Thêm</a>
+            <a class="nav-link" href={{ route('admin.station.create') }}>Thêm</a>
         </li>
     </ul>
 
@@ -22,23 +22,21 @@
             <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Tên</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Đánh giá</th>
-                <th scope="col">Địa chỉ</th>
+                <th scope="col">Quận/Huyện</th>
+                <th scope="col">Tỉnh/Thành phố</th>
                 <th scope="col">###</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($providers as $provider)
+            @foreach ($stations as $station)
                 <tr>
-                    <th scope="row">{{ $provider['id'] }}</th>
-                    <td>{{ $provider['name'] }}</td>
-                    <td>{{ $provider['phone_number'] }}</td>
-                    <td>{{ $provider['rate'] }}</td>
-                    <td>{{ $provider['address_name'] }}</td>
+                    <th scope="row">{{ $station['id'] }}</th>
+                    <td>{{ $station['name'] }}</td>
+                    <td>{{ $station['district_name'] }}</td>
+                    <td>{{ $station['province_name'] }}</td>
 
                     <td>
-                        <div class="d-flex">
+                        {{-- <div class="d-flex">
                             <a class="btn btn-primary btn-sm"
                                 href={{ route('admin.provider.edit', ['id' => $provider['id']]) }} role="button">Sửa</a>
                             <form id="delete_form" method="POST"
@@ -48,7 +46,7 @@
                                     Xóa
                                 </button>
                             </form>
-                        </div>
+                        </div> --}}
 
                     </td>
                 </tr>
@@ -56,15 +54,15 @@
         </tbody>
     </table>
 </div>
-<script type="text/javascript">
+{{-- <script type="text/javascript">
     const deleteButtons = document.querySelectorAll("#delete_provider");
     deleteButtons.forEach(deleteButton => {
         deleteButton.onclick = (e) => {
             e.preventDefault();
-            if (window.confirm('Bạn có chắc chắn muốn xóa nhà xe  này?')) {
+            if (window.confirm('Bạn có chắc chắn muốn xóa nhân viên  này?')) {
                 e.target.parentNode.submit();
             }
         }
     });
-</script>
+</script> --}}
 @endsection
