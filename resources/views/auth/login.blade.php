@@ -20,7 +20,7 @@
                 <input type="password" id="form3Example4" class="form-control" name='password' value="{{old('password')}}" />
             </div>
             <div class="form-check text-left">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <input class="form-check-input" type="checkbox" name="isRemembered" id="flexCheckDefault">
                 <label for="flexCheckDefault">
                     Remember me
                 </label>

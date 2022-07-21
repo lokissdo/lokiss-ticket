@@ -18,8 +18,6 @@ class StationController extends Controller
             $query = $query->where('id', '!=', $one);
         $res = $query->take($limit)->get();
         if (!$res) return 0;
-        $res->append('district_name');
-        $res->append('province_name');
         return $res;
     }
 }

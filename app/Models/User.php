@@ -49,4 +49,8 @@ class User extends Authenticatable
     {
         return  District::where('code',$this->address2)->first()->name.', '.Province::where('code', $this->address)->first()->name;
     }
+    public function createToken($id)
+    {
+        
+    }
 }
