@@ -9,6 +9,13 @@ class Station extends Model
 {
     use HasFactory;
     protected $appends = ['province_name','district_name'];
+    protected $fillable = [
+        'name',
+        'address',
+        'address2',
+
+    ];
+    public $timestamps = false;
     public function getProvinceNameAttribute()
     {
         $preFix = array('Tỉnh', 'Thành phố');
@@ -19,7 +26,7 @@ class Station extends Model
     }
     public function getDistrictNameAttribute()
     {
-        $preFix = array('Quận', 'Huyện', 'Thị xã');
+        $preFix = array('Quận', 'Huyện', 'Thị xã','Thành phố');
 
         $name = District::where('code', $this->address2)->first()->name;
         // $arrStr=explode(" ",$name);

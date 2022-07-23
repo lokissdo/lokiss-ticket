@@ -4,49 +4,58 @@
         <link rel="stylesheet" href={{ asset('css/admin.css') }}>
     @endpush
 @section('sidebar')
-    @include('admin.sidebar')
+    @include(Session::get('user')['role'] . '.sidebar')
 @endsection
+@php
+$isEmployer = Session::get('user')['role'] == 'employer';
+@endphp
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 
     <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
-            <a class="nav-link active"href={{ route('admin.station.index') }}>Xem</a>
+            <a class="nav-link active"href={{ route('serviceprovider.coach.index') }}>Xem</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href={{ route('admin.station.create') }}>Thêm</a>
-        </li>
+        @if ($isEmployer)
+            <li class="nav-item">
+                <a class="nav-link" href={{ route('employer.coach.create') }}>Thêm</a>
+            </li>
+        @endif
+
     </ul>
+
+    <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
+    <div>Danh sách nhân viên</div>
     <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Tên</th>
-                <th scope="col">Quận/Huyện</th>
-                <th scope="col">Tỉnh/Thành phố</th>
+                <th scope="col">Loại</th>
+                <th scope="col">Số chỗ ngồi</th>
                 <th scope="col">###</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($stations as $station)
+            @foreach ($coaches as $coach)
                 <tr>
-                    <th scope="row">{{ $station['id'] }}</th>
-                    <td>{{ $station['name'] }}</td>
-                    <td>{{ $station['district_name'] }}</td>
-                    <td>{{ $station['province_name'] }}</td>
+                    <th scope="row">{{ $coach['id'] }}</th>
+                    <td>{{ $coach['name'] }}</td>
+                    <td>{{ $coach['type_name'] }}</td>
+                    <td>{{ $coach['seat_number'] }}</td>
 
                     <td>
-                        <div class="d-flex">
+                        @if ($isEmployer)
                             <form id="delete_form" method="POST"
-                                action={{ route('admin.station.destroy', ['id' => $station['id']]) }}>
+                                action={{ route('employer.coach.destroy', ['id' => $coach['id']]) }}>
                                 @method('DELETE')
-                                <button id="delete_station" class="btn btn-danger btn-sm" type="submit">
+                                <button id="delete_coach" class="btn btn-danger btn-sm" type="submit">
                                     Xóa
                                 </button>
                             </form>
-                        </div>
+                        @endif
 
                     </td>
                 </tr>
@@ -55,7 +64,7 @@
     </table>
 </div>
 <script type="text/javascript">
-    const deleteButtons = document.querySelectorAll("#delete_station");
+    const deleteButtons = document.querySelectorAll("#delete_coach");
     deleteButtons.forEach(deleteButton => {
         deleteButton.onclick = (e) => {
             e.preventDefault();

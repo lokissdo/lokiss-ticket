@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\District;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 class RegisteringRequest extends FormRequest
 {
@@ -21,8 +20,7 @@ class RegisteringRequest extends FormRequest
     protected function prepareForValidation()
     {
         if($this->address!='null' && $this->address2!='null' ){
-            $user =DB::table('districts')
-                            ->where('code', '=', $this->address2)
+            $user =District::where('code', '=', $this->address2)
                             ->where('province_code', '=', $this->address)
                             ->get();
             if($user===null){

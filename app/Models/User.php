@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRoleEnum;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -49,8 +50,22 @@ class User extends Authenticatable
     {
         return  District::where('code',$this->address2)->first()->name.', '.Province::where('code', $this->address)->first()->name;
     }
-    public function createToken($id)
+    static function createRememberToken($credentials)
     {
-        
+        return md5(strval($credentials['email']).strval($credentials['password'])).strval(time());
+    }
+    static function compareRememberToken($token)
+    {
+        $user=User::where('remember_token',$token)->first();
+        return $user;
+    }
+    static function setUserSession($user,$role){
+        session(['user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'role' => $role
+        ]]);
     }
 }

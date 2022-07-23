@@ -12,6 +12,7 @@ use App\Models\Province;
 use App\Models\ServiceProvider;
 use App\Models\Station;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
@@ -70,6 +71,16 @@ class AdminController extends Controller
         return Station::create($toInsert);
 
     }
+    public function station_destroy(int $id)
+    {
+        try{
+            Station::destroy($id);
+        }
+        catch(Exception $e){
+            return back()->withError('Không thể xóa bến này vì đã được chọn trong lịch trình');//$e->getMessage()
+        }
+        return redirect()->route('admin.station.index'); 
+    }
     public function provider_edit(int $id)
     {
         View::share('title', 'ProviderEdition');
@@ -80,8 +91,12 @@ class AdminController extends Controller
     }
     public function provider_destroy(int $id)
     {
-        DeletedProviderProcessed::dispatch($id);
-        ServiceProvider::destroy($id);
+        try{
+            DeletedProviderProcessed::dispatch($id);
+            ServiceProvider::destroy($id);
+        }catch(Exception $e){
+            return back()->withError('Phải xóa tất cả hoạt động và tài sản của nhà xe trước');//$e->getMessage()
+        }
         return redirect()->route('admin.provider.index'); 
     }
     public function provider_update(int $id,ProviderEditRequest $request)
