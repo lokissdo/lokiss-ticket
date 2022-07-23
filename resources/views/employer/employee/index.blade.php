@@ -17,6 +17,9 @@
         </li>
     </ul>
     <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    @if (session('error'))
+        <div class="alert alert-danger text-center">{{ session('error') }}</div>
+    @endif
     <div>Danh sách nhân viên</div>
     <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">

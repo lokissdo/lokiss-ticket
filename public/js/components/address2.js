@@ -2,7 +2,7 @@ var province=document.querySelector("#select_pro")
 var district=document.querySelector("#select_dis")
 var data;
 var defaultAddress={
-    "province":`<option data-code="null" value="null"> Chọn tỉnh / thành </option>`,
+    "province":`<option data-code="null" value="null"> Chọn tỉnh / thành phố</option>`,
     "district":`<option data-code="null" value="null"> Chọn quận / huyện </option>`,
     "town":`<option data-code="null" value="null">Chọn phường / xã </option>`
 }

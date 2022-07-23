@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateScheduleRequest;
+use App\Models\Coach;
 use App\Models\Schedule;
 use App\Models\ScheduleDetail;
 use App\Models\Station;
+use Exception;
 use Google\Auth\Cache\Item;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 class ServiceProviderController extends Controller
 {
+
+    // Schedule
     public function schedule_index(){
         View::share('title', 'Schedules');
 
@@ -78,8 +82,25 @@ class ServiceProviderController extends Controller
         return 1;
     }
     public function schedule_destroy(int $id){
-        ScheduleDetail::where('schedule_id',$id)->delete();
-        Schedule::find($id)->delete();
+        try{
+            ScheduleDetail::where('schedule_id',$id)->delete();
+            Schedule::find($id)->delete();
+        }
+        catch(Exception $e){
+            return back()->withError('Không thể xóa lịch trình này vì đã được chọn trong chuyến đi');//$e->getMessage()
+        }
         return redirect()->route('serviceprovider.schedule.index'); 
+    }
+
+
+    // Coach
+    public function coach_index()
+    {
+        View::share('title', 'Coaches');
+        $coaches=Coach::all();
+        $coaches->append('type_name');
+        return view('service_provider.coach.index',[
+            'coaches'=>$coaches->toArray(),
+        ]);
     }
 }
