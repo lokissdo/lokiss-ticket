@@ -32,6 +32,8 @@ Route::group([
     Route::post('/station/store', [AdminController::class, 'station_store'])->name('station.store');
     Route::delete('/station/destroy/{id}', [AdminController::class, 'station_destroy'])->name('station.destroy');
 
+    Route::get('/passenger', [AdminController::class, 'passenger_index'])->name('passenger.index');
+
     // Route::get('/{user}', [PassengerController::class, 'show'])->name('show');
     // Route::delete('/{user}', [PassengerController::class, 'destroy'])->name('destroy');
 });

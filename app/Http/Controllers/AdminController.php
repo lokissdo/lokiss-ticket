@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ItemsPerPage;
 use App\Enums\UserRoleEnum;
 use App\Events\CreateProviderProcessed;
 use App\Events\DeletedProviderProcessed;
@@ -22,14 +23,54 @@ class AdminController extends Controller
     public function index()
     {
         View::share('title', 'Home');
-        $providers=ServiceProvider::all()->toArray();
+        $providers = ServiceProvider::all()->toArray();
         // foreach($providers as $key => $provider){
         //     $providers[$key]['address']=Province::where('code', $provider['address'])->first()->name;
         // }
         return view('admin.index')->with([
-            'providers'=>$providers
-            ]);
+            'providers' => $providers
+        ]);
     }
+    public function passenger_index(Request $request)
+    {
+        $itemsPerPage = ItemsPerPage::PASSENGER;
+        $sortCol = $request->sortCol ?? 'id';
+        $sortType = $request->sortType ?? 'asc';
+        $searchCol = $request->searchCol ?? 'name';
+        $searchVal = $request->searchVal ?? '';
+
+        $offset = $request->pageNum ? ($request->pageNum - 1) * $itemsPerPage : 0;
+        $limit = $itemsPerPage;
+
+
+        $query = User::where('role', UserRoleEnum::PASSENGER)
+            ->orderBy($sortCol, $sortType)
+            ->where($searchCol, 'like', '%' . $searchVal . '%');
+        if (isset($request->address) && $request->address != 'null')  $query = $query->where('address', $request->address);
+        if (isset($request->address2) && $request->address2 != 'null')  $query = $query->where('address2', $request->address2);
+
+        if (empty($request->isResetData)) {
+            $totalPage = ceil(($query->count()) / $itemsPerPage);
+        }
+        $passengers = $query->offset($offset)->limit($limit)->get();
+
+        $passengers->append('address_name');
+
+        if (!empty($request->isAPI)) return json_encode([
+            'passengers' => $passengers,
+            'totalPage' => $totalPage
+
+        ]);
+        View::share('title', 'PassngerList');
+        return view('admin.passenger.index', [
+            'passengers' => $passengers,
+            'total_page' => $totalPage,
+        ]);
+    }
+
+
+
+    //provider
     public function provider_create()
     {
         View::share('title', 'ProviderCreation');
@@ -37,28 +78,66 @@ class AdminController extends Controller
     }
     public function provider_store(ProviderRegisteringRequest $request)
     {
-        $toInsert=$request->only('phone_number','name','address');
-        $toInsert['employer_id']=User::query()->where('email', $request->email)->first()->id;
+        $toInsert = $request->only('phone_number', 'name', 'address');
+        $toInsert['employer_id'] = User::query()->where('email', $request->email)->first()->id;
         CreateProviderProcessed::dispatch($toInsert['employer_id']);
         return ServiceProvider::create($toInsert);
-
     }
     public function provider_index()
     {
         View::share('title', 'Home');
-        $providers=ServiceProvider::all();
+        $providers = ServiceProvider::all();
         $providers->append('address_name');
         return view('admin.provider.index')->with([
-            'providers'=>$providers->toArray()
-            ]);
+            'providers' => $providers->toArray()
+        ]);
     }
+    public function provider_edit(int $id)
+    {
+        View::share('title', 'ProviderEdition');
+        $provider = ServiceProvider::find($id);
+        $provider->append('email');
+        // $provider->email=User::find($provider->employer_id)->email;
+        return view('admin.provider.edit', ['provider' => $provider]);
+    }
+    public function provider_destroy(int $id)
+    {
+        try {
+            DeletedProviderProcessed::dispatch($id);
+            ServiceProvider::destroy($id);
+        } catch (Exception $e) {
+            return back()->withError('Phải xóa tất cả hoạt động và tài sản của nhà xe trước'); //$e->getMessage()
+        }
+        return redirect()->route('admin.provider.index');
+    }
+    public function provider_update(int $id, ProviderEditRequest $request)
+    {
+        $toUpdate = ServiceProvider::find($id);
+        $newuser = User::query()->where('email', $request->email)->first();
+        $olduser = User::find($toUpdate->employer_id);
+        if ($newuser != $olduser) {
+            $newuser->role = UserRoleEnum::EMPLOYER;
+            $newuser->save();
+            $olduser->role = UserRoleEnum::PASSENGER;
+            $olduser->save();
+        }
+        $toUpdate->employer_id = $newuser->id;
+        $toUpdate->phone_number = $request->phone_number;
+        $toUpdate->name = $request->name;
+        $toUpdate->address = $request->address;
+        $toUpdate->save();
+        return $toUpdate;
+    }
+
+
+    //station
     public function station_index()
     {
         View::share('title', 'Station');
-        $stations=Station::all();
+        $stations = Station::all();
         return view('admin.station.index')->with([
-            'stations'=>$stations->toArray()
-            ]);
+            'stations' => $stations->toArray()
+        ]);
     }
     public function station_create()
     {
@@ -67,54 +146,16 @@ class AdminController extends Controller
     }
     public function station_store(StationRegisteringRequest $request)
     {
-        $toInsert=$request->only('address2','name','address');
+        $toInsert = $request->only('address2', 'name', 'address');
         return Station::create($toInsert);
-
     }
     public function station_destroy(int $id)
     {
-        try{
+        try {
             Station::destroy($id);
+        } catch (Exception $e) {
+            return back()->withError('Không thể xóa bến này vì đã được chọn trong lịch trình'); //$e->getMessage()
         }
-        catch(Exception $e){
-            return back()->withError('Không thể xóa bến này vì đã được chọn trong lịch trình');//$e->getMessage()
-        }
-        return redirect()->route('admin.station.index'); 
-    }
-    public function provider_edit(int $id)
-    {
-        View::share('title', 'ProviderEdition');
-        $provider=ServiceProvider::find($id);
-        $provider->append('email');
-       // $provider->email=User::find($provider->employer_id)->email;
-        return view('admin.provider.edit',['provider'=>$provider]);
-    }
-    public function provider_destroy(int $id)
-    {
-        try{
-            DeletedProviderProcessed::dispatch($id);
-            ServiceProvider::destroy($id);
-        }catch(Exception $e){
-            return back()->withError('Phải xóa tất cả hoạt động và tài sản của nhà xe trước');//$e->getMessage()
-        }
-        return redirect()->route('admin.provider.index'); 
-    }
-    public function provider_update(int $id,ProviderEditRequest $request)
-    {
-        $toUpdate=ServiceProvider::find($id);
-        $newuser=User::query()->where('email', $request->email)->first();
-        $olduser=User::find($toUpdate->employer_id);
-        if($newuser != $olduser){
-            $newuser->role=UserRoleEnum::EMPLOYER;
-            $newuser->save();
-            $olduser->role=UserRoleEnum::PASSENGER;
-            $olduser->save();
-        }
-        $toUpdate->employer_id=$newuser->id;
-        $toUpdate->phone_number=$request->phone_number;
-        $toUpdate->name=$request->name;
-        $toUpdate->address=$request->address;
-        $toUpdate->save();
-        return $toUpdate;
+        return redirect()->route('admin.station.index');
     }
 }
