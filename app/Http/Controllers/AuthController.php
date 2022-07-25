@@ -90,6 +90,8 @@ class AuthController extends Controller
         if ($toDispatch) dispatch(new Job($user));
         return redirect()->route("$role.index");
     }
+
+    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     public function loggingIn(AuthenticatingRequest $request)
     {
         $credentials = $request->only('email', 'password');
