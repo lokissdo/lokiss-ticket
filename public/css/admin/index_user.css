@@ -1,0 +1,30 @@
+[data-name=search-input]{
+    right: 20px;
+    width: 120px;
+    transition: all linear 0.3s;
+}
+[data-name=select-address],[data-name=select-role]{
+    top: 20px;
+    transition: all linear 0.3s;
+}
+[data-name=select-role]{
+    width: 200px;
+    right: 0px;
+}
+.pointer{
+    cursor: pointer;
+}
+.wrapper-loading{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: rgba(13, 13, 13, 0.547);
+}
+#loading{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

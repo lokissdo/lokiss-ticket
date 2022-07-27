@@ -5,7 +5,7 @@
 <link rel="stylesheet"  href={{asset('css/admin/show_scheDetail.css')}}>
 @endpush
 @section('sidebar')
-@include(Session::get('user')['role'].'.sidebar')
+@include(Session::get('user')['role'].'.sidebar',['site'=>'schedule'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 

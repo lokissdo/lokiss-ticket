@@ -10,7 +10,7 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-          <a href="#" class="nav-link active" aria-current="page">
+          <a href="#" class="nav-link {{$site=='index'?'active':'text-white'}}" aria-current="page">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
             Home
           </a>
@@ -22,13 +22,19 @@
           </a>
         </li>
         <li>
-          <a href="{{route('serviceprovider.schedule.index')}}" class="nav-link text-white">
+          <a href="{{route('serviceprovider.schedule.index')}}" class="nav-link {{$site=='schedule'?'active':'text-white'}}">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
            Schedules
           </a>
         </li>
         <li>
-          <a href="{{route('serviceprovider.coach.index')}}" class="nav-link text-white">
+          <a href="{{route('serviceprovider.trip.index')}}" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+            Trips
+          </a>
+        </li>
+        <li>
+          <a href="{{route('serviceprovider.coach.index')}}" class="nav-link {{$site=='coach'?'active':'text-white'}}">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
             Coaches
           </a>

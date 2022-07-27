@@ -31,9 +31,9 @@ class AdminController extends Controller
             'providers' => $providers
         ]);
     }
-    public function passenger_index(Request $request)
+    public function user_index(Request $request)
     {
-        $itemsPerPage = ItemsPerPage::PASSENGER;
+        $itemsPerPage = ItemsPerPage::USER;
         $sortCol = $request->sortCol ?? 'id';
         $sortType = $request->sortType ?? 'asc';
         $searchCol = $request->searchCol ?? 'name';
@@ -43,28 +43,30 @@ class AdminController extends Controller
         $limit = $itemsPerPage;
 
 
-        $query = User::where('role', UserRoleEnum::PASSENGER)
-            ->orderBy($sortCol, $sortType)
-            ->where($searchCol, 'like', '%' . $searchVal . '%');
+        $query = User::where($searchCol, 'like', '%' . $searchVal . '%')
+            ->orderBy($sortCol, $sortType);
         if (isset($request->address) && $request->address != 'null')  $query = $query->where('address', $request->address);
         if (isset($request->address2) && $request->address2 != 'null')  $query = $query->where('address2', $request->address2);
+        if (isset($request->role) && $request->role != 'null')  $query = $query->where('role', $request->role);
 
-        if (empty($request->isResetData)) {
-            $totalPage = ceil(($query->count()) / $itemsPerPage);
-        }
-        $passengers = $query->offset($offset)->limit($limit)->get();
 
-        $passengers->append('address_name');
+        $totalPage=(!empty($request->isFilter)||!isset($request->isFilter))?ceil(($query->count()) / $itemsPerPage):-1;
+
+        $users = $query->offset($offset)->limit($limit)->get();
+
+        $users->append('address_name');
+        $users->append('role_name');
+
 
         if (!empty($request->isAPI)) return json_encode([
-            'passengers' => $passengers,
+            'users' => $users,
             'totalPage' => $totalPage
-
         ]);
-        View::share('title', 'PassngerList');
-        return view('admin.passenger.index', [
-            'passengers' => $passengers,
+        View::share('title', 'UsersList');
+        return view('admin.user.index', [
+            'users' => $users,
             'total_page' => $totalPage,
+            'roles'=>UserRoleEnum::asArray()
         ]);
     }
 

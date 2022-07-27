@@ -4,7 +4,8 @@
         <link rel="stylesheet" href={{ asset('css/admin.css') }}>
     @endpush
 @section('sidebar')
-    @include('admin.sidebar')
+@include('admin.sidebar',['site' => 'provider'])
+
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 

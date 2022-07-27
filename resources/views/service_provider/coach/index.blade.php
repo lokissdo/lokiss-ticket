@@ -4,7 +4,7 @@
         <link rel="stylesheet" href={{ asset('css/admin.css') }}>
     @endpush
 @section('sidebar')
-    @include(Session::get('user')['role'] . '.sidebar')
+    @include(Session::get('user')['role'] . '.sidebar',['site'=>'coach'])
 @endsection
 @php
 $isEmployer = Session::get('user')['role'] == 'employer';
@@ -27,7 +27,7 @@ $isEmployer = Session::get('user')['role'] == 'employer';
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
-    <div>Danh sách nhân viên</div>
+    <div>Danh sách các loại xe</div>
     <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>

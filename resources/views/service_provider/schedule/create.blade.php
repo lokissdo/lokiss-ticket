@@ -5,7 +5,7 @@
         <link rel="stylesheet" href={{ asset('css/admin/schedule_create.css') }}>
     @endpush
 @section('sidebar')
-    @include(Session::get('user')['role'] . '.sidebar')
+    @include(Session::get('user')['role'] . '.sidebar',['site'=>'scheudle'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-end">
