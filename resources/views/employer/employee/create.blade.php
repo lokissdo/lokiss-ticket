@@ -4,7 +4,7 @@
         <link rel="stylesheet" href={{ asset('css/admin/provider_create.css') }}>
     @endpush
 @section('sidebar')
-    @include('employer.sidebar')
+    @include('employer.sidebar',['site'=>'employee'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-end">

@@ -8,6 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Enums\UserRoleEnum;
+use App\Models\EmployeesList;
+
 class SetDefaultRoleForEmployees implements ShouldQueue
 {
     /**
@@ -34,9 +36,12 @@ class SetDefaultRoleForEmployees implements ShouldQueue
         $ids = DB::table('employees_list')
             ->select('id')
             ->where('employees_list.service_provider_id', $event->provider_id);
-       User::joinSub($ids, 'employee_ids', function ($join) {
-                $join->on('users.id', '=', 'employee_ids.id');
-            })
+        User::joinSub($ids, 'employee_ids', function ($join) {
+            $join->on('users.id', '=', 'employee_ids.id');
+        })
             ->update(['role' => UserRoleEnum::PASSENGER]);
+
+        EmployeesList::where('service_provider_id', $event->provider_id)->delete();
+
     }
 }

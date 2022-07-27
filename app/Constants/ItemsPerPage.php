@@ -3,5 +3,5 @@
 namespace App\Constants;
 
 class ItemsPerPage{
-     const PASSENGER=15;
+     const USER=15;
 }
