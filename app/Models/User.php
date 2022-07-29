@@ -29,9 +29,15 @@ class User extends Authenticatable
     ];
     protected $casts = [
     ];
+    public function province(){
+        return $this->hasOne(Province::class,'code','address'); 
+    }
+    public function district(){
+        return $this->hasOne(District::class,'code','address2'); 
+    }
     public function getAddressNameAttribute()
     {
-        return  District::where('code',$this->address2)->first()->name.', '.Province::where('code', $this->address)->first()->name;
+        return $this->district->name.', '.$this->province->name;
     }
     public function getRoleNameAttribute()
     {

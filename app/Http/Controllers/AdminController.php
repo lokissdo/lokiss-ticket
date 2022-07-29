@@ -99,7 +99,6 @@ class AdminController extends Controller
         View::share('title', 'ProviderEdition');
         $provider = ServiceProvider::find($id);
         $provider->append('email');
-        // $provider->email=User::find($provider->employer_id)->email;
         return view('admin.provider.edit', ['provider' => $provider]);
     }
     public function provider_destroy(int $id)

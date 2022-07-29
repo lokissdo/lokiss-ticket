@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CoachController;
 use App\Http\Controllers\StationController;
 use App\Models\Addresses;
 use Illuminate\Http\Request;
@@ -21,4 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/addresses', [Addresses::class,'getDetailAddresses'])->name('addresses');
 Route::get('/stations', [StationController::class,'getAllStations'])->name('stations');
+Route::get('/coaches', [CoachController::class,'getCoaches'])->name('coaches');
+
 

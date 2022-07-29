@@ -21,23 +21,27 @@ class ServiceProvider extends Model
         'rate'
     ];
     const UPDATED_AT = null;
-    public function getAddressNameAttribute()
+
+    public function employer()
     {
-        return  Province::where('code', $this->address)->first()->name;
+        return $this->hasOne(User::class, 'id', 'employer_id');
     }
     public function getEmailAttribute()
     {
-        return  User::find($this->employer_id)->email;
+        return  $this->employer->email;
+    }
+    public function employees_list()
+    {
+        return $this->hasMany(EmployeesList::class, 'id', 'employer_id');
     }
     static function getEmployeesList($id)
     {
         $ids = DB::table('employees_list')
-        ->select('id')
-        ->where('employees_list.service_provider_id', $id);
-      $employees_list=User::joinSub($ids, 'employee_ids', function ($join) {
+            ->select('id')
+            ->where('employees_list.service_provider_id', $id);
+        $employees_list = User::joinSub($ids, 'employee_ids', function ($join) {
             $join->on('users.id', '=', 'employee_ids.id');
-        })
-        ->get();
+        })->with(['province'])->get();
         $employees_list->append('address_name');
         return $employees_list;
     }
