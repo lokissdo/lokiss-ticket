@@ -26,7 +26,7 @@ class AuthController extends Controller
         if ($remember_token != null) {
             $user = User::compareRememberToken($remember_token);
             if ($user !== null) {
-                $role = strtolower(UserRoleEnum::getKeys($user->role)[0]);
+                $role = strtolower(UserRoleEnum::getKey($user->role));
                 User::setUserSession($user,$role);
                 return redirect()->route("$role.index");
             }
@@ -78,7 +78,7 @@ class AuthController extends Controller
             'error' => "Your account doesn't include email"
         ]);
         $roleIndex = is_null($user->role) ? self::DEFAULT_ROLE : $user->role;
-        $role = strtolower(UserRoleEnum::getKeys($roleIndex)[0]);
+        $role = strtolower(UserRoleEnum::getKey($roleIndex));
         // session(['user' => [
         //     'id' => $user->id,
         //     'name' => $user->name,
@@ -97,7 +97,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $roleName = strtolower(UserRoleEnum::getKeys($user->role)[0]);
+            $roleName = strtolower(UserRoleEnum::getKey($user->role));
             User::setUserSession($user, $roleName);
             if (isset($request->isRemembered)) {
                 $remember_token = User::createRememberToken($credentials);

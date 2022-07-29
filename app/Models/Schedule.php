@@ -17,13 +17,23 @@ class Schedule extends Model
 
     ];
     public $timestamps = false;
-    public function getArrivalProvinceAttribute()
-    {
-        return  Province::where('code',$this->arrival_province_code)->first()->name;
+    public function departure_province(){
+       return $this->hasOne(Province::class,'code','departure_province_code'); 
     }
-    public function getDepartureProvinceAttribute()
+    public function schedule_detail()
     {
-        return  Province::where('code',$this->departure_province_code)->first()->name;
+        return $this->hasMany(ScheduleDetail::class,'schedule_id','id'); 
+    }
+    public function arrival_province(){
+        return $this->hasOne(Province::class,'code','arrival_province_code'); 
+     }
+    public function getArrivalProvinceNameAttribute()
+    {
+        return  $this->arrival_province->name;
+    }
+    public function getDepartureProvinceNameAttribute()
+    {
+        return  $this->departure_province->name;;
     }
     public function getDepartureTimeStrAttribute()
     {

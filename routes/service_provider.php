@@ -26,6 +26,9 @@ Route::group([
 
 
         Route::get('/coach/index', [ServiceProviderController::class, 'coach_index'])->name('coach.index');
+        Route::get('/trip/index', [ServiceProviderController::class, 'trip_index'])->name('trip.index');
+        Route::get('/trip/create/{id}', [ServiceProviderController::class, 'trip_create'])->name('trip.create');
+        Route::post('/trip/store', [ServiceProviderController::class, 'trip_store'])->name('trip.store');
 
 
 

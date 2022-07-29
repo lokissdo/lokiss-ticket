@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\isStaff;
 use App\Models\Station;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,6 +12,14 @@ class StationController extends Controller
 {
     public function getAllStations(Request $req)
     {
+        $user = session()->get('user');
+        if (!$user) 
+            return 0;
+
+        $role = $user['role'];
+        if ($role != 'employee' && $role != 'employer') 
+            return 0;
+
         $limit = 6;
         $preVals = explode(',', $req->preVal);
         $query = Station::where('name', 'like', '%' . $req->value . '%');

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Station extends Model
 {
     use HasFactory;
+    protected $with = ['province','district'];
     protected $appends = ['province_name','district_name'];
+
     protected $fillable = [
         'name',
         'address',
@@ -16,10 +18,16 @@ class Station extends Model
 
     ];
     public $timestamps = false;
+    public function province(){
+        return $this->hasOne(Province::class,'code','address'); 
+    }
+    public function district(){
+        return $this->hasOne(District::class,'code','address2'); 
+    }
     public function getProvinceNameAttribute()
     {
         $preFix = array('Tỉnh', 'Thành phố');
-        $name = Province::where('code', $this->address)->first()->name;
+        $name = $this->province->name;
         // $arrStr=explode(" ",$name);
         // $res=implode(" ",$arrStr);
         return str_replace($preFix, "", $name);
@@ -28,7 +36,7 @@ class Station extends Model
     {
         $preFix = array('Quận', 'Huyện', 'Thị xã','Thành phố');
 
-        $name = District::where('code', $this->address2)->first()->name;
+        $name = $this->district->name;
         // $arrStr=explode(" ",$name);
         // $res=implode(" ",$arrStr);
         return str_replace($preFix, "", $name);
@@ -38,6 +46,8 @@ class Station extends Model
         $map = [];
         $res=[];
         $first=NULL;
+
+        //initial marking map
         foreach($list as $each){
             $each['is_first']=true;
             $map[$each['station_id']]=$each;
