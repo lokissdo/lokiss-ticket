@@ -2,54 +2,69 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Coach;
+use App\Models\Schedule;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TripRegisteringRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'price' => str_replace(',', '', $this->price),
+        ]);
+    }
     public function rules()
     {
         return [
-            'address' => [
+            'schedule_id' => [
                 'bail',
                 'required',
-                'string',
                 function ($attribute, $value, $fail) {
-                    if ($value === 'null')
-                        $fail('Tỉnh phải được chọn.');
-                    else if($value==='INVALID')
-                        $fail('Tỉnh không hợp lệ.');
+                    $service_provider_id = session()->get('user')['service_provider_id'];
+                    if (empty($service_provider_id))  $fail('Pls dont do that');
+                    if (!(Schedule::where('id', $value)->where('service_provider_id', $service_provider_id)->exists())) {
+                        $fail('Pls dont do that. ');
+                    }
                 },
             ],
+            'coach_id' => [
+                'bail',
+                'required',
+                Rule::exists(Coach::class, 'id')
+            ],
+            'departure_date' => [
+                'bail',
+                'required',
+                'date',
+                'after_or_equal:today'
+            ],
+            'price' => [
+                'bail',
+                'required',
+                'numeric',
+                'min:0'
+            ]
         ];
     }
     public function messages(): array
     {
         return [
-            'required' => ':attribute bắt buộc phải điền',
+            'required' => ':attribute bắt buộc phải điền.',
+            'after_or_equal' => ':attribute phải hợp lệ.'
         ];
     }
-
     public function attributes(): array
     {
         return [
-            'name' => 'Tên',
-            'address'=> 'Tỉnh',
-            'address2'=> 'Quận huyện',
+            'departure_date' => 'Ngày khởi hành',
+            'price' => 'Giá thành'
         ];
     }
 }

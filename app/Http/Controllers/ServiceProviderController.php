@@ -7,12 +7,13 @@ use App\Http\Requests\TripRegisteringRequest;
 use App\Models\Coach;
 use App\Models\Schedule;
 use App\Models\ScheduleDetail;
+use App\Models\ServiceProvider;
 use App\Models\Station;
+use App\Models\Trip;
 use Exception;
 use Google\Auth\Cache\Item;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
 class ServiceProviderController extends Controller
@@ -29,37 +30,18 @@ class ServiceProviderController extends Controller
         View::share('title', 'Schedules');
 
         //Schedule
-        $schedules = Schedule::where('service_provider_id', $this->service_provider_id)->with(['schedule_detail.station'])->get();
-        $schedules->append('departure_province_name');
-        $schedules->append('arrival_province_name');
-        $schedules->append('arrival_time_str');
-        $schedules->append('departure_time_str');
-        $schedules->append('total_days');
-        $schedules->makeHidden([
-            'arrival_province', 'departure_province',
-            'departure_province_code', 'arrival_province_code', 'departure_time', 'arrival_time'
-        ]);
-
-
-        $schedules = $schedules->toArray();
-        $schedules = array_map(function ($each) {
-            $each['schedule_detail'] = Station::OrderStations($each['schedule_detail']);
-            $TrimmedDetail = [];
-            foreach ($each['schedule_detail'] as $temp) {
-                $TrimmedDetail[] =
-                    [
-                        'name' => $temp['station']['name'],
-                        'province_name' => $temp['station']['province_name'],
-                        'district_name' => $temp['station']['district_name'],
-                    ];
-            }
-            $each['schedule_detail'] = $TrimmedDetail;
-            return $each;
-        }, $schedules);
-
-        
+        $schedules=ServiceProvider::get_schedules_list($this->service_provider_id);
         return view("service_provider.schedule.index")->with([
             'schedules' => $schedules,
+        ]);
+    }
+    public function schedule_show(int $id)
+    {
+        View::share('title', 'Schedules');
+        //Schedule
+        $schedule=ServiceProvider::get_schedules_list($this->service_provider_id,$id)[0];
+        return view("service_provider.schedule.show")->with([
+            'schedule' => $schedule,
         ]);
     }
     public function schedule_create()
@@ -104,6 +86,7 @@ class ServiceProviderController extends Controller
     }
 
 
+    
     // Coach
     public function coach_index()
     {
@@ -120,7 +103,9 @@ class ServiceProviderController extends Controller
     public function trip_index()
     {
         View::share('title', 'Trip');
-        return view('service_provider.trip.index');
+       $trips=Trip::get_trips($this->service_provider_id);
+        
+        return view('service_provider.trip.index')->with(['trips'=>$trips->toArray()]);
     }
     public function trip_create(int $id)
     {
@@ -131,5 +116,18 @@ class ServiceProviderController extends Controller
     }
     public function trip_store(TripRegisteringRequest $request)
     {
+        $newTrip=$request->toArray();
+        $newTrip['service_provider_id']=$this->service_provider_id;
+        return Trip::create($newTrip);
     }
+    public function trip_destroy(int $id)
+    {
+        try {
+            Trip::find($id)->delete();
+        } catch (Exception $e) {
+            return back()->withError('Không thể xóa chuyến đi này vì đã có người mua vé'); //$e->getMessage()
+        }
+        return redirect()->route('serviceprovider.trip.index');
+    }
+
 }

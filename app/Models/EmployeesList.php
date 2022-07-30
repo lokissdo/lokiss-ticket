@@ -14,5 +14,7 @@ class EmployeesList extends Model
         'service_provider_id',
     ];
     const UPDATED_AT = null;
-
+    public function user(){
+        return $this->hasOne(User::class,'id','id'); 
+    }
 }

@@ -19,17 +19,15 @@ class Station extends Model
     ];
     public $timestamps = false;
     public function province(){
-        return $this->hasOne(Province::class,'code','address'); 
+        return $this->belongsTo(Province::class,'address','code',); 
     }
     public function district(){
-        return $this->hasOne(District::class,'code','address2'); 
+        return $this->belongsTo(District::class,'address2','code'); 
     }
     public function getProvinceNameAttribute()
     {
         $preFix = array('Tỉnh', 'Thành phố');
         $name = $this->province->name;
-        // $arrStr=explode(" ",$name);
-        // $res=implode(" ",$arrStr);
         return str_replace($preFix, "", $name);
     }
     public function getDistrictNameAttribute()
@@ -37,8 +35,6 @@ class Station extends Model
         $preFix = array('Quận', 'Huyện', 'Thị xã','Thành phố');
 
         $name = $this->district->name;
-        // $arrStr=explode(" ",$name);
-        // $res=implode(" ",$arrStr);
         return str_replace($preFix, "", $name);
     }
     static function OrderStations($list)

@@ -24,9 +24,6 @@ class AdminController extends Controller
     {
         View::share('title', 'Home');
         $providers = ServiceProvider::all()->toArray();
-        // foreach($providers as $key => $provider){
-        //     $providers[$key]['address']=Province::where('code', $provider['address'])->first()->name;
-        // }
         return view('admin.index')->with([
             'providers' => $providers
         ]);
@@ -52,7 +49,7 @@ class AdminController extends Controller
 
         $totalPage=(!empty($request->isFilter)||!isset($request->isFilter))?ceil(($query->count()) / $itemsPerPage):-1;
 
-        $users = $query->offset($offset)->limit($limit)->get();
+        $users = $query->offset($offset)->limit($limit)->with(['province','district'])->get();
 
         $users->append('address_name');
         $users->append('role_name');
@@ -88,7 +85,7 @@ class AdminController extends Controller
     public function provider_index()
     {
         View::share('title', 'Home');
-        $providers = ServiceProvider::all();
+        $providers = ServiceProvider::with('province')->get();
         $providers->append('address_name');
         return view('admin.provider.index')->with([
             'providers' => $providers->toArray()

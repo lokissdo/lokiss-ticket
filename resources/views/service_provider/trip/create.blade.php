@@ -18,7 +18,7 @@
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
     <form action="{{ route('serviceprovider.trip.store') }}" >
-
+        <input  value="{{$id}}" name="schedule_id" hidden>
         <div class="container mt-5 mb-5 d-flex justify-content-center">
             <div class="card px-1 py-4">
                 <div class="card-body">
@@ -33,7 +33,7 @@
                                 <div class="input-group">
                                     <label class="form-control label-time" >ID Lịch trình:</label>
                                     <input class="form-control"  
-                                        type="number" value="{{$id}}" name="schedule_id">
+                                        type="number" value="{{$id}}" disabled>
                                 </div>
                             </div>
                         </div>
@@ -65,8 +65,8 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class="form-control label-time" for="appt-time">Ngày khởi hành :</label>
-                                    <input class="form-control" min="{{date('Y-m-d')}}"  id="departure-date" type="date" name="departure_time">
+                                    <label class="form-control label-time" for="departure-date">Ngày khởi hành :</label>
+                                    <input class="form-control" min="{{date('Y-m-d')}}"  id="departure-date" type="date" name="departure_date">
                                 </div>
                             </div>
                         </div>

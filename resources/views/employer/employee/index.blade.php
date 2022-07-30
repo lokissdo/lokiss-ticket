@@ -8,7 +8,6 @@
 
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
-
     <ul class="nav nav-tabs d-flex justify-content-end">
         <li class="nav-item">
             <a class="nav-link active"href={{ route('employer.employee.index') }}>Xem</a>
@@ -29,6 +28,8 @@
                 <th scope="col">Tên</th>
                 <th scope="col">Email</th>
                 <th scope="col">Địa chỉ</th>
+                <th scope="col">Ngày bắt đầu</th>
+
                 <th scope="col">###</th>
             </tr>
         </thead>
@@ -39,6 +40,8 @@
                     <td>{{ $employee['name'] }}</td>
                     <td>{{ $employee['email'] }}</td>
                     <td>{{ $employee['address_name'] }}</td>
+                    <td>{{ $employee['created_at'] }}</td>
+
 
                     <td>
                         <form id="delete_form" method="POST"
