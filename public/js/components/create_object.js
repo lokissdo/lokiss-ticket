@@ -34,8 +34,8 @@ function SubmitFormHandler(e) {
             } else {
                 html =
                     `<div class="alert alert-success">Thêm ${object} thành công<ul>`;
-                window.location.href =
-                    $("#show_list").getAttribute("href");
+                // window.location.href =
+                //     $("#show_list").getAttribute("href");
             }
             message.innerHTML = html;
         });

@@ -43,6 +43,9 @@ class User extends Authenticatable
     {
         return  strtolower(UserRoleEnum::getKey($this->role));
     }
+
+
+    
     static function createRememberToken($credentials)
     {
         return md5(strval($credentials['email']).strval($credentials['password'])).strval(time());
