@@ -3,29 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRoleEnum;
-use App\Events\UserRegisteredEvent;
 use App\Http\Requests\AuthenticatingRequest;
 use App\Http\Requests\RegisteringRequest;
-use App\Mail\NotifyMail;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use App\Jobs\SendEmailJob as Job;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
+
 class AuthController extends Controller
 {
-    private const DEFAULT_ROLE=1;
+    private const DEFAULT_ROLE = 1;
     public function login()
     {
         // if (Auth::viaRemember()) {
         //     dd(Auth::user());
         // }
-        if(session()->has('user')){
-            return redirect()->route(session('user')['role'].'.index');
+        $remember_token = Cookie::get('remember_token');
+        if ($remember_token != null) {
+            $user = User::compareRememberToken($remember_token);
+            if ($user !== null) {
+                $role = strtolower(UserRoleEnum::getKey($user->role));
+                User::setUserSession($user,$role);
+                return redirect()->route("$role.index");
+            }
+        }
+        if (session()->has('user')) {
+            return redirect()->route(session('user')['role'] . '.index');
         }
         View::share('title', 'Đăng nhập');
         return view('auth/login');
@@ -33,6 +40,7 @@ class AuthController extends Controller
     public function signOut()
     {
         session()->flush();
+        Cookie::queue(Cookie::forget('remember_token'));
         return redirect()->route("login");
     }
     public function register()
@@ -42,12 +50,12 @@ class AuthController extends Controller
     }
     public function registering(RegisteringRequest $request)
     {
-        $toInsert=$request->validated();
-        $toInsert['password']= bcrypt($toInsert['password']);
+        $toInsert = $request->validated();
+        $toInsert['password'] = bcrypt($toInsert['password']);
         $user = User::create($toInsert);
         dispatch(new Job($user));
         //$email = new NotifyMail($user);
-       // Mail::to($user->email)->send($email);
+        // Mail::to($user->email)->send($email);
         session()->flash('message', 'Successfully registered.');
         return redirect()->route("login");
     }
@@ -57,42 +65,46 @@ class AuthController extends Controller
         $user = User::query()
             ->where('email', $data->getEmail())
             ->first();
-        $toDispatch=0;
+        $toDispatch = 0;
         if (is_null($user)) {
             $user = new User();
-            $toDispatch=1;
+            $toDispatch = 1;
         }
         $user->email = $data->getEmail();
         $user->name   = $data->getName();
         $user->avatar = $data->getAvatar();
         $user->save();
-        if(!$user->email) return redirect()->route("register",[
-            'error'=>"Your account doesn't include email"
+        if (!$user->email) return redirect()->route("register", [
+            'error' => "Your account doesn't include email"
         ]);
-        $roleIndex=is_null($user->role)?self::DEFAULT_ROLE:$user->role;
-        $role = strtolower(UserRoleEnum::getKeys($roleIndex)[0]);
-        session(['user' => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $role
-        ]]);
-        if($toDispatch) dispatch(new Job($user));
+        $roleIndex = is_null($user->role) ? self::DEFAULT_ROLE : $user->role;
+        $role = strtolower(UserRoleEnum::getKey($roleIndex));
+        // session(['user' => [
+        //     'id' => $user->id,
+        //     'name' => $user->name,
+        //     'email' => $user->email,
+        //     'avatar' => $user->avatar,
+        //     'role' => $role
+        // ]]);
+        User::setUserSession($user, $role);
+        if ($toDispatch) dispatch(new Job($user));
         return redirect()->route("$role.index");
     }
-    public function loggingIn(AuthenticatingRequest $request){
+
+    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+    public function loggingIn(AuthenticatingRequest $request)
+    {
         $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials,isset($request->isRemembered))) {
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $roleName = strtolower(UserRoleEnum::getKeys($user->role)[0]);
-            session(['user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-                'role' => $roleName
-            ]]);
+            $roleName = strtolower(UserRoleEnum::getKey($user->role));
+            User::setUserSession($user, $roleName);
+            if (isset($request->isRemembered)) {
+                $remember_token = User::createRememberToken($credentials);
+                Cookie::queue('remember_token',$remember_token, time() + 86400 * 30);
+                $user->remember_token=$remember_token;
+                $user->save();
+            }
             return redirect()->route("$roleName.index");
         }
         return Redirect::back()->withErrors(['Email or password is incorrect.',]);

@@ -17,13 +17,27 @@ class Schedule extends Model
 
     ];
     public $timestamps = false;
-    public function getArrivalProvinceAttribute()
-    {
-        return  Province::where('code',$this->arrival_province_code)->first()->name;
+    public function departure_province(){
+       return $this->belongsTo(Province::class,'departure_province_code','code'); 
     }
-    public function getDepartureProvinceAttribute()
+    public function schedule_detail()
     {
-        return  Province::where('code',$this->departure_province_code)->first()->name;
+        return $this->hasMany(ScheduleDetail::class,'schedule_id','id'); 
+    }
+    // public function schedule_detail()
+    // {
+    //     return $this->hasOne(ScheduleDetail::class,'schedule_id','id'); 
+    // }
+    public function arrival_province(){
+        return $this->belongsTo(Province::class,'arrival_province_code','code'); 
+    }
+    public function getArrivalProvinceNameAttribute()
+    {
+        return  $this->arrival_province->name;
+    }
+    public function getDepartureProvinceNameAttribute()
+    {
+        return  $this->departure_province->name;
     }
     public function getDepartureTimeStrAttribute()
     {
@@ -40,4 +54,15 @@ class Schedule extends Model
         $arTime=intval($this->arrival_time);
         return (floor($arTime/1440));
     }
+    public function get_informations_without_detail(){
+        $this->append('departure_province_name');
+        $this->append('arrival_province_name');
+        $this->append('arrival_time_str');
+        $this->append('departure_time_str');
+        $this->append('total_days');
+        $this->makeHidden([
+            'arrival_province', 'departure_province',
+            'departure_province_code', 'arrival_province_code', 'departure_time', 'arrival_time'
+        ]);
+    } 
 }

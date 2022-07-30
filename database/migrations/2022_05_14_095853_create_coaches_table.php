@@ -16,8 +16,9 @@ class CreateCoachesTable extends Migration
         Schema::create('coaches', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_provider_id')->constrained();
-            $table->tinyInteger('seat_numbers');
+            $table->tinyInteger('seat_number');
             $table->tinyInteger('type');
+            $table->string('name');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }

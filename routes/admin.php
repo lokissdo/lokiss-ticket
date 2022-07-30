@@ -25,10 +25,15 @@ Route::group([
     Route::get('/provider/edit/{id}', [AdminController::class, 'provider_edit'])->name('provider.edit');
     Route::post('/provider/update/{id}', [AdminController::class, 'provider_update'])->name('provider.update');
     Route::delete('/provider/destroy/{id}', [AdminController::class, 'provider_destroy'])->name('provider.destroy');
+
+
     Route::get('/station', [AdminController::class, 'station_index'])->name('station.index');
     Route::get('/station/create', [AdminController::class, 'station_create'])->name('station.create');
     Route::post('/station/store', [AdminController::class, 'station_store'])->name('station.store');
+    Route::delete('/station/destroy/{id}', [AdminController::class, 'station_destroy'])->name('station.destroy');
 
-    // Route::get('/{user}', [PassengerController::class, 'show'])->name('show');
-    // Route::delete('/{user}', [PassengerController::class, 'destroy'])->name('destroy');
+    Route::get('/user', [AdminController::class, 'user_index'])->name('user.index');
+
+    // Route::get('/{user}', [userController::class, 'show'])->name('show');
+    // Route::delete('/{user}', [userController::class, 'destroy'])->name('destroy');
 });

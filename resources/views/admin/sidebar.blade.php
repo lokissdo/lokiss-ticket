@@ -1,7 +1,6 @@
 
 <link rel="stylesheet" href="{{asset('css/sidebar.css')}}">
   <div class="sidebar float-left  border border-2 sticky-top ">
-    
     <div class="d-flex flex-column flex-shrink-0 p-3 text-white height-100" style="width: 280px;">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
@@ -10,7 +9,8 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-          <a href="#" class="nav-link active" aria-current="page">
+          <a href="#" class="nav-link  {{$site=='index'?'active':'text-white'}}   
+          " aria-current="page">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
             Home
           </a>
@@ -28,19 +28,19 @@
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link text-white">
+          <a href="{{route('admin.user.index')}}" class="nav-link {{$site=='user'?'active':'text-white'}}">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-            Customers
+            Users
           </a>
         </li>
         <li>
-          <a href="{{route('admin.provider.index')}}" class="nav-link text-white">
+          <a href="{{route('admin.provider.index')}}" class="nav-link {{$site=='provider'?'active':'text-white'}}">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
             Service Provider
           </a>
         </li>
         <li>
-          <a href="{{route('admin.station.index')}}" class="nav-link text-white">
+          <a href="{{route('admin.station.index')}}" class="nav-link {{$site=='station'?'active':'text-white'}}">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
             Stations
           </a>

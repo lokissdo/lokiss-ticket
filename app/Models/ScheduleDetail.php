@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ScheduleDetail extends Model
 {
     use HasFactory;
+    public function station()
+    {
+        return $this->hasOne(Station::class,'id','station_id'); 
+    }
 }

@@ -4,7 +4,7 @@
         <link rel="stylesheet" href={{ asset('css/admin/provider_create.css') }}>
     @endpush
 @section('sidebar')
-    @include('admin.sidebar')
+    @include('admin.sidebar',['site' => 'station'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-end">
@@ -35,8 +35,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="input-group"> <select name="address" class="form-select " id="select_pro">
-                                        <option data-code="null" class="input-group form-control" value="null"> Select
-                                            city </option>
+                                        <option data-code="null" class="input-group form-control" value="null"> Chọn tỉnh / thành phố</option>
                                     </select>
                                 </div>
                             </div>
@@ -48,8 +47,7 @@
                             <div class="form-group">
                                 <div class="input-group"> 
                                     <select name="address2" class="form-select " id="select_dis">
-                                        <option data-code="null" class="input-group form-control" value="null"> Select
-                                            district </option>
+                                        <option data-code="null" class="input-group form-control" value="null"> Chọn quận / huyện </option>
                                     </select>
                                 </div>
                             </div>

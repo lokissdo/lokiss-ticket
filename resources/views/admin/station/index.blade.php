@@ -4,7 +4,8 @@
         <link rel="stylesheet" href={{ asset('css/admin.css') }}>
     @endpush
 @section('sidebar')
-    @include('admin.sidebar')
+@include('admin.sidebar',['site' => 'station'])
+
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 
@@ -16,7 +17,9 @@
             <a class="nav-link" href={{ route('admin.station.create') }}>Thêm</a>
         </li>
     </ul>
-
+    @if (session('error'))
+        <div class="alert alert-danger text-center">{{ session('error') }}</div>
+    @endif
     <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
@@ -36,17 +39,15 @@
                     <td>{{ $station['province_name'] }}</td>
 
                     <td>
-                        {{-- <div class="d-flex">
-                            <a class="btn btn-primary btn-sm"
-                                href={{ route('admin.provider.edit', ['id' => $provider['id']]) }} role="button">Sửa</a>
+                        <div class="d-flex">
                             <form id="delete_form" method="POST"
-                                action={{ route('admin.provider.destroy', ['id' => $provider['id']]) }}>
+                                action={{ route('admin.station.destroy', ['id' => $station['id']]) }}>
                                 @method('DELETE')
-                                <button id="delete_provider" class="btn btn-danger btn-sm" type="submit">
+                                <button id="delete_station" class="btn btn-danger btn-sm" type="submit">
                                     Xóa
                                 </button>
                             </form>
-                        </div> --}}
+                        </div>
 
                     </td>
                 </tr>
@@ -54,8 +55,8 @@
         </tbody>
     </table>
 </div>
-{{-- <script type="text/javascript">
-    const deleteButtons = document.querySelectorAll("#delete_provider");
+<script type="text/javascript">
+    const deleteButtons = document.querySelectorAll("#delete_station");
     deleteButtons.forEach(deleteButton => {
         deleteButton.onclick = (e) => {
             e.preventDefault();
@@ -64,5 +65,5 @@
             }
         }
     });
-</script> --}}
+</script>
 @endsection

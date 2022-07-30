@@ -8,22 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 class Station extends Model
 {
     use HasFactory;
+    protected $with = ['province','district'];
     protected $appends = ['province_name','district_name'];
+
+    protected $fillable = [
+        'name',
+        'address',
+        'address2',
+
+    ];
+    public $timestamps = false;
+    public function province(){
+        return $this->belongsTo(Province::class,'address','code',); 
+    }
+    public function district(){
+        return $this->belongsTo(District::class,'address2','code'); 
+    }
     public function getProvinceNameAttribute()
     {
         $preFix = array('Tỉnh', 'Thành phố');
-        $name = Province::where('code', $this->address)->first()->name;
-        // $arrStr=explode(" ",$name);
-        // $res=implode(" ",$arrStr);
+        $name = $this->province->name;
         return str_replace($preFix, "", $name);
     }
     public function getDistrictNameAttribute()
     {
-        $preFix = array('Quận', 'Huyện', 'Thị xã');
+        $preFix = array('Quận', 'Huyện', 'Thị xã','Thành phố');
 
-        $name = District::where('code', $this->address2)->first()->name;
-        // $arrStr=explode(" ",$name);
-        // $res=implode(" ",$arrStr);
+        $name = $this->district->name;
         return str_replace($preFix, "", $name);
     }
     static function OrderStations($list)
@@ -31,6 +42,8 @@ class Station extends Model
         $map = [];
         $res=[];
         $first=NULL;
+
+        //initial marking map
         foreach($list as $each){
             $each['is_first']=true;
             $map[$each['station_id']]=$each;
