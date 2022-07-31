@@ -16,12 +16,12 @@
             <a class="nav-link" href={{ route('employer.employee.create') }}>Thêm</a>
         </li>
     </ul>
-    <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2>@include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
-    <div>Danh sách nhân viên</div>
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <h2>@include('icons.employees')Danh sách nhân viên</h2>
+    <table class="table border  mb-0 mr-auto bg-light border-1 align-self-stretch table-hover ">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>

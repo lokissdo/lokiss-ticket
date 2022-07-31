@@ -1,17 +1,29 @@
-:root{
+:root {
     --sidebar-heigth: 96vh;
 }
 
-.sidebar{
-    position: sticky;
-    top: 2vh;
-    height:var(--sidebar-heigth);
-    width: 300px;
-    padding-right: 300px;
-    border-radius: 30px;
-   background-color: #212529;
-   margin-right: 3vw;
+.sidebar {
+    position: fixed;
+
+    height: 100vh;
+    width: 280px;
+    background-image: linear-gradient(to right top, #053341, #082937, #091e2d, #081522, #000717);
+    margin: 0px;
+    top: 0;
+    left: 0;
+    bottom: 0;
 }
-.height-100{
-    height:100%;
+
+.sidebar-overlay {
+    width: 400px;
+}
+
+.height-100 {
+    height: 100%;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #212529;
+    background-color: #ffffff;
 }

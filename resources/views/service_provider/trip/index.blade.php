@@ -17,12 +17,12 @@
         </li>
 
     </ul>
-    <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
     <div>Danh sách chuyến đi</div>
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>
@@ -46,22 +46,23 @@
                     <td>{{ $trip['schedule']['arrival_province_name'] }}</td>
                     <td>{{ $trip['schedule']['arrival_time_str'] . ' | ' . date('d-m-Y', strtotime($trip['arrival_date'])) }}
                     </td>
-                    <td>{{ $trip['coach'] }}</td>
+                    <td>{{ $trip['coach']['name'] . ' (' . $trip['coach']['seat_number'] . 'chỗ )' }}</td>
                     <td>{{ number_format($trip['price']) . ' VND' }}</td>
 
 
-                    <td class="d-flex">
-
-                        <form id="delete_form" method="POST"
-                            action={{ route('serviceprovider.trip.destroy', ['id' => $trip['id']]) }}>
-                            @method('DELETE')
-                            <button id="delete_trip" class="btn btn-danger btn-sm" type="submit">
-                                Xóa
-                            </button>
-                        </form>
-                        <a class="btn btn-primary btn-sm "
-                            href="{{ route('serviceprovider.schedule.show', ['id' => $trip['schedule_id']]) }}"
-                            role="button">Xem chi tiết lịch trình</a>
+                    <td>
+                        <div class="d-flex justify-content-around">
+                            <form id="delete_form" method="POST"
+                                action={{ route('serviceprovider.trip.destroy', ['id' => $trip['id']]) }}>
+                                @method('DELETE')
+                                <button id="delete_trip" class="btn btn-danger btn-sm" type="submit">
+                                    Xóa
+                                </button>
+                            </form>
+                            <a class="btn btn-primary btn-sm "
+                                href="{{ route('serviceprovider.trip.show', ['id' => $trip['id']]) }}"
+                                role="button">Xem chi tiết </a>
+                        </div>
 
                     </td>
                 </tr>

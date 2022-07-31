@@ -40,7 +40,7 @@
             <!-- Register buttons -->
             <div class="text-center">
                 <h5>or log in with:</h5>
-                @include('components.icons')
+                @include('icons.social_media')
             </div>
         </form>
     </div>

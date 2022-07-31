@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 
 class CoachController extends Controller
 {
-    public function getCoaches(Request $req)
+    public function get_coaches(Request $req)
     {
         $user = session()->get('user');
         if (!$user) 

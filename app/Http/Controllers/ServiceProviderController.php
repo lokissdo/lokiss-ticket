@@ -9,6 +9,7 @@ use App\Models\Schedule;
 use App\Models\ScheduleDetail;
 use App\Models\ServiceProvider;
 use App\Models\Station;
+use App\Models\Ticket;
 use App\Models\Trip;
 use Exception;
 use Google\Auth\Cache\Item;
@@ -22,7 +23,8 @@ class ServiceProviderController extends Controller
     private $service_provider_id;
     public function __construct()
     {
-        $this->service_provider_id = session()->get('user')['service_provider_id'];
+        if (session()->has('user'))
+            $this->service_provider_id = session()->get('user')['service_provider_id'];
     }
     // Schedule
     public function schedule_index()
@@ -30,7 +32,7 @@ class ServiceProviderController extends Controller
         View::share('title', 'Schedules');
 
         //Schedule
-        $schedules=ServiceProvider::get_schedules_list($this->service_provider_id);
+        $schedules = ServiceProvider::get_schedules_list($this->service_provider_id);
         return view("service_provider.schedule.index")->with([
             'schedules' => $schedules,
         ]);
@@ -39,7 +41,7 @@ class ServiceProviderController extends Controller
     {
         View::share('title', 'Schedules');
         //Schedule
-        $schedule=ServiceProvider::get_schedules_list($this->service_provider_id,$id)[0];
+        $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $id)[0];
         return view("service_provider.schedule.show")->with([
             'schedule' => $schedule,
         ]);
@@ -86,7 +88,7 @@ class ServiceProviderController extends Controller
     }
 
 
-    
+
     // Coach
     public function coach_index()
     {
@@ -103,9 +105,9 @@ class ServiceProviderController extends Controller
     public function trip_index()
     {
         View::share('title', 'Trip');
-       $trips=Trip::get_trips($this->service_provider_id);
-        
-        return view('service_provider.trip.index')->with(['trips'=>$trips->toArray()]);
+        $trips = Trip::get_trips($this->service_provider_id);
+
+        return view('service_provider.trip.index')->with(['trips' => $trips]);
     }
     public function trip_create(int $id)
     {
@@ -116,8 +118,8 @@ class ServiceProviderController extends Controller
     }
     public function trip_store(TripRegisteringRequest $request)
     {
-        $newTrip=$request->toArray();
-        $newTrip['service_provider_id']=$this->service_provider_id;
+        $newTrip = $request->toArray();
+        $newTrip['service_provider_id'] = $this->service_provider_id;
         return Trip::create($newTrip);
     }
     public function trip_destroy(int $id)
@@ -129,5 +131,43 @@ class ServiceProviderController extends Controller
         }
         return redirect()->route('serviceprovider.trip.index');
     }
-
+    public function trip_show(int $id)
+    {
+        View::share('title', 'Trip');
+        //Schedule
+        $trip = Trip::get_trips($this->service_provider_id, $id)[0];
+        $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $trip['schedule_id'])[0];
+        $tickets = Ticket::get_tickets($id);
+        $tickets = array_map(function ($item) {
+            $user = [
+                'id' => $item['user_id'],
+                'name' => $item['user']['name'],
+                'email' => $item['user']['email'],
+                'avatar' => $item['user']['avatar'],
+                'phone_number' => $item['user']['phone_number'],
+            ];
+            $arrival_station = [
+                'name' => $item['arrival_station']['name'],
+                'province_name' => $item['arrival_station']['province_name'],
+                'district_name' => $item['arrival_station']['district_name'],
+            ];
+            $departure_station = [
+                'name' => $item['departure_station']['name'],
+                'province_name' => $item['departure_station']['province_name'],
+                'district_name' => $item['departure_station']['district_name'],
+            ];
+            $seat_position = $item['seat_position'];
+            return [
+                'user' => $user,
+                'seat_position' => $seat_position,
+                'departure_station' => $departure_station,
+                'arrival_station' => $arrival_station,
+            ];
+        }, $tickets);
+        return view("service_provider.trip.show")->with([
+            'schedule' => $schedule,
+            'tickets' => $tickets,
+            'trip' => $trip,
+        ]);
+    }
 }
