@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('available_balance')->default(0);
             $table->string('avatar')->nullable();
             $table->string('address');
+            $table->string('phone_number')->nullable();
             $table->string('address2')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->rememberToken();

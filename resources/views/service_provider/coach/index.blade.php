@@ -23,12 +23,12 @@ $isEmployer = Session::get('user')['role'] == 'employer';
 
     </ul>
 
-    <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
-    <div>Danh sách các loại xe</div>
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <h2> @include('icons.coach')Danh sách các loại xe</h2>
+    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>

@@ -9,4 +9,5 @@ final class CoachTypesEnum extends Enum
     const SHUTTLE   = 0;
     const BUS       = 1;
     const LIMOUSINE = 2;
+    const MINI      = 3;
 }
