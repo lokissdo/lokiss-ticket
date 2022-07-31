@@ -23,7 +23,7 @@
         </div>
     </div>
     
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch ">
+    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
        
         <thead class="thead-dark">
             <tr>

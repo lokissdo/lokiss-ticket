@@ -1,0 +1,48 @@
+.seat {
+    margin: 20px;
+    padding: 10px;
+    width: 100px;
+}
+.ticket-detail {
+ display: none;
+    padding: 20px 15px;
+    background-color: antiquewhite;
+    left: -20px;
+    z-index: 999;
+}
+.infor-ticket{
+    width: max-content;
+}
+.seat:hover .ticket-detail  {
+    display: block;
+}
+
+.user:hover .ticket-detail  {
+    display: block;
+}
+
+#show-seat-detail,#show-station-detail{
+    display: none;
+}
+.straight-line{
+    margin-top: 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.286);
+    margin-bottom: 10px;
+
+
+}
+.ticket-detail,.seat-detail{
+    animation: FadeInUp .7s ease-in-out .0s forwards;
+}
+@keyframes FadeInUp {
+    from{
+        opacity: 0;
+        /* -webkit-transform: translate3d(0,100%,0); */
+        /* transform: translate3d(0,100%,0); */
+    }
+    to{
+        opacity: 1;
+        /* -webkit-transform: none; */
+        /* transform: none; */
+    }  
+}

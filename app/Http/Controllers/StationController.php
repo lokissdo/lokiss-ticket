@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class StationController extends Controller
 {
-    public function getAllStations(Request $req)
+    public function get_all_stations(Request $req)
     {
         $user = session()->get('user');
         if (!$user) 

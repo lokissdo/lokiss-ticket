@@ -20,6 +20,7 @@ class EmployerController extends Controller
     private $service_provider_id;
     public function __construct()
     {
+        if (session()->has('user'))
         $this->service_provider_id = session()->get('user')['service_provider_id'] ?? null;
     }
     public function index()

@@ -20,7 +20,7 @@
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>

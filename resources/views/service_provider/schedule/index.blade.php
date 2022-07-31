@@ -21,7 +21,7 @@
     <div>Danh sách lịch trình</div>
 
 
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>
@@ -43,6 +43,8 @@
                             <h1>ID: {{ $schedule['id'] }}</h1>
                         </a>
                         @foreach ($schedule['schedule_detail'] as $key => $each)
+                            @include('icons.station')
+
                             <span>{{ $each['name'] }}
                                 ({{ $each['district_name'] . ', ' . $each['province_name'] }})
                             </span>

@@ -17,7 +17,7 @@
             <a class="nav-link" href={{ route('serviceprovider.schedule.create') }}>Thêm</a>
         </li>
     </ul>
-    <h2> Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
 
 
     <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
@@ -65,6 +65,8 @@
     <h3>Lịch trình di chuyyển</h3>
     <div> 
         @foreach ($schedule['schedule_detail'] as $key => $each)
+        @include('icons.station')
+
         <strong>{{ $each['name'] }}
             ({{ $each['district_name'].', '.$each['province_name'] }})
         </strong>

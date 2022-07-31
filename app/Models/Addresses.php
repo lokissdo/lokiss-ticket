@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Addresses extends Model
 {
     use HasFactory;
-    public function getDetailAddresses(){
+    public function get_detail_addresses(){
         $content=[];
         $allProvince=Province::all();
         $allDistrict=District::all();

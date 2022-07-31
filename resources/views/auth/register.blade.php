@@ -72,7 +72,7 @@
         <!-- Register buttons -->
         <div class="text-center">
             <h5>or sign up with:</h5>
-            @include('components.icons')
+            @include('icons.social_media')
         </div>
     </div>
 @endsection

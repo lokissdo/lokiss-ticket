@@ -19,7 +19,7 @@ class Station extends Model
     ];
     public $timestamps = false;
     public function province(){
-        return $this->belongsTo(Province::class,'address','code',); 
+        return $this->belongsTo(Province::class,'address','code'); 
     }
     public function district(){
         return $this->belongsTo(District::class,'address2','code'); 
