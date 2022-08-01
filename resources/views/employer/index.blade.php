@@ -15,6 +15,7 @@
           <a class="nav-link" href={{route('admin.provider.create')}}>Thêm</a>
         </li>
       </ul>
+    @include('layout.footer')
       
 </div>
     

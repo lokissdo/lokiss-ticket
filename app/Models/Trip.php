@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\ItemsPerPage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,9 +27,22 @@ class Trip extends Model
     {
         return $this->belongsTo(Schedule::class);
     }
-    static function get_trips($service_provider_id, $trip_id = null)
+    static function get_trips($service_provider_id, $trip_id = null,$request=null)
     {
         $query = Trip::where('service_provider_id', $service_provider_id);
+
+
+        // Get API
+        $itemsPerPage = ItemsPerPage::USER;
+        $sortCol = $request->sortCol ?? 'id';
+        $sortType = $request->sortType ?? 'asc';
+        $searchCol = $request->searchCol ?? 'name';
+        $searchVal = $request->searchVal ?? '';
+        $offset = isset($request->pageNum) && $request->pageNum ? ($request->pageNum - 1) * $itemsPerPage : 0;
+        $limit = $itemsPerPage;
+
+/////
+
         if ($trip_id !== null) $query = $query->where('id', $trip_id);
         $trips = $query->with(['coach:id,name,seat_number', 'schedule.arrival_province', 'schedule.departure_province'])->get();
         $trips = $trips->map(function ($item, $key) {

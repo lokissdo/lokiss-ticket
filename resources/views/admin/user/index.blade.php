@@ -9,22 +9,33 @@
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 position-relative">
 
-    <ul class="nav nav-tabs d-flex justify-content-end">
-        <li class="nav-item">
-            <a class="nav-link active"href={{ route('admin.user.index') }}>Xem</a>
-        </li>
+    <ul class="nav nav-tabs d-flex justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.index') }}" class="text-decoration-none">Home</a>
+                </li>
+                
+                <li class="breadcrumb-item active">User</li>
+            </ol>
+        </nav>
+        <div class="d-inline">
+            <li class="nav-item">
+                <a class="nav-link active"href={{ route('admin.user.index') }}>Xem</a>
+            </li>
+        </div>
     </ul>
 
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
     <div class="wrapper-loading position-absolute d-flex justify-content-center d-none">
-        <div class="spinner-grow text-secondary align-self-center" style="width: 4rem; height: 4rem;" id="loading"role="status">
+        <div class="spinner-grow text-secondary align-self-center" style="width: 4rem; height: 4rem;"
+            id="loading"role="status">
         </div>
     </div>
-    
+
     <table class="table  mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
-       
+
         <thead class="thead-dark">
             <tr>
                 <th scope="col">
@@ -101,13 +112,13 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="input-group"> <select class="form-select " id="select_role">
-                                                <option  class="input-group form-control"
-                                                    value="null"> Tất cả</option>
-                                                    @foreach ($roles as $key=>$value){
-                                                        <option class="input-group form-control"
-                                                        value="{{$value}}"> {{strtolower($key)}}</option>
+                                                <option class="input-group form-control" value="null"> Tất cả</option>
+                                                @foreach ($roles as $key => $value)
+                                                    {
+                                                    <option class="input-group form-control"
+                                                        value="{{ $value }}"> {{ strtolower($key) }}</option>
                                                     }
-                                                    @endforeach
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -138,8 +149,8 @@
         </tbody>
 
     </table>
-    
-    <div class="count">Tổng cộng: {{count($users)}}</div>
+
+    <div class="count">Tổng cộng: {{ count($users) }}</div>
     <ul class="pagination align-self-center">
         @for ($i = 1; $i <= $total_page; ++$i)
             <li class="page-item">

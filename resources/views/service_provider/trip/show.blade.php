@@ -1,3 +1,6 @@
+@php
+$role= Session::get('user')['role'];
+@endphp
 @extends('layout.master')
 @section('content')
     @push('css')
@@ -5,13 +8,23 @@
         <link rel="stylesheet" href={{ asset('css/service_provider/show_trip.css') }}>
     @endpush
 @section('sidebar')
-    @include(Session::get('user')['role'] . '.sidebar', ['site' => 'trip'])
+    @include($role . '.sidebar', ['site' => 'trip'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 
-    <ul class="nav nav-tabs d-flex justify-content-end">
+    <ul class="nav nav-tabs d-flex justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{route("$role.index")}}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{{ route('serviceprovider.trip.index') }}" class="text-decoration-none">Trip</a>
+                </li>
+                <li class="breadcrumb-item active">Show</li>
+            </ol>
+        </nav>
         <li class="nav-item">
             <a class="nav-link active"href={{ route('serviceprovider.trip.index') }}>Xem</a>
+            <a class="nav-link "href={{ route('serviceprovider.schedule.index') }}>Thêm</a>
         </li>
     </ul>
     <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
@@ -43,7 +56,7 @@
         </tbody>
     </table>
     <div class="straight-line"></div>
-    <h3> @include('icons.schedule')Lịch trình di chuyyển</h3>
+    <h3> @include('icons.schedule')Lịch trình di chuyển</h3>
     <div>
         @foreach ($schedule['schedule_detail'] as $key => $each)
             @include('icons.station')

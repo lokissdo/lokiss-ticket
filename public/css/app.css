@@ -45,6 +45,7 @@ html{
 
 .nav-tabs {
   --bs-nav-tabs-border-color: #89898930;
+  margin-bottom: 5px;
 }
 
 /* .table tbody tr:nth-child(2n) {
@@ -58,4 +59,8 @@ thead {
 
 .table {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.2) !important;
+}
+.breadcrumb{
+  margin-bottom: 0px;
+  font-size: 1.2rem;
 }
