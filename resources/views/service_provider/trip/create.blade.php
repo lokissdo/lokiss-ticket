@@ -97,6 +97,8 @@
             </div>
         </div>
     </form>
+    @include('layout.footer')
+
 </div>
 @push('js')
     <script>

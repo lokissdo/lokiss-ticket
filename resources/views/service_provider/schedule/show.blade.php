@@ -17,10 +17,10 @@
             <a class="nav-link" href={{ route('serviceprovider.schedule.create') }}>Thêm</a>
         </li>
     </ul>
-    <h2> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
 
 
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <table class="table mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
@@ -79,6 +79,8 @@
         @endif
     @endforeach
     </div>
+    @include('layout.footer')
+
 </div>
 <script type="text/javascript">
     const deleteButtons = document.querySelectorAll("#delete_schedule");
