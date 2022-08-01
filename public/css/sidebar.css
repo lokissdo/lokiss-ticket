@@ -6,7 +6,7 @@
     position: fixed;
 
     height: 100vh;
-    width: 280px;
+    width: var(--sidebar-width);
     background-image: linear-gradient(to right top, #053341, #082937, #091e2d, #081522, #000717);
     margin: 0px;
     top: 0;

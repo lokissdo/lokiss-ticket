@@ -3,6 +3,7 @@
 }
 .admin-page{
     margin-right: 3vw;
+    /* min-height: calc(100vh-15px); */
 }
 .mt-5px{
     margin-top: 5px;

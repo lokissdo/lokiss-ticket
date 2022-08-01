@@ -7,17 +7,15 @@
  display: none;
     padding: 20px 15px;
     background-color: antiquewhite;
-    left: -20px;
+    left: 90px;
+    bottom: 0;
     z-index: 999;
+    color:#22262a;
 }
 .infor-ticket{
     width: max-content;
 }
-.seat:hover .ticket-detail  {
-    display: block;
-}
-
-.user:hover .ticket-detail  {
+.seat:hover .ticket-detail,.user:hover .ticket-detail   {
     display: block;
 }
 
@@ -31,7 +29,7 @@
 
 
 }
-.ticket-detail,.seat-detail{
+.ticket-detail,.seat-detail,.station-detail{
     animation: FadeInUp .7s ease-in-out .0s forwards;
 }
 @keyframes FadeInUp {

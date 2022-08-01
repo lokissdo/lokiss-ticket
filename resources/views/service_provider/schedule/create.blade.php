@@ -115,6 +115,8 @@
             </div>
         </div>
     </form>
+    @include('layout.footer')
+
 </div>
 @push('js')
     <script src="{{ asset('js/components/address.js') }}"></script>

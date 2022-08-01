@@ -14,8 +14,8 @@
             <a class="nav-link active"href={{ route('serviceprovider.trip.index') }}>Xem</a>
         </li>
     </ul>
-    <h2> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <table class="table mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>
@@ -68,7 +68,6 @@
     @endphp
     <div class="straight-line"></div>
     <h3> Chỗ trống: {{ $seat_number - count($tickets) }}</h3>
-    {{-- <button type="button" class="btn btn-primary show-seat-detail">Xem các vị trí trong xe</button> --}}
     <div class="btn-group-toggle ">
         <label class="btn btn-primary active">
             <input type="checkbox" id="show-seat-detail" autocomplete="off"> Xem các vị trí trong xe
@@ -125,7 +124,7 @@
         }
     @endphp
 
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch">
+    <table class="table station-detail mr-auto bg-light border-1 align-self-stretch d-none">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">Bến</th>
