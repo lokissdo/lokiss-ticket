@@ -17,12 +17,12 @@
         </li>
 
     </ul>
-    <h2> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
     <div>Danh sách chuyến đi</div>
-    <table class="table border mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
+    <table class="table  mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>
@@ -69,6 +69,8 @@
             @endforeach
         </tbody>
     </table>
+    @include('layout.footer')
+
 </div>
 <script type="text/javascript">
     const deleteButtons = document.querySelectorAll("#delete_trip");

@@ -8,3 +8,12 @@ $('#show-seat-detail').onchange = (e) => {
 
     }
 }
+$('#show-station-detail').onchange = (e) => {
+    if (e.target.checked) {
+        $('.station-detail').classList.remove('d-none')
+    }
+    else {
+        $('.station-detail').classList.add('d-none')
+
+    }
+}
