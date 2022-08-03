@@ -151,15 +151,7 @@
     </table>
 
     <div class="count">Tổng cộng: {{ count($users) }}</div>
-    <ul class="pagination align-self-center">
-        @for ($i = 1; $i <= $total_page; ++$i)
-            <li class="page-item">
-                <a class="page-link pointer" data-page="{{ $i }}">{{ $i }}</a>
-            </li>
-        @endfor
-
-    </ul>
-
+   @include('components.pagination',['total_page'=>$total_page])
 </div>
 @endsection
 @push('js')

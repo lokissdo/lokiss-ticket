@@ -106,7 +106,6 @@ class ServiceProviderController extends Controller
     {
         View::share('title', 'Trip');
         $trips = Trip::get_trips($this->service_provider_id);
-
         return view('service_provider.trip.index')->with(['trips' => $trips]);
     }
     public function trip_create(int $id)

@@ -1,22 +1,22 @@
 @php
-$role= Session::get('user')['role'];
+$role = Session::get('user')['role'];
 @endphp
 @extends('layout.master')
 @section('content')
     @push('css')
         <link rel="stylesheet" href={{ asset('css/admin.css') }}>
+        <link rel="stylesheet" href={{ asset('css/service_provider/trip_index.css') }}>
     @endpush
 @section('sidebar')
     @include($role . '.sidebar', ['site' => 'trip'])
 @endsection
-<div class="admin-page  d-flex flex-column w-100 mr-2 ">
+<div class="admin-page  d-flex flex-column w-100 mr-2 close-select ">
 
     <ul class="nav nav-tabs d-flex justify-content-between">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route("$role.index")}}" class="text-decoration-none">Home</a>
+                <li class="breadcrumb-item"><a href="{{ route("$role.index") }}" class="text-decoration-none">Home</a>
                 </li>
-            
                 <li class="breadcrumb-item active">Trip</li>
             </ol>
         </nav>
@@ -28,24 +28,94 @@ $role= Session::get('user')['role'];
                 <a class="nav-link " href={{ route('serviceprovider.schedule.index') }}>Thêm</a>
             </li>
         </div>
-        
-
     </ul>
-    <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2 class="text-center"> @include('icons.company') Nhà xe
+        <strong>{{ Session::get('user')['service_provider_name'] }}</strong>
+    </h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
-    <h3> @include('icons.trip')Danh sách chuyến đi</h3> 
+    <h3> @include('icons.trip')Danh sách chuyến đi</h3>
     <table class="table  mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">STT</th>
-                <th scope="col">Khởi hành</th>
-                <th scope="col">Ngày Khởi hành</th>
-                <th scope="col">Đến</th>
-                <th scope="col">Ngày Đến</th>
-                <th scope="col">Xe</th>
-                <th scope="col">Giá</th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between" data-sortcol='id'>
+                        <div> STT</div>
+                        @include('icons.sort')
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between position-relative">
+                        <div>Khởi hành</div>
+                        @include('icons.select', ['data_trigger' => 'select-departure-address'])
+                        <div class="position-absolute d-none select-dropdown" data-name="select-departure-address">
+                            <div class="form-group">
+                                <div class="input-group"> <select name="address" class="form-select " id="select_pro">
+                                        <option data-code="null" class="input-group form-control" value="null"> Chọn
+                                            tỉnh / thành phố</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between position-relative">
+                        <div>Ngày khởi hành</div>
+                        @include('icons.calendar', ['data_trigger' => 'select-departure-date'])
+                        <div class="position-absolute d-none select-dropdown" data-name="select-departure-date">
+                            <input  class="form-control" type="date" name="departure_date">
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between position-relative">
+                        <div>Đến</div>
+                        @include('icons.select', ['data_trigger' => 'select-arrival-address'])
+                        <div class="position-absolute d-none select-dropdown" data-name="select-arrival-address">
+
+                            <div class="form-group">
+                                <div class="input-group"> <select name="address" class="form-select " id="select_pro">
+                                        <option data-code="null" class="input-group form-control" value="null"> Chọn
+                                            tỉnh / thành phố</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between position-relative">
+                        <div>Ngày Đến</div>
+                        @include('icons.calendar', ['data_trigger' => 'select-arrival-date'])
+                        <div class="position-absolute d-none select-dropdown" data-name="select-arrival-date">
+                            <input class="form-control" type="date" name="arrival_date">
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between position-relative">
+                        <div>Xe</div>
+                        @include('icons.select', ['data_trigger' => 'select-coach'])
+                        <div class="position-absolute d-none select-dropdown" data-name="select-coach">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <select class="form-select " id="select_coach">
+                                        <option class="input-group form-control" value="null"> Tất cả</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex justify-content-between" data-sortcol='price'>
+                        <div> Giá</div>
+                        @include('icons.sort')
+                    </div>
+                </th>
                 <th scope="col">###</th>
             </tr>
         </thead>
@@ -83,18 +153,18 @@ $role= Session::get('user')['role'];
             @endforeach
         </tbody>
     </table>
+   @include('components.pagination',['total_page'=>2])
     @include('layout.footer')
 
 </div>
-<script type="text/javascript">
-    const deleteButtons = document.querySelectorAll("#delete_trip");
-    deleteButtons.forEach(deleteButton => {
-        deleteButton.onclick = (e) => {
-            e.preventDefault();
-            if (window.confirm('Bạn có chắc chắn muốn xóa nhân viên  này?')) {
-                e.target.parentNode.submit();
-            }
-        }
-    });
-</script>
 @endsection
+
+
+@push('js')
+<script>
+    const urlCoachAPI = '{{ route('coaches') }}';
+</script>
+
+<script src="{{ asset('js/components/address.js') }}"></script>
+<script src="{{ asset('js/service_provider/trip_index.js') }}"></script>
+@endpush

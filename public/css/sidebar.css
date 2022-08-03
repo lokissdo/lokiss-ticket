@@ -4,7 +4,6 @@
 
 .sidebar {
     position: fixed;
-
     height: 100vh;
     width: var(--sidebar-width);
     background-image: linear-gradient(to right top, #053341, #082937, #091e2d, #081522, #000717);
@@ -15,7 +14,7 @@
 }
 
 .sidebar-overlay {
-    width: 400px;
+    width: 380px;
 }
 
 .height-100 {

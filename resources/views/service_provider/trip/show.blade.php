@@ -1,5 +1,10 @@
 @php
-$role= Session::get('user')['role'];
+$role = Session::get('user')['role'];
+$seats = [];
+foreach ($tickets as $ticket) {
+    $seats[$ticket['seat_position']] = $ticket;
+}
+$seat_number = $trip['coach']['seat_number'];
 @endphp
 @extends('layout.master')
 @section('content')
@@ -15,19 +20,27 @@ $role= Session::get('user')['role'];
     <ul class="nav nav-tabs d-flex justify-content-between">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route("$role.index")}}" class="text-decoration-none">Home</a>
+                <li class="breadcrumb-item"><a href="{{ route("$role.index") }}" class="text-decoration-none">Home</a>
                 </li>
-                <li class="breadcrumb-item"><a href="{{ route('serviceprovider.trip.index') }}" class="text-decoration-none">Trip</a>
+                <li class="breadcrumb-item"><a href="{{ route('serviceprovider.trip.index') }}"
+                        class="text-decoration-none">Trip</a>
                 </li>
                 <li class="breadcrumb-item active">Show</li>
             </ol>
         </nav>
-        <li class="nav-item">
-            <a class="nav-link active"href={{ route('serviceprovider.trip.index') }}>Xem</a>
-            <a class="nav-link "href={{ route('serviceprovider.schedule.index') }}>Thêm</a>
-        </li>
+        <div class="d-flex">
+            <li class="nav-item">
+                <a class="nav-link active"href={{ route('serviceprovider.trip.index') }}>Xem</a>
+            </li>
+            <li class="nav-item">
+
+                <a class="nav-link "href={{ route('serviceprovider.schedule.index') }}>Thêm</a>
+            </li>
+        </div>
+
     </ul>
-    <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2 class="text-center"> @include('icons.company') Nhà xe
+        <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     <table class="table mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
@@ -38,6 +51,8 @@ $role= Session::get('user')['role'];
                 <th scope="col">Ngày Đến</th>
                 <th scope="col">Xe</th>
                 <th scope="col">Giá</th>
+                <th scope="col">Doanh thu</th>
+
             </tr>
         </thead>
         <tbody>
@@ -50,8 +65,10 @@ $role= Session::get('user')['role'];
                 <td>{{ $trip['schedule']['arrival_province_name'] }}</td>
                 <td>{{ $trip['schedule']['arrival_time_str'] . ' | ' . date('d-m-Y', strtotime($trip['arrival_date'])) }}
                 </td>
-                <td>{{ $trip['coach']['name'] . ' (' . $trip['coach']['seat_number'] . ' chỗ )' }}</td>
+                <td>{{ $trip['coach']['name'] . ' (' . $seat_number . ' chỗ )' }}</td>
                 <td>{{ number_format($trip['price']) . ' VND' }}</td>
+                <td>{{ number_format(count($tickets)*$trip['price']). ' VND' }}</td>
+
             </tr>
         </tbody>
     </table>
@@ -72,13 +89,7 @@ $role= Session::get('user')['role'];
             @endif
         @endforeach
     </div>
-    @php
-        $seats = [];
-        foreach ($tickets as $ticket) {
-            $seats[$ticket['seat_position']] = $ticket;
-        }
-        $seat_number = $trip['coach']['seat_number'];
-    @endphp
+
     <div class="straight-line"></div>
     <h3> Chỗ trống: {{ $seat_number - count($tickets) }}</h3>
     <div class="btn-group-toggle ">
