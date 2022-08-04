@@ -1,3 +1,6 @@
+@php
+$role= Session::get('user')['role'];
+@endphp
 @extends('layout.master')
 @section('content')
     @push('css')
@@ -5,13 +8,28 @@
         <link rel="stylesheet" href={{ asset('css/service_provider/trip_create.css') }}> 
     @endpush
 @section('sidebar')
-    @include(Session::get('user')['role'] . '.sidebar',['site'=>'trip'])
+    @include($role . '.sidebar',['site'=>'trip'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
-    <ul class="nav nav-tabs d-flex justify-content-end">
-        <li class="nav-item">
-            <a class="nav-link " id="show_list"href={{ route('serviceprovider.trip.index') }}>Xem</a>
-        </li>
+    <ul class="nav nav-tabs d-flex justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{route("$role.index")}}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{{ route('serviceprovider.trip.index') }}" class="text-decoration-none">Trip</a>
+                </li>
+                <li class="breadcrumb-item active">Create</li>
+            </ol>
+        </nav>
+        <div class="d-flex">
+            <li class="nav-item">
+                <a class="nav-link " id="show_list"href={{ route('serviceprovider.trip.index') }}>Xem</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="show_list"href={{ route('serviceprovider.schedule.index') }}>Thêm</a>
+            </li>
+        </div>
+       
       
     </ul>
     @if (session('error'))
