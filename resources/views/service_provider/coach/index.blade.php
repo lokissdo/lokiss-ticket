@@ -1,38 +1,53 @@
+@php
+$role= Session::get('user')['role'];
+$isEmployer =$role == 'employer';
+@endphp
 @extends('layout.master')
 @section('content')
     @push('css')
         <link rel="stylesheet" href={{ asset('css/admin.css') }}>
     @endpush
 @section('sidebar')
-    @include(Session::get('user')['role'] . '.sidebar',['site'=>'coach'])
+    @include($role . '.sidebar', ['site' => 'coach'])
 @endsection
-@php
-$isEmployer = Session::get('user')['role'] == 'employer';
-@endphp
+
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 
-    <ul class="nav nav-tabs d-flex justify-content-end">
-        <li class="nav-item">
-            <a class="nav-link active"href={{ route('serviceprovider.coach.index') }}>Xem</a>
-        </li>
-        @if ($isEmployer)
+    <ul class="nav nav-tabs d-flex justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route("$role.index") }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Coach</li>
+            </ol>
+        </nav>
+        <div class="d-flex">
             <li class="nav-item">
-                <a class="nav-link" href={{ route('employer.coach.create') }}>Thêm</a>
+                <a class="nav-link active"href={{ route('serviceprovider.coach.index') }}>Xem</a>
             </li>
-        @endif
+            @if ($isEmployer)
+                <li class="nav-item">
+                    <a class="nav-link" href={{ route('employer.coach.create') }}>Thêm</a>
+                </li>
+            @endif
+        </div>
+
+
 
     </ul>
 
-    <h2 class="text-center"> @include('icons.company') Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <h2 class="text-center"> @include('icons.company') Nhà xe
+        <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
-    <h2 > @include('icons.coach') Danh sách các loại xe</h2>
+    <h3> @include('icons.coach') Danh sách các loại xe</h3>
     <table class="table mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Tên</th>
+                <th scope="col">Ảnh</th>
                 <th scope="col">Loại</th>
                 <th scope="col">Số chỗ ngồi</th>
                 <th scope="col">###</th>
@@ -43,6 +58,8 @@ $isEmployer = Session::get('user')['role'] == 'employer';
                 <tr>
                     <th scope="row">{{ $coach['id'] }}</th>
                     <td>{{ $coach['name'] }}</td>
+                    <td><img  height="100px" src="{{asset('storage/img/'.$coach['photo'] )}}" ></td>
+
                     <td>{{ $coach['type_name'] }}</td>
                     <td>{{ $coach['seat_number'] }}</td>
 

@@ -12,7 +12,9 @@ use App\Models\EmployeesList;
 use App\Models\ServiceProvider;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 class EmployerController extends Controller
@@ -21,7 +23,7 @@ class EmployerController extends Controller
     public function __construct()
     {
         if (session()->has('user'))
-        $this->service_provider_id = session()->get('user')['service_provider_id'] ?? null;
+            $this->service_provider_id = session()->get('user')['service_provider_id'] ?? null;
     }
     public function index()
     {
@@ -31,13 +33,12 @@ class EmployerController extends Controller
         $user['service_provider_name'] = $provider->name;
 
         session(['user' => $user]);
-        View::share('title', 'Home');
         return view('employer.index');
     }
     public function employee_index()
     {
-        View::share('title', 'Employer|Employees');
-        
+        View::share('title', 'Employees');
+
 
         return view('employer.employee.index')->with([
             'employees' => ServiceProvider::get_employees_list($this->service_provider_id)
@@ -83,12 +84,25 @@ class EmployerController extends Controller
     {
         $toInsert = $request->only('seat_number', 'name', 'type');
         $toInsert['service_provider_id'] = $this->service_provider_id;
-        return Coach::create($toInsert);
+
+
+
+        try {
+            $dirName = 'public/img/provider/' . $toInsert['service_provider_id'];
+            $pathPhoto = substr($request->file('photo')->store($dirName), strlen('public/img/'));
+            $toInsert['photo'] = $pathPhoto;
+            Coach::create($toInsert);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+        return redirect()->route('serviceprovider.coach.index');
     }
     public function coach_destroy($id)
     {
         try {
-            Coach::find($id)->delete();
+            $coach=Coach::find($id);
+            Storage::delete('public/img/'.$coach->photo);
+            $coach->delete();
         } catch (Exception $e) {
             return back()->withError('Phải xóa các chuyến đi trước đó có sử dụng xe này'); //$e->getMessage()
         }

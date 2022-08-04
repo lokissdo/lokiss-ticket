@@ -1,0 +1,30 @@
+
+.select-dropdown,[data-name=select-role]{
+    top: 25px;
+    transition: all linear 0.3s;
+    width: 200px;
+}
+[data-name=select-role]{
+    width: 200px;
+    right: 0px;
+}
+.wrapper-loading{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: rgba(13, 13, 13, 0.547);
+}
+#loading{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.select-dropdown{
+    z-index: 999 !important;
+}
+td:last-child{
+    min-width: 152px;
+}

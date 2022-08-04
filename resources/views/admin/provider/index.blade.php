@@ -9,13 +9,23 @@
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
 
-    <ul class="nav nav-tabs d-flex justify-content-end">
-        <li class="nav-item">
-            <a class="nav-link active"href={{ route('admin.provider.index') }}>Xem</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href={{ route('admin.provider.create') }}>Thêm</a>
-        </li>
+    <ul class="nav nav-tabs d-flex justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.index') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Service Provider</li>
+            </ol>
+        </nav>
+        <div class="d-flex">
+            <li class="nav-item">
+                <a class="nav-link active"href={{ route('admin.provider.index') }}>Xem</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href={{ route('admin.provider.create') }}>Thêm</a>
+            </li>
+        </div>
+        
     </ul>
 
     <table class="table  mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
