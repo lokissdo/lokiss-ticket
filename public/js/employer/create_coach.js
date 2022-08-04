@@ -3,23 +3,21 @@ const $ = document.querySelector.bind(document);
 const form = $("form");
 const uri = form.getAttribute("action");
 const message = $("#message_display");
+const photoInput = $('#image-file')
 
+
+
+// Can't recieve messages 'cause backend mistake this req with redirect req
 function SubmitFormHandler(e) {
     e.preventDefault();
-    // const formEntries=new FormData(form).entries();
-    // const data = Object.fromEntries(formEntries);
-    // console.log(data)
-    const params = new URLSearchParams([...new FormData(form).entries()]);
-    console.log(params.toString());
+    const formData = new FormData(form);
+    formData.append('photo', photoInput.files[0])
+    console.log(...formData.entries());
     fetch(uri, {
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
         method: "POST",
-        body: params,
+        body: formData
     })
-        .then((response) => response.json())
+        .then((response) => response.text())
         .then((res) => {
             let html;
             console.log(res);
@@ -38,9 +36,11 @@ function SubmitFormHandler(e) {
                 //     $("#show_list").getAttribute("href");
             }
             message.innerHTML = html;
+        })
+        .catch((e) => {
+            console.log(e, "Pls don't dp that")
         });
-    // .catch((e) => console.log(e, "Pls don't dp that"));
-    
+
 }
 form.addEventListener("submit", SubmitFormHandler);
 function ErrorHandler(e) {

@@ -20,6 +20,7 @@ class CoachFactory extends Factory
             'seat_number' => rand(10,50),
             'type' => $this->faker->randomElement(CoachTypesEnum::getValues()),
             'name'=>$this->faker->company(),
+            'photo'=>'provider/15/n5t0eoAXw2tdgdCjlkKQY8qZJPgZYqHxBAzUnKgA.jpg'
         ];
     }
 }

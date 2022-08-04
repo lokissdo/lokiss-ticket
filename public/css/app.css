@@ -67,6 +67,6 @@ thead {
 td > .d-flex{
   flex-wrap: wrap;
 }
-th{
+th, td{
   vertical-align: middle
 }

@@ -102,11 +102,12 @@ class ServiceProviderController extends Controller
 
 
     //trip
-    public function trip_index()
+    public function trip_index(Request $request)
     {
         View::share('title', 'Trip');
-        $trips = Trip::get_trips($this->service_provider_id);
-        return view('service_provider.trip.index')->with(['trips' => $trips]);
+        $tripsData = Trip::get_trips($this->service_provider_id,null,$request);
+        if (!empty($request->isAPI)) return json_encode($tripsData);
+        return view('service_provider.trip.index')->with($tripsData);
     }
     public function trip_create(int $id)
     {
@@ -134,7 +135,7 @@ class ServiceProviderController extends Controller
     {
         View::share('title', 'Trip');
         //Schedule
-        $trip = Trip::get_trips($this->service_provider_id, $id)[0];
+        $trip = Trip::get_trips($this->service_provider_id, $id)['trips'][0];
         $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $trip['schedule_id'])[0];
         $tickets = Ticket::get_tickets($id);
         $tickets = array_map(function ($item) {

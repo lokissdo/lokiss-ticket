@@ -40,7 +40,8 @@ $seat_number = $trip['coach']['seat_number'];
 
     </ul>
     <h2 class="text-center"> @include('icons.company') Nhà xe
-        <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+        <strong>{{ Session::get('user')['service_provider_name'] }}</strong>
+    </h2>
     <table class="table mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
@@ -67,7 +68,7 @@ $seat_number = $trip['coach']['seat_number'];
                 </td>
                 <td>{{ $trip['coach']['name'] . ' (' . $seat_number . ' chỗ )' }}</td>
                 <td>{{ number_format($trip['price']) . ' VND' }}</td>
-                <td>{{ number_format(count($tickets)*$trip['price']). ' VND' }}</td>
+                <td>{{ number_format(count($tickets) * $trip['price']) . ' VND' }}</td>
 
             </tr>
         </tbody>
@@ -88,6 +89,11 @@ $seat_number = $trip['coach']['seat_number'];
                 </svg>
             @endif
         @endforeach
+    </div>
+    <div class="straight-line"></div>
+    <div>
+        <h3>Xe</h3>
+        <img height="100px" src="{{ asset('storage/img/' . $trip['coach']['photo']) }}"alt="Xe khách">
     </div>
 
     <div class="straight-line"></div>

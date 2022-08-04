@@ -8,13 +8,15 @@
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-between">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('employer.index')}}" class="text-decoration-none">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('employer.employee.index')}}" class="text-decoration-none">Employee</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Create</li>
-                </ol>
-            </nav>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('employer.index') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{{ route('employer.employee.index') }}"
+                        class="text-decoration-none">Employee</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
         <div class="d-flex">
             <li class="nav-item">
                 <a class="nav-link " id="show_list" href={{ route('employer.employee.index') }}>Xem</a>
@@ -25,6 +27,9 @@
         </div>
 
     </ul>
+    @if (session('error'))
+        <div class="alert alert-danger text-center">{{ session('error') }}</div>
+    @endif
     <form action="{{ route('employer.employee.store') }}" method="GET">
         <input type="hidden" name="service_provider_id"value="{{ Session::get('user')['service_provider_id'] }}">
         <div class="container mt-5 mb-5 d-flex justify-content-center">

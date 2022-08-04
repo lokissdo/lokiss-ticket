@@ -32,6 +32,11 @@ $role = Session::get('user')['role'];
     <h2 class="text-center"> @include('icons.company') Nhà xe
         <strong>{{ Session::get('user')['service_provider_name'] }}</strong>
     </h2>
+    <div class="wrapper-loading position-fixed d-flex justify-content-center d-none">
+        <div class="spinner-grow text-secondary align-self-center" style="width: 4rem; height: 4rem;"
+            id="loading"role="status">
+        </div>
+    </div>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
@@ -51,7 +56,7 @@ $role = Session::get('user')['role'];
                         @include('icons.select', ['data_trigger' => 'select-departure-address'])
                         <div class="position-absolute d-none select-dropdown" data-name="select-departure-address">
                             <div class="form-group">
-                                <div class="input-group"> <select name="address" class="form-select " id="select_pro">
+                                <div class="input-group"> <select name="address" data-name="select-departure-code" class="form-select " id="select_pro">
                                         <option data-code="null" class="input-group form-control" value="null"> Chọn
                                             tỉnh / thành phố</option>
                                     </select>
@@ -76,7 +81,7 @@ $role = Session::get('user')['role'];
                         <div class="position-absolute d-none select-dropdown" data-name="select-arrival-address">
 
                             <div class="form-group">
-                                <div class="input-group"> <select name="address" class="form-select " id="select_pro">
+                                <div class="input-group"> <select data-name="select-arrival-code" name="address" class="form-select " id="select_pro">
                                         <option data-code="null" class="input-group form-control" value="null"> Chọn
                                             tỉnh / thành phố</option>
                                     </select>
@@ -119,7 +124,7 @@ $role = Session::get('user')['role'];
                 <th scope="col">###</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="data-table">
             @foreach ($trips as $trip)
                 <tr>
                     <th scope="row">{{ $trip['id'] }}</th>
@@ -152,8 +157,10 @@ $role = Session::get('user')['role'];
                 </tr>
             @endforeach
         </tbody>
+
     </table>
-   @include('components.pagination',['total_page'=>2])
+    <div class="count">Tổng cộng: {{count($trips)}}</div>
+   @include('components.pagination',['total_page'=>$total_page])
     @include('layout.footer')
 
 </div>
@@ -163,6 +170,8 @@ $role = Session::get('user')['role'];
 @push('js')
 <script>
     const urlCoachAPI = '{{ route('coaches') }}';
+    const urlFilterAndSortAPI = '{{ route('serviceprovider.trip.index') }}';
+
 </script>
 
 <script src="{{ asset('js/components/address.js') }}"></script>

@@ -47,6 +47,7 @@ $isEmployer =$role == 'employer';
             <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Tên</th>
+                <th scope="col">Ảnh</th>
                 <th scope="col">Loại</th>
                 <th scope="col">Số chỗ ngồi</th>
                 <th scope="col">###</th>
@@ -57,6 +58,8 @@ $isEmployer =$role == 'employer';
                 <tr>
                     <th scope="row">{{ $coach['id'] }}</th>
                     <td>{{ $coach['name'] }}</td>
+                    <td><img  height="100px" src="{{asset('storage/img/'.$coach['photo'] )}}" ></td>
+
                     <td>{{ $coach['type_name'] }}</td>
                     <td>{{ $coach['seat_number'] }}</td>
 

@@ -14,6 +14,7 @@ class Coach extends Model
         'name',
         'type',
         'seat_number',
+        'photo',
         'service_provider_id',
     ];
     public function getTypeNameAttribute()

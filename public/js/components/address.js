@@ -3,7 +3,9 @@ var data;
 var defaultAddress={
     "province":`<option data-code="null" value="null"> Chọn tỉnh / thành </option>`,
 }
-window.onload=()=>{
+
+
+const GetAddressByFetchAPI=()=>{
     fetch("/api/addresses")
     .then(response => response.json())
     .then(res =>{
@@ -18,3 +20,4 @@ window.onload=()=>{
         
     });
 }
+window.addEventListener('load',GetAddressByFetchAPI)

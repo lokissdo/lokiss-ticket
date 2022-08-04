@@ -79,19 +79,11 @@ class AuthController extends Controller
         ]);
         $roleIndex = is_null($user->role) ? self::DEFAULT_ROLE : $user->role;
         $role = strtolower(UserRoleEnum::getKey($roleIndex));
-        // session(['user' => [
-        //     'id' => $user->id,
-        //     'name' => $user->name,
-        //     'email' => $user->email,
-        //     'avatar' => $user->avatar,
-        //     'role' => $role
-        // ]]);
         User::setUserSession($user, $role);
         if ($toDispatch) dispatch(new Job($user));
         return redirect()->route("$role.index");
     }
 
-    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     public function loggingIn(AuthenticatingRequest $request)
     {
         $credentials = $request->only('email', 'password');

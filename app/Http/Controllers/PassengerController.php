@@ -10,7 +10,6 @@ class PassengerController extends Controller
 {
     public function index()
     {
-        View::share('title', 'Home');
         return view('passenger.index');
     }
 }

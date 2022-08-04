@@ -8,21 +8,13 @@ use Illuminate\Validation\Rule;
 
 class CoachRegisteringRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
         return [
@@ -46,6 +38,33 @@ class CoachRegisteringRequest extends FormRequest
                 'min:1',
                 'max:255',
             ],
+            'photo' => [
+                'bail',
+                'required',
+                'image',
+                'max:2048'
+            ],
+
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'required'  =>  ':attribute bắt buộc phải điền.',
+            'in'  => ':attribute phải hợp lệ',
+            'max' => ':attribute không được lớn hơn :max ký tự',
+            'photo.max' => ':attribute không được lớn hơn :max KB',
+            'seat_number.max' => ':attribute không được lớn hơn :max chỗ'
+
+        ];
+    }
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Tên',
+            'seat_number' => 'Số chỗ ',
+            'type' => 'Loại',
+            'photo' => 'Ảnh'
         ];
     }
 }
