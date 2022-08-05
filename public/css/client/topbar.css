@@ -1,0 +1,43 @@
+.topbar_last_item_img>img{
+    width: 188px;
+    aspect-ratio: auto 188 / 42;
+}
+.topbar_items_first{
+    background-color:var(--green-color) !important;
+    color: whitesmoke;
+}
+.topbar_infor{
+    padding:5px 0;
+}
+.topbar_infor_sdt{
+    margin-right: 20px;
+}
+.topbar_items{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.topbar{
+    box-shadow:0 1px 4px 0 rgba(111, 111, 111, 0.174);
+}
+.topbar_last_item{
+    text-transform: uppercase;
+    font-size: 13px;
+    color: #5d5e5d;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 7px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 15px;
+    border-radius: 20px;
+    letter-spacing: .5px;
+}
+.topbar_social_item{
+    height: 100%;
+    margin-left: 20px;
+}

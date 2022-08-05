@@ -10,6 +10,6 @@ class PassengerController extends Controller
 {
     public function index()
     {
-        return view('passenger.index');
+        return view('client.index');
     }
 }

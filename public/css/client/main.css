@@ -1,0 +1,27 @@
+img {
+  vertical-align: middle;
+  border: 0;
+}
+
+:root {
+  --green-color: #03407e;
+  --orange-color: #ef5222;
+}
+
+body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  min-height: 100vh;
+
+}
+.hoverable{
+  cursor: pointer;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1024px;
+  }
+}
