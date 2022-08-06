@@ -14,10 +14,31 @@ body {
   line-height: 1.5;
   color: #212529;
   min-height: 100vh;
+  font-size: 1rem;
 
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow-x: hidden;
 }
-.hoverable{
+
+
+
+img{
+  pointer-events: none;
+}
+
+
+.hoverable,
+.hover-color {
   cursor: pointer;
+}
+
+.hover-color:hover {
+  color: var(--orange-color) !important;
 }
 
 @media (min-width: 1200px) {
