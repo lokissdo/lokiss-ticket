@@ -17,20 +17,15 @@ use Illuminate\Support\Facades\View;
 class AuthController extends Controller
 {
     private const DEFAULT_ROLE = 1;
+    public function index(){
+        return view('client.index');
+    }
     public function login()
     {
         // if (Auth::viaRemember()) {
         //     dd(Auth::user());
         // }
-        $remember_token = Cookie::get('remember_token');
-        if ($remember_token != null) {
-            $user = User::compareRememberToken($remember_token);
-            if ($user !== null) {
-                $role = strtolower(UserRoleEnum::getKey($user->role));
-                User::setUserSession($user,$role);
-                return redirect()->route("$role.index");
-            }
-        }
+       
         if (session()->has('user')) {
             return redirect()->route(session('user')['role'] . '.index');
         }

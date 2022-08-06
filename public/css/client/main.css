@@ -1,0 +1,48 @@
+img {
+  vertical-align: middle;
+  border: 0;
+}
+
+:root {
+  --green-color: #03407e;
+  --orange-color: #ef5222;
+}
+
+body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  min-height: 100vh;
+  font-size: 1rem;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+
+
+img{
+  pointer-events: none;
+}
+
+
+.hoverable,
+.hover-color {
+  cursor: pointer;
+}
+
+.hover-color:hover {
+  color: var(--orange-color) !important;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1024px;
+  }
+}

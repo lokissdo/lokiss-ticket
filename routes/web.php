@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PassengerController;
+use App\Http\Middleware\CheckRememberToken;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
-
+use App\Http\Middleware\isPassenger;
+use App\Http\Middleware\Loggedin;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,12 +20,20 @@ use Laravel\Socialite\Facades\Socialite;
 // Route::get('/', function () {
 //     return view('layout.master');
 // })->name('welcome');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/signout', [AuthController::class, 'signOut'])->name('signOut');
+
+Route::group([
+    'middleware' => [CheckRememberToken::class],
+], function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/', [AuthController::class, 'index'])->name('index');
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+});
+
+
 
 Route::post('/login', [AuthController::class, 'loggingIn'])->name('loggingIn');
+Route::get('/signout', [AuthController::class, 'signOut'])->name('signOut');
 
-Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registering'])->name('registering');
 Route::get('/auth/redirect/{provider}', function ($provider) {
     return Socialite::driver($provider)->redirect();
@@ -30,3 +41,12 @@ Route::get('/auth/redirect/{provider}', function ($provider) {
 Route::get('/auth/callback/{provider}',  [AuthController::class, 'callback'])->name('social.callback');
 
 
+
+Route::group([
+    'as' => 'passenger.',
+    'middleware' => [Loggedin::class,isPassenger::class],
+], function () {
+    Route::get('/', [PassengerController::class, 'index'])->name('index');
+    // Route::get('/{user}', [PassengerController::class, 'show'])->name('show');
+    // Route::delete('/{user}', [PassengerController::class, 'destroy'])->name('destroy');
+});
