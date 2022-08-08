@@ -9,7 +9,7 @@ class Schedule extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'arrival_time',
+        'duration',
         'service_provider_id',
         'departure_time',
         'arrival_province_code',
@@ -24,10 +24,6 @@ class Schedule extends Model
     {
         return $this->hasMany(ScheduleDetail::class,'schedule_id','id'); 
     }
-    // public function schedule_detail()
-    // {
-    //     return $this->hasOne(ScheduleDetail::class,'schedule_id','id'); 
-    // }
     public function arrival_province(){
         return $this->belongsTo(Province::class,'arrival_province_code','code'); 
     }
@@ -39,30 +35,36 @@ class Schedule extends Model
     {
         return  $this->departure_province->name;
     }
-    public function getDepartureTimeStrAttribute()
+    public function getHourDurationAttribute()
     {
-        $deTime=intval($this->departure_time);
-        return ( floor($deTime/60)).' : '.( $deTime%60);
-    }
-    public function getArrivalTimeStrAttribute()
-    {
-        $arTime=intval($this->arrival_time)%1440;
-        return (floor($arTime /60)).' : '.($arTime %60);
-    }
-    public function getTotalDaysAttribute()
-    {
-        $arTime=intval($this->arrival_time);
-        return (floor($arTime/1440));
+        return (int)($this->duration/60).'h'.(int)($this->duration%60).'p';
     }
     public function get_informations_without_detail(){
         $this->append('departure_province_name');
         $this->append('arrival_province_name');
-        $this->append('arrival_time_str');
-        $this->append('departure_time_str');
-        $this->append('total_days');
+        $this->append('hour_duration');
         $this->makeHidden([
             'arrival_province', 'departure_province',
-            'departure_province_code', 'arrival_province_code', 'departure_time', 'arrival_time'
+            'departure_province_code', 'arrival_province_code',
         ]);
     } 
+
+    public static function reOrderSchedules( array $scheduleArr)
+    {
+        return array_map(function ($each) {
+            $each['schedule_detail'] = Station::orderStations($each['schedule_detail']);
+            $TrimmedDetail = [];
+            foreach ($each['schedule_detail'] as $temp) {
+                $TrimmedDetail[] =
+                    [
+                        'name' => $temp['station']['name'],
+                        'province_name' => $temp['station']['province_name'],
+                        'district_name' => $temp['station']['district_name'],
+                    ];
+            }
+            $each['schedule_detail'] = $TrimmedDetail;
+            return $each;
+        }, $scheduleArr);
+    }
 }
+

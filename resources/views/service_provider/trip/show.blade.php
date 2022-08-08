@@ -49,7 +49,7 @@ $seat_number = $trip['coach']['seat_number'];
                 <th scope="col">Khởi hành</th>
                 <th scope="col">Ngày Khởi hành</th>
                 <th scope="col">Đến</th>
-                <th scope="col">Ngày Đến</th>
+                <th scope="col">Thời gian di chuyển</th>
                 <th scope="col">Xe</th>
                 <th scope="col">Giá</th>
                 <th scope="col">Doanh thu</th>
@@ -60,11 +60,11 @@ $seat_number = $trip['coach']['seat_number'];
             <tr>
                 <th scope="row">{{ $trip['id'] }}</th>
                 <td>{{ $trip['schedule']['departure_province_name'] }}</td>
-                <td>{{ $trip['schedule']['departure_time_str'] . ' | ' . date('d-m-Y', strtotime($trip['departure_date'])) }}
+                <td>{{ date('H:i',strtotime($trip['schedule']['departure_time'])) . ' | ' . date('d-m-Y', strtotime($trip['departure_date'])) }}
                 </td>
 
                 <td>{{ $trip['schedule']['arrival_province_name'] }}</td>
-                <td>{{ $trip['schedule']['arrival_time_str'] . ' | ' . date('d-m-Y', strtotime($trip['arrival_date'])) }}
+                <td>{{ $trip['schedule']['hour_duration']}}
                 </td>
                 <td>{{ $trip['coach']['name'] . ' (' . $seat_number . ' chỗ )' }}</td>
                 <td>{{ number_format($trip['price']) . ' VND' }}</td>

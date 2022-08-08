@@ -13,7 +13,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'name',
         'email',
@@ -27,17 +27,18 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    protected $casts = [
-    ];
-    public function province(){
-        return $this->hasOne(Province::class,'code','address'); 
+    protected $casts = [];
+    public function province()
+    {
+        return $this->hasOne(Province::class, 'code', 'address');
     }
-    public function district(){
-        return $this->hasOne(District::class,'code','address2'); 
+    public function district()
+    {
+        return $this->hasOne(District::class, 'code', 'address2');
     }
     public function getAddressNameAttribute()
     {
-        return $this->district->name.', '.$this->province->name;
+        return $this->district->name . ', ' . $this->province->name;
     }
     public function getRoleNameAttribute()
     {
@@ -45,17 +46,18 @@ class User extends Authenticatable
     }
 
 
-    
+
     static function createRememberToken($credentials)
     {
-        return md5(strval($credentials['email']).strval($credentials['password'])).strval(time());
+        return md5(strval($credentials['email']) . strval($credentials['password'])) . strval(time());
     }
     static function compareRememberToken($token)
     {
-        $user=User::where('remember_token',$token)->first();
+        $user = User::where('remember_token', $token)->first();
         return $user;
     }
-    static function setUserSession($user,$role){
+    static function setUserSession($user, $role)
+    {
         session(['user' => [
             'id' => $user->id,
             'name' => $user->name,
@@ -63,5 +65,24 @@ class User extends Authenticatable
             'avatar' => $user->avatar,
             'role' => $role
         ]]);
+    }
+    static function get_user_with_filter_sort($searchCol,$searchVal,$sortCol,$sortType,$address,$address2,$role,$offset,$itemsPerPage,$includedTotalPage)
+    {
+        $query = User::where($searchCol, 'like', '%' . $searchVal . '%')
+            ->orderBy($sortCol, $sortType);
+        if ($address != 'null')  $query = $query->where('address', $address);
+        if ($address2 != 'null')  $query = $query->where('address2', $address2);
+        if ($role != 'null')  $query = $query->where('role', $role);
+
+        $totalPage = ($includedTotalPage==1) ? ceil(($query->count()) / $itemsPerPage) : -1;
+        $users = $query->offset($offset)->limit($itemsPerPage)->with(['province', 'district'])->get();
+
+        $users->append('address_name');
+        $users->append('role_name');
+
+        return[
+            'totalPage'=>$totalPage,
+            'users'=>$users
+        ];
     }
 }

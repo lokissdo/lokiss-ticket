@@ -15,10 +15,10 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('arrival_time');
+            $table->time('departure_time');
             $table->foreignId('arrival_province_id')->constrained('stations','id');
             $table->foreignId('service_provider_id')->constrained();
-            $table->timestamp('destination_time');
+            $table->smallInteger('duration')->unsigned()->comment('by minutes');
             $table->foreignId('destination_province_id')->constrained('stations','id');
         });
     }

@@ -158,10 +158,8 @@
                                     <img src="https://img.icons8.com/ios-filled/20/666666/ticket-confirmed.png"/>
                                 <span>2000.000 đ</span>
                                 </div>
-                            </div>
-                           
-                        </div>
-                        
+                            </div>                           
+                        </div>    
                     </div>
                     <div class="popular-block hoverable">
                         <img height="100%"  class="popular-block-image "  src="https://futabus.vn/_nuxt/img/commonRoutes_6.56a4691.png" alt="">
@@ -205,10 +203,10 @@
                         </div>             
                     </div>
                 </div>
-
-
-
             </div>
+
+
+            {{-- news --}}
             <div class="news">
                 <div class="news-img ">
                     <img width="100%" src="https://futabus.vn/_nuxt/img/bg-3.0d434f3.png" alt="">
@@ -239,9 +237,9 @@
                     </div>
                 </div>
             </div>
+        @include('layout.footer_client')
             
         </div>
-
     </div>
 @endsection
 
