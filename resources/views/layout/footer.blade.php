@@ -8,6 +8,7 @@
 <style>
     .footer-overlay {
         height: var(--footer-height);
+        margin-top: 50px;
     }
 
     footer {

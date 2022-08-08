@@ -1,5 +1,5 @@
 @php
-$role= Session::get('user')['role'];
+$role = Session::get('user')['role'];
 @endphp
 @extends('layout.master')
 @section('content')
@@ -8,15 +8,16 @@ $role= Session::get('user')['role'];
         <link rel="stylesheet" href={{ asset('css/admin/schedule_create.css') }}>
     @endpush
 @section('sidebar')
-    @include($role . '.sidebar',['site'=>'schedule'])
+    @include($role . '.sidebar', ['site' => 'schedule'])
 @endsection
 <div class="admin-page  d-flex flex-column w-100 mr-2 ">
     <ul class="nav nav-tabs d-flex justify-content-between">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route("$role.index")}}" class="text-decoration-none">Home</a>
+                <li class="breadcrumb-item"><a href="{{ route("$role.index") }}" class="text-decoration-none">Home</a>
                 </li>
-                <li class="breadcrumb-item"><a href="{{ route('serviceprovider.schedule.index') }}" class="text-decoration-none">Schedule</a>
+                <li class="breadcrumb-item"><a href="{{ route('serviceprovider.schedule.index') }}"
+                        class="text-decoration-none">Schedule</a>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
             </ol>
@@ -29,7 +30,7 @@ $role= Session::get('user')['role'];
                 <a class="nav-link active" href={{ route('serviceprovider.schedule.create') }}>Thêm</a>
             </li>
         </div>
-        
+
     </ul>
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
@@ -43,61 +44,36 @@ $role= Session::get('user')['role'];
                     </div>
                     <h2 class="card-title mb-3 text-center">Thêm Lịch trình</h2>
 
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <label class="form-control label-time" for="appt-time">Departure Time:</label>
-                                    <input class="form-control" id="appt-time" type="time" name="departure_time">
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="form-control label-time" for="appt-time">Departure Time:</label>
+                            <input class="form-control" id="appt-time" type="time" name="departure_time">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group"> <select name="departure_province_code" class="form-select "
-                                        id="select_pro">
-                                        <option data-code="null" class="input-group form-control" value="null">
-                                            Departure Province </option>
-                                    </select>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <div class="input-group"> <select name="departure_province_code" class="form-select "
+                                id="select_pro">
+                                <option data-code="null" class="input-group form-control" value="null">
+                                    Departure Province </option>
+                            </select>
                         </div>
                     </div>
 
 
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <label class="form-control label-time" for="appt-time">Arrival Time:</label>
-                                    <input class="form-control" id="appt-time" type="time" name="arrival_time">
-                                </div>
-                            </div>
+
+                    <div class="form-group">
+                        <div class="input-group"> <select name="arrival_province_code" class="form-select "
+                                id="select_pro">
+                                <option data-code="null" class="input-group form-control" value="null">
+                                    Arrival Province </option>
+                            </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group"> <select name="arrival_province_code" class="form-select "
-                                        id="select_pro">
-                                        <option data-code="null" class="input-group form-control" value="null">
-                                            Arrival Province </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <label class="form-control label-time" for="total-time">Total travel days:</label>
-                                    <input class="form-control" id="total-time" min="0" max="20"
-                                        type="number" name="total_days">
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="form-control label-time" for="total-time">Thời gian di chuyển( phút):</label>
+                            <input class="form-control" id="total-time" min="10" max="20000" type="number"
+                                name="duration">
                         </div>
                     </div>
                     <div class="position-relative d-flex container-station-input">
@@ -129,8 +105,8 @@ $role= Session::get('user')['role'];
                 </div>
             </div>
         </div>
-    </form>
-    @include('layout.footer')
+</form>
+@include('layout.footer')
 
 </div>
 @push('js')

@@ -12,4 +12,9 @@ class ScheduleDetail extends Model
     {
         return $this->hasOne(Station::class,'id','station_id'); 
     }
+    public function get_station_informations(){
+        $this->station->append('province_name');
+        $this->station->append('district_name');
+        $this->station->makeHidden(['address', 'address2']);
+    } 
 }

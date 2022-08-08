@@ -11,9 +11,10 @@ $('#price').onkeyup = (e) => {
 }
 
 coach_display.onkeyup = CallCoachAPI;
-coach_display.onfocus = () => {
+coach_display.onfocus = (e) => {
     let value = String(coach_display.value);
     coach_display.value = value.replace(/\(.+\)/g, '');
+    CallCoachAPI(e);
 }
 
 $('#submit-button').onclick = (e) => {

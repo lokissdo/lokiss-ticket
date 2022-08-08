@@ -44,7 +44,7 @@ class ServiceProvider extends Model
     }
     static function get_employees_list($service_provider_id)
     {
-        if(session()->get('user')['role']!='employer') return null;
+        if (session()->get('user')['role'] != 'employer') return null;
         $serviceProvider = ServiceProvider::where('id', $service_provider_id)->with(['employees.user.province', 'employees.user.district'])->first();
         $employees = $serviceProvider->employees;
         $employeesArrray = [];
@@ -60,35 +60,23 @@ class ServiceProvider extends Model
         }
         return $employeesArrray;
     }
-    
-    static function get_schedules_list($service_provider_id,$schedule_id=null){
-        $query=Schedule::where('service_provider_id', $service_provider_id);
-        if($schedule_id!=-null) $query=$query->where('id', $schedule_id);
-        $schedules = $query->with(['schedule_detail.station'])->get();
-        $schedules->append('departure_province_name');
-        $schedules->append('arrival_province_name');
-        $schedules->append('arrival_time_str');
-        $schedules->append('departure_time_str');
-        $schedules->append('total_days');
-        $schedules->makeHidden([
-            'arrival_province', 'departure_province',
-            'departure_province_code', 'arrival_province_code', 'departure_time', 'arrival_time'
-        ]);
-        $schedules = $schedules->toArray();
-        $schedules = array_map(function ($each) {
-            $each['schedule_detail'] = Station::OrderStations($each['schedule_detail']);
-            $TrimmedDetail = [];
-            foreach ($each['schedule_detail'] as $temp) {
-                $TrimmedDetail[] =
-                    [
-                        'name' => $temp['station']['name'],
-                        'province_name' => $temp['station']['province_name'],
-                        'district_name' => $temp['station']['district_name'],
-                    ];
-            }
-            $each['schedule_detail'] = $TrimmedDetail;
-            return $each;
-        }, $schedules);
-        return $schedules;
+
+    static function get_schedules_list($service_provider_id, $schedule_id = null)
+    {
+        $query = Schedule::where('service_provider_id', $service_provider_id);
+        if ($schedule_id != null) $query = $query->where('id', $schedule_id);
+        
+        $schedules = $query->with(['arrival_province', 'departure_province', 
+        'schedule_detail.station.province','schedule_detail.station.district'])->get()
+            ->map(function ($item) {
+                $item->get_informations_without_detail();
+                $item->schedule_detail=$item->schedule_detail->map(function($scheDetailItem){
+                   return $scheDetailItem->get_station_informations();
+                });
+                return $item;
+            });
+        $schedulesArr = $schedules->toArray();
+        $schedulesArr = Schedule::reOrderSchedules($schedulesArr);
+        return $schedulesArr;
     }
 }

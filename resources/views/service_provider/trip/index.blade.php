@@ -40,6 +40,7 @@ $role = Session::get('user')['role'];
     @if (session('error'))
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
+    {{-- {{dd($trips)}} --}}
     <h3> @include('icons.trip')Danh sách chuyến đi</h3>
     <table class="table  mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
@@ -91,12 +92,9 @@ $role = Session::get('user')['role'];
                     </div>
                 </th>
                 <th scope="col">
-                    <div class="d-flex justify-content-between position-relative">
-                        <div>Ngày Đến</div>
-                        @include('icons.calendar', ['data_trigger' => 'select-arrival-date'])
-                        <div class="position-absolute d-none select-dropdown" data-name="select-arrival-date">
-                            <input class="form-control" type="date" name="arrival_date">
-                        </div>
+                    <div class="d-flex justify-content-between" data-sortcol='duration'>
+                        <div> Thời gian di chuyển</div>
+                        @include('icons.sort')
                     </div>
                 </th>
                 <th scope="col">
@@ -107,8 +105,7 @@ $role = Session::get('user')['role'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <select class="form-select " id="select_coach">
-                                        <option class="input-group form-control" value="null"> Tất cả</option>
-
+                                        <option class="input-group form-control" value=""> Tất cả</option>
                                     </select>
                                 </div>
                             </div>
@@ -129,11 +126,11 @@ $role = Session::get('user')['role'];
                 <tr>
                     <th scope="row">{{ $trip['id'] }}</th>
                     <td>{{ $trip['schedule']['departure_province_name'] }}</td>
-                    <td>{{ $trip['schedule']['departure_time_str'] . ' | ' . date('d-m-Y', strtotime($trip['departure_date'])) }}
+                    <td>{{ date('H:i',strtotime($trip['schedule']['departure_time'])). ' | ' . date('d-m-Y', strtotime($trip['departure_date'])) }}
                     </td>
 
                     <td>{{ $trip['schedule']['arrival_province_name'] }}</td>
-                    <td>{{ $trip['schedule']['arrival_time_str'] . ' | ' . date('d-m-Y', strtotime($trip['arrival_date'])) }}
+                    <td>{{ $trip['schedule']['hour_duration']  }}
                     </td>
                     <td>{{ $trip['coach']['name'] . ' (' . $trip['coach']['seat_number'] . 'chỗ )' }}</td>
                     <td>{{ number_format($trip['price']) . ' VND' }}</td>

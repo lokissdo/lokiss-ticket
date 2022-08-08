@@ -9,17 +9,17 @@ use Illuminate\Database\Seeder;
 
 class ScheduleDetailSeeder extends Seeder
 {
-    private $maxScheduleID;
+    private $minScheduleId;
     private $maxMiddleStation;
 
     public function __construct()
     {
-        $this->maxScheduleID = 40;
+        $this->minScheduleId = 1;
         $this->maxMiddleStation = 5;
     }
     public function run()
     {
-        $schedules = Schedule::where('id', '>', $this->maxScheduleID)->get();
+        $schedules = Schedule::where('id', '>=', $this->minScheduleId)->get();
         $arrInsert=[];
         foreach ($schedules as $each) {
             $schedule_id = $each->id;

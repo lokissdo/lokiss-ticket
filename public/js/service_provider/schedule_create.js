@@ -70,6 +70,8 @@ function init() {
     tick = Array.from($$(".approved")).pop();
     addStation.classList.add("d-none");
     searchSation.addEventListener('keyup', CallAPIwithStation);
+    searchSation.addEventListener('focus', CallAPIwithStation);
+
     $$(".delete-station ").forEach(ele => {
         ele.addEventListener('click', (e) => {
             const deleteButtons=Array.from($$(".delete-station"));

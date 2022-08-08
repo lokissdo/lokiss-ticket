@@ -20,7 +20,7 @@ class CoachController extends Controller
         $numOfItem = 6;
         $query= Coach::where('service_provider_id',$user['service_provider_id'])->where('name', 'like', '%' . $req->value . '%');
         if(!isset($req->all)){
-            $query=$query->take($numOfItem);
+            $query->take($numOfItem);
         }
         $res =$query->get();
         if (!$res) return 0;

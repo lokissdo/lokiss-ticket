@@ -7,7 +7,6 @@ const searchButtons = $$('[data-name=search-bar]')
 const selectIcons = $$('[data-name=select-icon]')
 const Selectors = $$("select")
 const departureDateSelector = $('[name=departure_date]')
-const arrivalDateSelector = $('[name=arrival_date]')
 const urlShowTrip = $("#delete_form~a").href
 const urlDeleteTrip = $("#delete_form").getAttribute('action')
 
@@ -63,23 +62,8 @@ const AssignEvent = {
             })
         });
     },
-    HideShowArrivalDate: function () {
-        const iconArrivalDate = $('span[data-trigger=select-arrival-date]');
-        if (departureDateSelector.value === '') {
-            iconArrivalDate.classList.add('d-none')
-        }
-        else {
-            arrivalDateSelector.setAttribute("min", departureDateSelector.value);
-            iconArrivalDate.classList.remove('d-none')
-        }
-    },
     SelectorDate: function () {
         departureDateSelector.onchange = () => {
-            this.HideShowArrivalDate();
-            isFilter = 1;
-            CallAPIForSortnFilter();
-        }
-        arrivalDateSelector.onchange = () => {
             isFilter = 1;
             CallAPIForSortnFilter();
         }
@@ -166,11 +150,11 @@ const render = {
             html += `
             <th scope="row">${trip['id']}</th>
             <td>${trip['schedule']['departure_province_name']}</td>
-            <td>${trip['schedule']['departure_time_str']} |  ${helper.dateFormatDMY(trip['departure_date'])} 
+            <td>${trip['schedule']['departure_time']} |  ${helper.dateFormatDMY(trip['departure_date'])} 
             </td>
     
             <td>${trip['schedule']['arrival_province_name']}</td>
-            <td>${trip['schedule']['arrival_time_str']} | ${helper.dateFormatDMY(trip['arrival_date'])}
+            <td>${trip['schedule']['hour_duration']}
             </td>
             <td>${trip['coach']['name']} ( ${trip['coach']['seat_number']} chỗ )</td>
             <td>${new Intl.NumberFormat().format(trip['price'])} VND </td>
@@ -238,7 +222,6 @@ function CallAPIForSortnFilter() {
     params.append('departure_province_code', $('select[data-name=select-departure-code]').value);
     params.append('arrival_province_code', $('select[data-name=select-arrival-code]').value);
     params.append('coach_id', $('#select_coach').value);
-    params.append('arrival_date', $('input[name=arrival_date]').value);
     params.append('departure_date', $('input[name=departure_date]').value);
 
 

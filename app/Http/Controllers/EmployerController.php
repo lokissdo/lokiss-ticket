@@ -85,8 +85,6 @@ class EmployerController extends Controller
         $toInsert = $request->only('seat_number', 'name', 'type');
         $toInsert['service_provider_id'] = $this->service_provider_id;
 
-
-
         try {
             $dirName = 'public/img/provider/' . $toInsert['service_provider_id'];
             $pathPhoto = substr($request->file('photo')->store($dirName), strlen('public/img/'));
