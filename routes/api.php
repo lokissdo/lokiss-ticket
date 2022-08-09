@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\StationController;
 use App\Models\Addresses;
@@ -23,5 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/addresses', [Addresses::class,'get_detail_addresses'])->name('addresses');
 Route::get('/stations', [StationController::class,'get_all_stations'])->name('stations');
 Route::get('/coaches', [CoachController::class,'get_coaches'])->name('coaches');
+Route::get('/popular_schedules', [ClientController::class,'get_popular_schedules'])->name('popular_schedules');
+
 
 

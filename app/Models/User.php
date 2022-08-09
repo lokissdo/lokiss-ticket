@@ -66,23 +66,25 @@ class User extends Authenticatable
             'role' => $role
         ]]);
     }
-    static function get_user_with_filter_sort($searchCol,$searchVal,$sortCol,$sortType,$address,$address2,$role,$offset,$itemsPerPage,$includedTotalPage)
+    static function get_user_with_filter_sort($searchCol, $searchVal, $sortCol, $sortType, $address, $address2, $role, $offset, $itemsPerPage, $includedTotalPage)
     {
         $query = User::where($searchCol, 'like', '%' . $searchVal . '%')
             ->orderBy($sortCol, $sortType);
-        if ($address != 'null')  $query = $query->where('address', $address);
-        if ($address2 != 'null')  $query = $query->where('address2', $address2);
-        if ($role != 'null')  $query = $query->where('role', $role);
+        if ($address != 'null') {
+            $query->where('address', $address);
+            if ($address2 != 'null')  $query->where('address2', $address2);
+        }
+        if ($role != 'null')  $query->where('role', $role);
 
-        $totalPage = ($includedTotalPage==1) ? ceil(($query->count()) / $itemsPerPage) : -1;
+        $totalPage = ($includedTotalPage == 1) ? ceil(($query->count()) / $itemsPerPage) : -1;
         $users = $query->offset($offset)->limit($itemsPerPage)->with(['province', 'district'])->get();
 
         $users->append('address_name');
         $users->append('role_name');
 
-        return[
-            'totalPage'=>$totalPage,
-            'users'=>$users
+        return [
+            'totalPage' => $totalPage,
+            'users' => $users
         ];
     }
 }

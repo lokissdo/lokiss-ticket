@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Schedule extends Model
 {
@@ -20,6 +21,9 @@ class Schedule extends Model
     public function departure_province(){
        return $this->belongsTo(Province::class,'departure_province_code','code'); 
     }
+    public function trips(){
+        return $this->hasMany(Trip::class); 
+     }
     public function schedule_detail()
     {
         return $this->hasMany(ScheduleDetail::class,'schedule_id','id'); 
@@ -55,16 +59,27 @@ class Schedule extends Model
             $each['schedule_detail'] = Station::orderStations($each['schedule_detail']);
             $TrimmedDetail = [];
             foreach ($each['schedule_detail'] as $temp) {
-                $TrimmedDetail[] =
-                    [
-                        'name' => $temp['station']['name'],
-                        'province_name' => $temp['station']['province_name'],
-                        'district_name' => $temp['station']['district_name'],
-                    ];
+                $TrimmedDetail[] = $temp['station'];
             }
             $each['schedule_detail'] = $TrimmedDetail;
             return $each;
         }, $scheduleArr);
+    }
+    public static function get_popular_schedule(){
+        $itemReturnedNum=6;
+        $previousWeek=date('Y-m-d',strtotime(now().' - '.'14 days'));
+        $followingWeek=date('Y-m-d',strtotime(now().' + '.'14 days'));
+        $query=self::with(['arrival_province','departure_province'])
+        ->join('trips', 'trips.schedule_id', '=', 'schedules.id')
+        ->whereBetween('trips.departure_date',[$previousWeek,$followingWeek])
+        ->groupBy('schedules.id')
+        ->select([DB::raw('COUNT(trips.id) as count '),DB::raw('AVG(trips.price) as price'),'schedules.*'])
+        ->orderByRaw('count DESC');
+        $popularItems=$query->limit($itemReturnedNum)->get();
+        $popularItems->append('hour_duration');
+
+
+        return $popularItems->toArray();
     }
 }
 

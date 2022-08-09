@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Jobs\SendEmailJob as Job;
+use Exception;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\View;
 class AuthController extends Controller
 {
     private const DEFAULT_ROLE = 1;
-    public function index(){
-        return view('client.index');
-    }
+    
     public function login()
     {
         // if (Auth::viaRemember()) {
@@ -34,8 +33,15 @@ class AuthController extends Controller
     }
     public function signOut()
     {
+        try{
+            $role=session('user')['role'];
+        }catch(Exception $e){
+            return redirect()->route("passenger.index");
+        }  
         session()->flush();
         Cookie::queue(Cookie::forget('remember_token'));
+        if($role=='passenger')  return redirect()->route("passenger.index");
+
         return redirect()->route("login");
     }
     public function register()

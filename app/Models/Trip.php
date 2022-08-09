@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Constants\ItemsPerPage;
-use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -53,12 +52,6 @@ class Trip extends Model
         $departure_date = $request->departure_date ?? null;
 
 
-
-
-
-
-
-
         /////Filter
         if ($departure_province_code != null && $departure_province_code != 'null') {
 
@@ -78,20 +71,10 @@ class Trip extends Model
             $query->where('departure_date', $departure_date);
         }
 
-
+        //totalPage if not sorting
         $totalPage = (!empty($request->isFilter) || !isset($request->isFilter)) ? ceil(($query->count()) / $itemsPerPage) : -1;
 
-
-
-
-
-
-        
-
-
-
-
-
+        //sort
         if ($sortCol == 'duration') {
             $query->join('schedules', 'trips.schedule_id', '=', 'schedules.id')
                 ->orderBy('schedules.duration', $sortType)

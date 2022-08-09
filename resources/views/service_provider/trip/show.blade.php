@@ -193,12 +193,16 @@ $seat_number = $trip['coach']['seat_number'];
                                     <div class=" infor-ticket">
 
                                         Đi từ
-                                        :{{ $ticket['arrival_station']['name'] . '(' . $ticket['arrival_station']['district_name'] . ',' . $ticket['arrival_station']['province_name'] . ')' }}
+                                        :{{ $ticket['departure_station']['name'] . '(' . $ticket['departure_station']['district_name'] . ',' . $ticket['departure_station']['province_name'] . ')' }}
+                                       
                                     </div>
 
                                     <div class=" infor-ticket">
                                         Đến
-                                        :{{ $ticket['departure_station']['name'] . '(' . $ticket['departure_station']['district_name'] . ',' . $ticket['departure_station']['province_name'] . ')' }}
+                                        :{{ $ticket['arrival_station']['name'] . '(' . $ticket['arrival_station']['district_name'] . ',' . $ticket['arrival_station']['province_name'] . ')' }}
+                                    </div>
+                                    <div class=" infor-ticket">
+                                       Mã chỗ: {{$ticket['seat_position']}}
                                     </div>
                                 </div>
                             </div>
