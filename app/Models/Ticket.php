@@ -30,7 +30,13 @@ class Ticket extends Model
         return $this->belongsTo(User::class,'user_id','id'); 
     }
     static function get_tickets(int $trip_id){
-        $tickets=Ticket::where('trip_id',$trip_id)->with(['user','arrival_station.province','departure_station.province'])->get();
+        $tickets=Ticket::where('trip_id',$trip_id)->with([
+            'user',
+            'arrival_station.province',
+            'arrival_station.district',
+            'departure_station.province',
+            'departure_station.district',
+            ])->get();
         self::get_necessary_informations($tickets);
         $ticketsArr=$tickets->toArray();
         return $ticketsArr;

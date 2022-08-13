@@ -40,7 +40,7 @@
                     Ngày đi
                 </div>
                 <input class="form-control" min="{{ date('Y-m-d') }}" id="departure-date" type="date"
-                    name="departure_date">
+                    value="{{ $departure_date ?? '' }}" name="departure_date">
             </div>
         </div>
 
@@ -133,7 +133,7 @@
         padding: 4px;
     }
 
-    option:checked {
+    #select_pro option:checked {
         text-align: center;
     }
 
@@ -141,6 +141,17 @@
         right: -27px;
         top: 20px;
         z-index: 999;
+    }
+
+    .btn-danger:not(.root-color) {
+        background-color: var(--orange-color);
+    }
+
+    .search-trip {
+        bottom: -20px;
+        right: 30px;
+        box-shadow: 4px 4px 20px 1px hsl(0deg 0% 55% / 40%);
+        text-transform: uppercase;
     }
 
     @media (max-width: 900px) {
@@ -158,15 +169,24 @@
 
     }
 
-    .btn-danger:not(.root-color) {
-        background-color: var(--orange-color);
-    }
+    @media (max-width: 400px) {
+        .search-trip {
+            bottom: -10px;
+            right: 10px;
+            box-shadow: 2px 2px 10px 0px hsl(0deg 0% 55% / 40%);
+            text-transform: uppercase;
+            font-size: 10px
+        }
 
-    .search-trip {
-        bottom: -20px;
-        right: 30px;
-        box-shadow: 4px 4px 20px 1px hsl(0deg 0% 55% / 40%);
-        text-transform: uppercase;
+        .search-trip img {
+            width: 15px;
+        }
+
     }
 </style>
+@if (isset($departure_province_code) || isset($arrival_province_code))
+    <script>
+        const preAddressCode = [{{ $departure_province_code }}, {{ $arrival_province_code }}];
+    </script>
+@endif
 <script src="{{ asset('js/components/search_trip.js') }}"></script>

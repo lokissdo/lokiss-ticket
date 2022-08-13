@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 Route::get('/addresses', [Addresses::class,'get_detail_addresses'])->name('addresses');
 Route::get('/stations', [StationController::class,'get_all_stations'])->name('stations');
 Route::get('/coaches', [CoachController::class,'get_coaches'])->name('coaches');

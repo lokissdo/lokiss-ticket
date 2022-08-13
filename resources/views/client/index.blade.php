@@ -129,7 +129,7 @@
                                     <span>920km</span>
                                 </div>
                                 <div class="infor-duration">
-                                    <img src="https://img.icons8.com/ios-glyphs/20/666666/clock--v3.png"/>
+                                    <img  src="https://img.icons8.com/ios-glyphs/20/666666/clock--v3.png"/>
                                     <span>8h</span>
                                 </div>
                                 <div class="infor-price">

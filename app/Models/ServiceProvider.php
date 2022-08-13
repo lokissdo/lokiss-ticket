@@ -18,7 +18,6 @@ class ServiceProvider extends Model
         'phone_number',
         'address',
         'employer_id',
-        'rate'
     ];
     const UPDATED_AT = null;
 
@@ -30,9 +29,63 @@ class ServiceProvider extends Model
     {
         return $this->belongsTo(Province::class, 'address', 'code');
     }
+    public function comments()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    // public function bookmarks(): HasMany
+    // {
+    //     return $this->hasMany(Bookmark::class);
+    // }
+
+    // protected function getBookmarksCacheKey(): string
+    // {
+    //     return sprintf('user-%d-bookmarks', $this->id);
+    // }
+
+    // public function clearBookmarksCache(): bool
+    // {
+    //     return Cache::forget($this->getBookmarksCacheKey());
+    // }
+
+    // public function getBookmarksAttribute(): Collection
+    // {
+    //     if ($this->relationLoaded('bookmarks')) {
+    //         return $this->getRelationValue('bookmarks');
+    //     }
+
+    //     $bookmarks = Cache::rememberForever($this->getBookmarksCacheKey(), function () {
+    //         return $this->getRelationValue('bookmarks');
+    //     });
+
+    //     $this->setRelation('bookmarks', $bookmarks);
+
+    //     return $bookmarks;
+    // }
+
+
+
     public function getAddressNameAttribute()
     {
         return $this->province->name;
+    }
+    public function getRateInforAttribute()
+    {
+        return $this->rate_avg . ' (' . $this->rate_count.')';
+    }
+    public function getRateAvgAttribute()
+    {
+        $count=$this->rate_count;
+        if($count===0) return 0;
+        $total = $this->comments->reduce(function ($pre, $item) {
+            return $pre + $item->rate;
+        },0);
+        return round($total/$count,2);
+    }
+    public function getRateCountAttribute()
+    {
+        return $this->comments->count();
     }
     public function getEmailAttribute()
     {
@@ -42,41 +95,7 @@ class ServiceProvider extends Model
     {
         return $this->hasMany(EmployeesList::class, 'service_provider_id', 'id');
     }
-    static function get_employees_list($service_provider_id)
-    {
-        if (session()->get('user')['role'] != 'employer') return null;
-        $serviceProvider = ServiceProvider::where('id', $service_provider_id)->with(['employees.user.province', 'employees.user.district'])->first();
-        $employees = $serviceProvider->employees;
-        $employeesArrray = [];
-        foreach ($employees as $item) {
-            $item->user->append('address_name');
-            $employeesArrray[] = [
-                'id' => $item->user->id,
-                'name' => $item->user->name,
-                'email' => $item->user->email,
-                'address_name' => $item->user->address_name,
-                'created_at' => $item->created_at
-            ];
-        }
-        return $employeesArrray;
-    }
-
-    static function get_schedules_list($service_provider_id, $schedule_id = null)
-    {
-        $query = Schedule::where('service_provider_id', $service_provider_id);
-        if ($schedule_id != null) $query = $query->where('id', $schedule_id);
-        
-        $schedules = $query->with(['arrival_province', 'departure_province', 
-        'schedule_detail.station.province','schedule_detail.station.district'])->get()
-            ->map(function ($item) {
-                $item->get_informations_without_detail();
-                $item->schedule_detail=$item->schedule_detail->map(function($scheDetailItem){
-                   return $scheDetailItem->get_station_informations();
-                });
-                return $item;
-            });
-        $schedulesArr = $schedules->toArray();
-        $schedulesArr = Schedule::reOrderSchedules($schedulesArr);
-        return $schedulesArr;
-    }
+   
+   
+    
 }

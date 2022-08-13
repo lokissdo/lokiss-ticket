@@ -37,7 +37,7 @@ class Station extends Model
         $name = $this->district->name;
         return str_replace($preFix, "", $name);
     }
-    static function orderStations($list)
+    static function orderStations(array $list)
     {
         $map = [];
         $res = [];

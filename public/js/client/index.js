@@ -23,7 +23,7 @@ window.onload = () => {
                 duration.textContent = elementData.hour_duration;
 
                 const price = select('.infor-price>span')
-                price.textContent = new Intl.NumberFormat().format(Math.round(Number(elementData.price) / 1000) * 1000);
+                price.textContent = new Intl.NumberFormat().format(Math.round(Number(elementData.price) / 10000) * 10000);
             });
 
         });
