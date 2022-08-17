@@ -76,12 +76,12 @@ $seat_number = $trip['coach']['seat_number'];
     <div class="straight-line"></div>
     <h3> @include('icons.schedule')Lịch trình di chuyển</h3>
     <div>
-        @foreach ($schedule['schedule_detail'] as $key => $each)
+        @foreach ($scheduleDetail as $key => $each)
             @include('icons.station')
             <strong>{{ $each['name'] }}
                 ({{ $each['district_name'] . ', ' . $each['province_name'] }})
             </strong>
-            @if ($key != count($schedule['schedule_detail']) - 1)
+            @if ($key != count($scheduleDetail) - 1)
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue"
                     class="bi bi-arrow-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -162,7 +162,7 @@ $seat_number = $trip['coach']['seat_number'];
             </tr>
         </thead>
         <tbody>
-            @foreach ($schedule['schedule_detail'] as $station)
+            @foreach ($scheduleDetail as $station)
                 <tr>
                     <th scope="row">{{ $station['name'] }}</th>
 
@@ -193,12 +193,16 @@ $seat_number = $trip['coach']['seat_number'];
                                     <div class=" infor-ticket">
 
                                         Đi từ
-                                        :{{ $ticket['arrival_station']['name'] . '(' . $ticket['arrival_station']['district_name'] . ',' . $ticket['arrival_station']['province_name'] . ')' }}
+                                        :{{ $ticket['departure_station']['name'] . '(' . $ticket['departure_station']['district_name'] . ',' . $ticket['departure_station']['province_name'] . ')' }}
+                                       
                                     </div>
 
                                     <div class=" infor-ticket">
                                         Đến
-                                        :{{ $ticket['departure_station']['name'] . '(' . $ticket['departure_station']['district_name'] . ',' . $ticket['departure_station']['province_name'] . ')' }}
+                                        :{{ $ticket['arrival_station']['name'] . '(' . $ticket['arrival_station']['district_name'] . ',' . $ticket['arrival_station']['province_name'] . ')' }}
+                                    </div>
+                                    <div class=" infor-ticket">
+                                       Mã chỗ: {{$ticket['seat_position']}}
                                     </div>
                                 </div>
                             </div>

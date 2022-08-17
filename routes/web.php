@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Middleware\CheckRememberToken;
 use Illuminate\Support\Facades\Route;
@@ -25,15 +26,15 @@ Route::group([
     'middleware' => [CheckRememberToken::class],
 ], function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/', [AuthController::class, 'index'])->name('index');
+    Route::get('/', [ClientController::class, 'index'])->name('passenger.index');
     Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::get('/trip', [ClientController::class, 'trip'])->name('trip');
+
 });
 
-
-
+//Auth
 Route::post('/login', [AuthController::class, 'loggingIn'])->name('loggingIn');
 Route::get('/signout', [AuthController::class, 'signOut'])->name('signOut');
-
 Route::post('/register', [AuthController::class, 'registering'])->name('registering');
 Route::get('/auth/redirect/{provider}', function ($provider) {
     return Socialite::driver($provider)->redirect();
@@ -46,7 +47,6 @@ Route::group([
     'as' => 'passenger.',
     'middleware' => [Loggedin::class,isPassenger::class],
 ], function () {
-    Route::get('/', [PassengerController::class, 'index'])->name('index');
     // Route::get('/{user}', [PassengerController::class, 'show'])->name('show');
     // Route::delete('/{user}', [PassengerController::class, 'destroy'])->name('destroy');
 });

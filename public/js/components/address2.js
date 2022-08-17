@@ -6,7 +6,7 @@ var defaultAddress={
     "district":`<option data-code="null" value="null"> Chọn quận / huyện </option>`,
     "town":`<option data-code="null" value="null">Chọn phường / xã </option>`
 }
-window.onload=()=>{
+window.addEventListener('load',()=>{
     fetch("/api/addresses")
     .then(response => response.json())
     .then(res =>{
@@ -20,13 +20,13 @@ window.onload=()=>{
          // Select districts when province changes
         province.addEventListener('change',ProvinceChangeListenter)
     });
-}
+})
 
 function ProvinceChangeListenter(){
     console.log(province.value)
     if(province.value!="null"){
         let html=defaultAddress.district;       
-       const temp = data.find(element => element.code===province.value).districts;
+       const temp = data.find(element => element.code==province.value).districts;
         for (let i=0;i<temp.length;i++)
            html+=` <option ${(typeof preAddress2Code)!=='undefined' && preAddress2Code==temp[i].code ?'selected':''} data-code="${temp[i].code}" value="${temp[i].code}"> ${temp[i].name} </option>`
         district.innerHTML=html;

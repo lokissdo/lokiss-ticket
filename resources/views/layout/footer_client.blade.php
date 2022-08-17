@@ -5,7 +5,7 @@
                 <div class="footer_item_title">Giới Thiệu
                     <div class="footer_item_title-underline"></div>
                 </div>
-                <div class="footer_item_detail"> Chào mừng bạn đến với ngôi nhà H&N! Tại đây, mỗi một dòng chữ, mỗi chi tiết và hình ảnh đều là những bằng chứng mang dấu ấn lịch sử H&N 100 năm, và đang không ngừng phát triển lớn mạnh. </div>
+                <div class="footer_item_detail"> Chào mừng bạn đến với ngôi nhà H&H! Tại đây, mỗi một dòng chữ, mỗi chi tiết và hình ảnh đều là những bằng chứng mang dấu ấn lịch sử H&H 100 năm, và đang không ngừng phát triển lớn mạnh. </div>
             </div>
             <div class="footer_item">
                 <div class="footer_item_title">Địa chỉ
@@ -15,7 +15,7 @@
                     <li class="item_address ">Đường xx, Quân xx, Thành phố xx</li>
                     <li class="item_address ">03676341**</li>
                     <li class="item_address ">dokhaihung2003@gmail.com</li>
-                    <li class="item_address ">SNEAKERSHOP</li>
+                    <li class="item_address ">{{strtoupper(env('APP_NAME'))}}</li>
                 </div>
             </div>
             <div class="footer_item">
@@ -44,6 +44,6 @@
 
         </div>
         <div class="footer_copyright">
-           <div class="footer_copyright-text">© Bản quyền thuộc về . Thiết kế website H&N </div>
+           <div class="footer_copyright-text">© Bản quyền thuộc về . Thiết kế website LOKISS </div>
         </div>
     </footer>

@@ -57,14 +57,15 @@
     </div>
     <div class="topbar_items">
         <div class="topbar_last container d-flex justify-content-between">
-            <div class="topbar_last_item  topbar_last_item_img">
-                <img src="{{ asset('img/logo.png') }}" walt="logo">
+            <div class="topbar_last_item position-relative topbar_last_item_img ">
+                <img src="{{ asset('img/logo.png') }}" alt="logo">
+                <a href="{{route('passenger.index')}} " class="wrapper"></a>
             </div>
             <div class="topbar_last_item">
-                <a href="#" class="text-decoration-none  text-reset hover-color">Trang chủ</a>
+                <a href="{{route('passenger.index')}}" class="text-decoration-none  text-reset hover-color">Trang chủ</a>
             </div>
             <div class="topbar_last_item">
-                <a href="#" class="text-decoration-none text-reset hover-color">Lịch trình</a>
+                <a href="{{route('trip')}}" class="text-decoration-none text-reset hover-color">Lịch trình</a>
             </div>
             <div class="topbar_last_item">
                 <a href="#" class="text-decoration-none text-reset hover-color">Tin tức</a>

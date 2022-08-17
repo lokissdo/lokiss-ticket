@@ -14,7 +14,7 @@ class ScheduleDetailSeeder extends Seeder
 
     public function __construct()
     {
-        $this->minScheduleId = 1;
+        $this->minScheduleId = 36;
         $this->maxMiddleStation = 5;
     }
     public function run()

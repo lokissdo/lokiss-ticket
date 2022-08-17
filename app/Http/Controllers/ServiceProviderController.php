@@ -32,7 +32,7 @@ class ServiceProviderController extends Controller
         View::share('title', 'Schedules');
 
         //Schedule
-        $schedules = ServiceProvider::get_schedules_list($this->service_provider_id);
+        $schedules = Schedule::get_schedules_list($this->service_provider_id);
         return view("service_provider.schedule.index")->with([
             'schedules' => $schedules,
         ]);
@@ -41,7 +41,7 @@ class ServiceProviderController extends Controller
     {
         View::share('title', 'Schedules');
         //Schedule
-        $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $id)[0];
+        $schedule = Schedule::get_schedules_list($this->service_provider_id, $id)[0];
         return view("service_provider.schedule.show")->with([
             'schedule' => $schedule,
         ]);
@@ -135,11 +135,10 @@ class ServiceProviderController extends Controller
         View::share('title', 'Trip');
         //Schedule
         $trip = Trip::get_trip($this->service_provider_id, $id);
-        $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $trip['schedule_id'])[0];
+        $scheduleDetail = ScheduleDetail::get_schedule_detail( $trip['schedule_id']);
         $ticketsArr = Ticket::get_tickets($id);
-        
         return view("service_provider.trip.show")->with([
-            'schedule' => $schedule,
+            'scheduleDetail' => $scheduleDetail,
             'tickets' => $ticketsArr,
             'trip' => $trip,
         ]);

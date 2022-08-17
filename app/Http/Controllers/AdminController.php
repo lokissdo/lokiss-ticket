@@ -77,7 +77,7 @@ class AdminController extends Controller
     public function provider_index()
     {
         View::share('title', 'Home');
-        $providers = ServiceProvider::with('province')->get();
+        $providers = ServiceProvider::with(['province'])->withCount('ratings')->withAvg('ratings','rate')->get();
         $providers->append('address_name');
         return view('admin.provider.index')->with([
             'providers' => $providers->toArray()

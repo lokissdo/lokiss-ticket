@@ -58,8 +58,8 @@ $role = Session::get('user')['role'];
                         <div class="position-absolute d-none select-dropdown" data-name="select-departure-address">
                             <div class="form-group">
                                 <div class="input-group"> <select name="address" data-name="select-departure-code" class="form-select " id="select_pro">
-                                        <option data-code="null" class="input-group form-control" value="null"> Chọn
-                                            tỉnh / thành phố</option>
+                                        <option data-code="null" class="input-group form-control" value="null">
+                                            Tất cả</option>
                                     </select>
                                 </div>
                             </div>
@@ -83,8 +83,7 @@ $role = Session::get('user')['role'];
 
                             <div class="form-group">
                                 <div class="input-group"> <select data-name="select-arrival-code" name="address" class="form-select " id="select_pro">
-                                        <option data-code="null" class="input-group form-control" value="null"> Chọn
-                                            tỉnh / thành phố</option>
+                                        <option data-code="null" class="input-group form-control" value="null"> Tất cả</option>
                                     </select>
                                 </div>
                             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CoachTypesEnum;
 use App\Models\Coach;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -26,5 +27,9 @@ class CoachController extends Controller
         if (!$res) return 0;
         $res->append('type_name');
         return $res;
+    }
+    public function get_coaches_types()
+    {
+        return json_encode(CoachTypesEnum::asArray());
     }
 }

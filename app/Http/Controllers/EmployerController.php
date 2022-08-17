@@ -39,9 +39,8 @@ class EmployerController extends Controller
     {
         View::share('title', 'Employees');
 
-
         return view('employer.employee.index')->with([
-            'employees' => ServiceProvider::get_employees_list($this->service_provider_id)
+            'employees' => EmployeesList::get_employees_list($this->service_provider_id)
         ]);
     }
     public function employee_create()
