@@ -53,8 +53,8 @@ class Schedule extends Model
     static function get_schedules_list($service_provider_id = null, $schedule_id = null)
     {
         $query = Schedule::query();
-        if ($service_provider_id != null) Schedule::where('service_provider_id', $service_provider_id);
-        if ($schedule_id != null) $query = $query->where('id', $schedule_id);
+        if ($service_provider_id != null) $query->where('service_provider_id', $service_provider_id);
+        if ($schedule_id != null) $query->where('id', $schedule_id);
 
         $schedules = $query->with([
             'arrival_province', 'departure_province',
@@ -71,10 +71,12 @@ class Schedule extends Model
         $schedulesArr = Schedule::reOrderSchedules($schedulesArr);
         return $schedulesArr;
     }
-    public function get_informations_without_detail()
+    public function get_informations_without_detail($withScheduleLocations=true)
     {
-        $this->append('departure_province_name');
-        $this->append('arrival_province_name');
+        if($withScheduleLocations===true){
+            $this->append('departure_province_name');
+            $this->append('arrival_province_name');
+        }
         $this->append('hour_duration');
         $this->makeHidden([
             'arrival_province', 'departure_province',

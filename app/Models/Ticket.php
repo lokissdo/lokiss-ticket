@@ -17,31 +17,37 @@ class Ticket extends Model
         'user_id',
         'seat_position'
     ];
-    public function arrival_station(){
-        return $this->belongsTo(Station::class,'arrival_station_id','id'); 
+    public function arrival_station()
+    {
+        return $this->belongsTo(Station::class, 'arrival_station_id', 'id');
     }
-    public function departure_station(){
-        return $this->belongsTo(Station::class,'departure_station_id','id'); 
+    public function departure_station()
+    {
+        return $this->belongsTo(Station::class, 'departure_station_id', 'id');
     }
-    public function trip(){
-        return $this->belongsTo(Trip::class,'trip_id','id'); 
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class, 'trip_id', 'id');
     }
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id'); 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    static function get_tickets(int $trip_id){
-        $tickets=Ticket::where('trip_id',$trip_id)->with([
+    static function get_tickets(int $trip_id)
+    {
+        $tickets = Ticket::where('trip_id', $trip_id)->with([
             'user',
             'arrival_station.province',
             'arrival_station.district',
             'departure_station.province',
             'departure_station.district',
-            ])->get();
+        ])->get();
         self::get_necessary_informations($tickets);
-        $ticketsArr=$tickets->toArray();
+        $ticketsArr = $tickets->toArray();
         return $ticketsArr;
     }
-    protected function get_necessary_informations($tickets){
+    protected function get_necessary_informations($tickets)
+    {
         $tickets->map(function ($item) {
             $user = [
                 'id' => $item->user_id,
@@ -54,7 +60,7 @@ class Ticket extends Model
             $item->arrival_station->append('district_name');
             $item->departure_station->append('province_name');
             $item->departure_station->append('district_name');
-            
+
             $seat_position = $item->seat_position;
             return collect([
                 'user' => $user,
@@ -63,5 +69,9 @@ class Ticket extends Model
                 'arrival_station' => $item->departure_station,
             ]);
         });
+    }
+    public static function get_occupied_seats($trip_id)
+    {
+        return self::where('trip_id', $trip_id)->get('seat_position');
     }
 }

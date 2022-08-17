@@ -189,7 +189,7 @@
                             </div>
                         </div>
                         <div class="news-slides-item hoverable">
-                            <img src="https://www.ueh.edu.vn/images/upload/editer/UEH%20trien%20khai%20Shuttel%20Bus%20-%20Copy.png" alt="UEH triển khai dịch vụ Shuttle Bus">
+                            <img src="https://vtv1.mediacdn.vn/thumb_w/650/2021/12/10/xe-2-1639152834143913985205.jpg" alt="UEH triển khai dịch vụ Shuttle Bus">
                             <div class="news-slides-item-title">
                                 <p >UEH triển khai dịch vụ Shuttle Bus</p>
                             </div>

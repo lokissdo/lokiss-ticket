@@ -29,7 +29,7 @@ class ServiceProvider extends Model
     {
         return $this->belongsTo(Province::class, 'address', 'code');
     }
-    public function comments()
+    public function ratings()
     {
         return $this->hasMany(Rating::class);
     }
@@ -78,14 +78,14 @@ class ServiceProvider extends Model
     {
         $count=$this->rate_count;
         if($count===0) return 0;
-        $total = $this->comments->reduce(function ($pre, $item) {
+        $total = $this->ratings->reduce(function ($pre, $item) {
             return $pre + $item->rate;
         },0);
         return round($total/$count,2);
     }
     public function getRateCountAttribute()
     {
-        return $this->comments->count();
+        return $this->ratings->count();
     }
     public function getEmailAttribute()
     {

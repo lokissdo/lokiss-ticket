@@ -22,24 +22,23 @@ class ClientController extends Controller
         if (empty($req->departure_province_code) || empty($req->arrival_province_code) || empty($req->departure_date))
             return redirect()->route('passenger.index');
         $departure_province_code = $req->departure_province_code;
-        $departure_province = Province::find($departure_province_code)->name??null;
+        $departure_province = Province::find($departure_province_code)->name ?? null;
 
         $arrival_province_code = $req->arrival_province_code;
-        $arrival_province = Province::find($arrival_province_code)->name??null;
+        $arrival_province = Province::find($arrival_province_code)->name ?? null;
 
         $departure_date = $req->departure_date;
-        $date = new DateTime($departure_date);
+        $date = new DateTime($departure_date."23:59:59");
         $now = new DateTime();
-        if (!$departure_province || !$arrival_province || $date < $now)
+        if (!$departure_province || !$arrival_province || ($date < $now))
             return redirect()->route('passenger.index');
 
-        $tripData = Trip::get_trips(null,$req,false);
-        $trips=$tripData['trips'];
-        $serviceProviderIdLists=Trip::get_service_provider_ids_list($trips);
+        $tripData = Trip::get_trips(null, $req, true);
+        $trips = $tripData['trips'];
 
-        $scheduleIdLists=Trip::get_schedule_ids_list($trips);
-        $scheduleDetails=ScheduleDetail::get_schedule_details($scheduleIdLists);
-        $ratings=Rating::get_general_ratings_by_service_provider_list($serviceProviderIdLists);
+        $scheduleIdLists = Trip::get_schedule_ids_list($trips);
+        $scheduleDetails = ScheduleDetail::get_schedule_details($scheduleIdLists);
+       
         return view('client.trip')->with([
             'departure_province_code' => $departure_province_code,
             'departure_province' => $departure_province,
@@ -47,13 +46,7 @@ class ClientController extends Controller
             'arrival_province' => $arrival_province,
             'departure_date' => $departure_date,
             'trips' => $trips,
-            'ratings'=>$ratings,
-            'scheduleDetails'=>$scheduleDetails
+            'scheduleDetails' => $scheduleDetails
         ]);
-    }
-    public function get_popular_schedules()
-    {
-        $data = Schedule::get_popular_schedule();
-        return json_encode($data);
     }
 }

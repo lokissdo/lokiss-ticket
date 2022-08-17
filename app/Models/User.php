@@ -63,7 +63,12 @@ class User extends Authenticatable
             'name' => $user->name,
             'email' => $user->email,
             'avatar' => $user->avatar,
-            'role' => $role
+            'role' => $role,
+            'phone_number' => $user->phone_number,
+            'address'=>$user->address,
+            'address2'=>$user->address2,
+
+
         ]]);
     }
     static function get_user_with_filter_sort($searchCol, $searchVal, $sortCol, $sortType, $address, $address2, $role, $offset, $itemsPerPage, $includedTotalPage)

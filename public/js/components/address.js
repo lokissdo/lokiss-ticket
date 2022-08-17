@@ -1,8 +1,10 @@
 var provinces=document.querySelectorAll("#select_pro")
-const GetAddressByFetchAPI=()=>{
+var data;
+const GetAddressByFetchAPI= ()=>{
     fetch("/api/addresses")
     .then(response => response.json())
-    .then(data =>{
+    .then(res =>{
+        data=res
         provinces.forEach((province,index)=>{
             var html=province.innerHTML;
             for (let i=0;i<data.length;i++){     
@@ -10,7 +12,7 @@ const GetAddressByFetchAPI=()=>{
             }
             province.innerHTML=html;
         })
-        
+        if(ProvinceChangeListenter) ProvinceChangeListenter()
     });
 }
 window.addEventListener('load',GetAddressByFetchAPI)

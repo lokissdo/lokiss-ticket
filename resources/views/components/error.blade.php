@@ -45,7 +45,6 @@
         myTimeout = setTimeout(() => {
             time_on = 0;
             errorModal.classList.add('d-none');
-            time_on = 0;
         }, 4000);
     };
 </script>

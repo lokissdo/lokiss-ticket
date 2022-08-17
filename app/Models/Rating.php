@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\ItemsPerPage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -18,6 +19,10 @@ class Rating extends Model
         'user_id'
     ];
     const UPDATED_AT = null;
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function getRatingAvgCacheKey($service_provider_id)
     {
         return sprintf('rating-avg-%d', $service_provider_id);
@@ -57,5 +62,8 @@ class Rating extends Model
             Cache::put(self::getRatingCountCacheKey($SPId),  $each->count, 24 * 60 * 60);
         }
         return $result;
+    }
+    public static function get_comments_by_service_provider($service_provider_id,$offset=0,$take=ItemsPerPage::COMMENTS){
+        return self::where('service_provider_id',$service_provider_id)->with('user:id,name,avatar')->offset($offset)->take($take)->get();
     }
 }

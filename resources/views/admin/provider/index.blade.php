@@ -45,7 +45,7 @@
                     <th scope="row">{{ $provider['id'] }}</th>
                     <td>{{ $provider['name'] }}</td>
                     <td>{{ $provider['phone_number'] }}</td>
-                    <td>{{ $provider['rate_infor'] }}</td>
+                    <td>{{ (round($provider['ratings_avg_rate'],2).'*'??'0').' ('.$provider['ratings_count'].')' }}</td>
                     <td>{{ $provider['address_name'] }}</td>
 
                     <td>
