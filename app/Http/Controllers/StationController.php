@@ -25,7 +25,9 @@ class StationController extends Controller
         $query = Station::where('name', 'like', '%' . $req->value . '%');
         foreach ($preVals as $one)
             $query = $query->where('id', '!=', $one);
-        $res = $query->take($limit)->get();
+        $res = $query->with('province','district')->take($limit)->get();
+        $res->append('province_name');
+        $res->append('district_name');
         if (!$res) return 0;
         return $res;
     }

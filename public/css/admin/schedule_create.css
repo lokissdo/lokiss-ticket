@@ -31,3 +31,6 @@
 .item_suggested{
     min-width: 160px;
 }
+.input-group>label{
+    width: 30% !important;
+}

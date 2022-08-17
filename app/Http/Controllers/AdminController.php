@@ -30,40 +30,32 @@ class AdminController extends Controller
     }
     public function user_index(Request $request)
     {
+
+        //preparation for sort and filter
         $itemsPerPage = ItemsPerPage::USER;
         $sortCol = $request->sortCol ?? 'id';
         $sortType = $request->sortType ?? 'asc';
         $searchCol = $request->searchCol ?? 'name';
         $searchVal = $request->searchVal ?? '';
-
+        $address = $request->address ?? 'null';
+        $address2 = $request->address2 ?? 'null';
+        $role = $request->role ?? 'null';
+        $includedTotalPage = !empty($request->isFilter) || empty($request->isAPI) ? 1 : 0;
         $offset = $request->pageNum ? ($request->pageNum - 1) * $itemsPerPage : 0;
-        $limit = $itemsPerPage;
 
 
-        $query = User::where($searchCol, 'like', '%' . $searchVal . '%')
-            ->orderBy($sortCol, $sortType);
-        if (isset($request->address) && $request->address != 'null')  $query = $query->where('address', $request->address);
-        if (isset($request->address2) && $request->address2 != 'null')  $query = $query->where('address2', $request->address2);
-        if (isset($request->role) && $request->role != 'null')  $query = $query->where('role', $request->role);
-
-
-        $totalPage=(!empty($request->isFilter)||!isset($request->isFilter))?ceil(($query->count()) / $itemsPerPage):-1;
-
-        $users = $query->offset($offset)->limit($limit)->with(['province','district'])->get();
-
-        $users->append('address_name');
-        $users->append('role_name');
-
+        $data=User::get_user_with_filter_sort($searchCol,$searchVal,$sortCol,$sortType,$address,$address2,$role,$offset,$itemsPerPage,$includedTotalPage);
 
         if (!empty($request->isAPI)) return json_encode([
-            'users' => $users,
-            'totalPage' => $totalPage
+            'users' => $data['users'],
+            'totalPage' => $data['totalPage']
         ]);
+
         View::share('title', 'UsersList');
         return view('admin.user.index', [
-            'users' => $users,
-            'total_page' => $totalPage,
-            'roles'=>UserRoleEnum::asArray()
+            'users' => $data['users'],
+            'total_page' =>$data['totalPage'],
+            'roles' => UserRoleEnum::asArray()
         ]);
     }
 
@@ -85,7 +77,7 @@ class AdminController extends Controller
     public function provider_index()
     {
         View::share('title', 'Home');
-        $providers = ServiceProvider::with('province')->get();
+        $providers = ServiceProvider::with(['province'])->withCount('ratings')->withAvg('ratings','rate')->get();
         $providers->append('address_name');
         return view('admin.provider.index')->with([
             'providers' => $providers->toArray()
@@ -132,7 +124,9 @@ class AdminController extends Controller
     public function station_index()
     {
         View::share('title', 'Station');
-        $stations = Station::all();
+        $stations = Station::with(['province', 'district'])->get();
+        $stations->append('province_name');
+        $stations->append('district_name');
         return view('admin.station.index')->with([
             'stations' => $stations->toArray()
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CoachTypesEnum;
 use App\Models\Coach;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -20,11 +21,15 @@ class CoachController extends Controller
         $numOfItem = 6;
         $query= Coach::where('service_provider_id',$user['service_provider_id'])->where('name', 'like', '%' . $req->value . '%');
         if(!isset($req->all)){
-            $query=$query->take($numOfItem);
+            $query->take($numOfItem);
         }
         $res =$query->get();
         if (!$res) return 0;
         $res->append('type_name');
         return $res;
+    }
+    public function get_coaches_types()
+    {
+        return json_encode(CoachTypesEnum::asArray());
     }
 }

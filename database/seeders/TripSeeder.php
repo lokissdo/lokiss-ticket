@@ -24,14 +24,14 @@ class TripSeeder extends Seeder
     }
     public function run()
     {
-        $service_provider = ServiceProvider::get('id');
+        $service_providers = ServiceProvider::get('id');
         $TripsInserted = [];
-        foreach ($service_provider as $each) {
+        foreach ($service_providers as $each) {
             $numOfTrip = rand($this->minTripPerProvider, $this->maxTripPerProvider); 
             for ($i = 0; $i < $numOfTrip; $i++){
                 $coach_id = Coach::where('service_provider_id', $each->id)->orderByRaw('RAND()')->first()->id;
                 $schedule_id = Schedule::where('service_provider_id', $each->id)->orderByRaw('RAND()')->first()->id;
-                $diffDay=rand(-10,60);
+                $diffDay=rand(0,60);
                 $TripsInserted[] = [
                     'coach_id' => $coach_id,
                     'schedule_id' => $schedule_id,

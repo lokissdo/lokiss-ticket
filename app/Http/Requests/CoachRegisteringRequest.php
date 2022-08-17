@@ -6,6 +6,9 @@ use App\Enums\CoachTypesEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+// Content-Type: 
+//data-form => redirect 
+//json/application => JSON
 class CoachRegisteringRequest extends FormRequest
 {
 

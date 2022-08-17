@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Station extends Model
 {
     use HasFactory;
-    protected $with = ['province', 'district'];
-    protected $appends = ['province_name', 'district_name'];
+    //protected $appends = ['province_name', 'district_name'];
 
     protected $fillable = [
         'name',
@@ -35,11 +34,10 @@ class Station extends Model
     public function getDistrictNameAttribute()
     {
         $preFix = array('Quận', 'Huyện', 'Thị xã', 'Thành phố');
-
         $name = $this->district->name;
         return str_replace($preFix, "", $name);
     }
-    static function OrderStations($list)
+    static function orderStations(array $list)
     {
         $map = [];
         $res = [];

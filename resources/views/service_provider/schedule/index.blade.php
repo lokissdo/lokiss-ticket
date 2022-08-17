@@ -40,9 +40,8 @@ $role= Session::get('user')['role'];
                 <th scope="col">STT</th>
                 <th scope="col">Giờ khởi hành</th>
                 <th scope="col">Địa điểm khởi hành</th>
-                <th scope="col">Giờ đến</th>
+                <th scope="col">Thời gian di chuyển</th>
                 <th scope="col">Địa điểm đến</th>
-                <th scope="col">Số ngày di chuyển</th>
                 <th scope="col">###</th>
             </tr>
         </thead>
@@ -77,11 +76,10 @@ $role= Session::get('user')['role'];
 
                 <tr>
                     <th scope="row">{{ $schedule['id'] }}</th>
-                    <td>{{ $schedule['departure_time_str'] }}</td>
+                    <td>{{ $schedule['departure_time'] }}</td>
                     <td>{{ $schedule['departure_province_name'] }}</td>
-                    <td>{{ $schedule['arrival_time_str'] }}</td>
+                    <td>{{ $schedule['hour_duration'] }}</td>
                     <td>{{ $schedule['arrival_province_name'] }}</td>
-                    <td>{{ $schedule['total_days'] }}</td>
 
                     <td>
                         <div class="d-flex justify-content-around">

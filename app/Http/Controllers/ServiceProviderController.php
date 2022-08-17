@@ -32,7 +32,7 @@ class ServiceProviderController extends Controller
         View::share('title', 'Schedules');
 
         //Schedule
-        $schedules = ServiceProvider::get_schedules_list($this->service_provider_id);
+        $schedules = Schedule::get_schedules_list($this->service_provider_id);
         return view("service_provider.schedule.index")->with([
             'schedules' => $schedules,
         ]);
@@ -41,7 +41,7 @@ class ServiceProviderController extends Controller
     {
         View::share('title', 'Schedules');
         //Schedule
-        $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $id)[0];
+        $schedule = Schedule::get_schedules_list($this->service_provider_id, $id)[0];
         return view("service_provider.schedule.show")->with([
             'schedule' => $schedule,
         ]);
@@ -53,8 +53,7 @@ class ServiceProviderController extends Controller
     }
     public function schedule_store(CreateScheduleRequest $request)
     {
-        $toInsert = $request->except('total_days', 'station_id');
-        $toInsert['arrival_time'] = $toInsert['arrival_time'] + $request->total_days * 1440;
+        $toInsert = $request->except( 'station_id');
         $toInsert['service_provider_id'] = $this->service_provider_id;
         $schedule = Schedule::create($toInsert);
         if (!$schedule) return 0;
@@ -105,13 +104,13 @@ class ServiceProviderController extends Controller
     public function trip_index(Request $request)
     {
         View::share('title', 'Trip');
-        $tripsData = Trip::get_trips($this->service_provider_id,null,$request);
+        $tripsData = Trip::get_trips($this->service_provider_id,$request);
         if (!empty($request->isAPI)) return json_encode($tripsData);
         return view('service_provider.trip.index')->with($tripsData);
     }
     public function trip_create(int $id)
     {
-        if (empty(Schedule::find($id)) || Schedule::find($id)->service_provider_id != $this->service_provider_id)
+        if (Schedule::where('id',$id)->where('service_provider_id',$this->service_provider_id)->doesntExist())
             return back()->withError('Bạn không có quyền truy cập vào trang này');
         View::share('title', 'TripCreation');
         return view('service_provider.trip.create', ['id' => $id]);
@@ -135,38 +134,12 @@ class ServiceProviderController extends Controller
     {
         View::share('title', 'Trip');
         //Schedule
-        $trip = Trip::get_trips($this->service_provider_id, $id)['trips'][0];
-        $schedule = ServiceProvider::get_schedules_list($this->service_provider_id, $trip['schedule_id'])[0];
-        $tickets = Ticket::get_tickets($id);
-        $tickets = array_map(function ($item) {
-            $user = [
-                'id' => $item['user_id'],
-                'name' => $item['user']['name'],
-                'email' => $item['user']['email'],
-                'avatar' => $item['user']['avatar'],
-                'phone_number' => $item['user']['phone_number'],
-            ];
-            $arrival_station = [
-                'name' => $item['arrival_station']['name'],
-                'province_name' => $item['arrival_station']['province_name'],
-                'district_name' => $item['arrival_station']['district_name'],
-            ];
-            $departure_station = [
-                'name' => $item['departure_station']['name'],
-                'province_name' => $item['departure_station']['province_name'],
-                'district_name' => $item['departure_station']['district_name'],
-            ];
-            $seat_position = $item['seat_position'];
-            return [
-                'user' => $user,
-                'seat_position' => $seat_position,
-                'departure_station' => $departure_station,
-                'arrival_station' => $arrival_station,
-            ];
-        }, $tickets);
+        $trip = Trip::get_trip($this->service_provider_id, $id);
+        $scheduleDetail = ScheduleDetail::get_schedule_detail( $trip['schedule_id']);
+        $ticketsArr = Ticket::get_tickets($id);
         return view("service_provider.trip.show")->with([
-            'schedule' => $schedule,
-            'tickets' => $tickets,
+            'scheduleDetail' => $scheduleDetail,
+            'tickets' => $ticketsArr,
             'trip' => $trip,
         ]);
     }

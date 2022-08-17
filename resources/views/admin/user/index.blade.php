@@ -136,7 +136,7 @@
                     <td>{{ $user['name'] }}</td>
                     <td>{{ $user['email'] }}</td>
                     <td>
-                        <img src="{{ $user['avatar'] }}" alt="" width="32" height="32"
+                        <img src="{{ $user['avatar'] }}" alt="{{asset('img/logo.png')}}" width="32" height="32"
                             class="rounded-circle me-2">
                     </td>
                     <td>{{ $user['address_name'] }}</td>

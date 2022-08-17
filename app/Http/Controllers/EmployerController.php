@@ -39,9 +39,8 @@ class EmployerController extends Controller
     {
         View::share('title', 'Employees');
 
-
         return view('employer.employee.index')->with([
-            'employees' => ServiceProvider::get_employees_list($this->service_provider_id)
+            'employees' => EmployeesList::get_employees_list($this->service_provider_id)
         ]);
     }
     public function employee_create()
@@ -84,8 +83,6 @@ class EmployerController extends Controller
     {
         $toInsert = $request->only('seat_number', 'name', 'type');
         $toInsert['service_provider_id'] = $this->service_provider_id;
-
-
 
         try {
             $dirName = 'public/img/provider/' . $toInsert['service_provider_id'];
