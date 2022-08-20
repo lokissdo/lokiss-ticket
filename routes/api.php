@@ -32,6 +32,9 @@ Route::get('/popular_schedules', [APIController::class,'get_popular_schedules'])
 Route::get('/comments/{id}', [APIController::class,'get_comments'])->name('comments');
 Route::get('/seats/{trip_id}', [APIController::class,'get_seats'])->name('seats');
 Route::get('/trips', [APIController::class,'get_trips'])->name('trips');
+Route::post('/create_ticket', [APIController::class,'create_ticket'])->name('create_ticket');
+
+
 
 
 

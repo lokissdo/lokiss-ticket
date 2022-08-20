@@ -34,6 +34,8 @@
                             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                               <li><a class="dropdown-item" href="#">Settings</a></li>
                               <li><a class="dropdown-item" href="#">Profile</a></li>
+                              <li><a class="dropdown-item" href="{{route('passenger.ticket')}}">Tickets</a></li>
+
                               <li><hr class="dropdown-divider"></li>
                               <li><a class="dropdown-item" href="{{route('signOut')}}">
                                 Sign out
@@ -61,10 +63,10 @@
                 <img src="{{ asset('img/logo.png') }}" alt="logo">
                 <a href="{{route('passenger.index')}} " class="wrapper"></a>
             </div>
-            <div class="topbar_last_item">
+            <div class="topbar_last_item {{($title==='home')?'chosen-page':''}}">
                 <a href="{{route('passenger.index')}}" class="text-decoration-none  text-reset hover-color">Trang chủ</a>
             </div>
-            <div class="topbar_last_item">
+            <div class="topbar_last_item {{($title==='trip')?'chosen-page':''}}">
                 <a href="{{route('trip')}}" class="text-decoration-none text-reset hover-color">Lịch trình</a>
             </div>
             <div class="topbar_last_item">
@@ -73,8 +75,8 @@
             <div class="topbar_last_item">
                 <a href="#"class="text-decoration-none text-reset hover-color">Liên hệ</a>
             </div>
-            <div class="topbar_last_item">
-                <a href="#"class="text-decoration-none text-reset hover-color">Hóa đơn</a>
+            <div class="topbar_last_item {{($title==='ticket')?'chosen-page':''}}">
+                <a href="{{route('passenger.ticket')}}"class="text-decoration-none text-reset hover-color">Hóa đơn</a>
             </div>
             <div class="topbar_last_item">
                 <a href="#"class="text-decoration-none text-reset hover-color">Về chúng tôi</a>
