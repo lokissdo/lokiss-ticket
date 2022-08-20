@@ -143,7 +143,7 @@ const render = {
                                     </svg>
                                 </i>
 
-                                <span>${(Math.round(sp['ratings_avg_rate'], 2) ?? '0') + ' (' + sp['ratings_count'] + ')'}</span>
+                                <span>${(helper.round(sp['ratings_avg_rate'], 2) ?? '0') + ' (' + sp['ratings_count'] + ')'}</span>
                             </div>
                         </div>
                         <div class="route-price">${helper.number_format(trip['price']) + ' VND'}</div>
@@ -164,7 +164,7 @@ const render = {
                                 </div>
 
                                 <div class="route-time">
-                                    ${helper.formatHi(schedule['departure_time'])}
+                               <span data-name='departure-time'>  ${helper.formatHi(schedule['departure_time'])} </span>
                                     <img alt="fromto" width="28" height="7" src="${helper.asset('img/fromto.png')}">
                                     ${helper.formatHiaddMinutes(schedule['departure_time'], schedule['duration'])}
 
@@ -322,7 +322,7 @@ const render = {
                                             </svg>
                                         </i>
 
-                                        <span>${Math.round(sp['ratings_avg_rate'], 2) ?? '0'}</span>
+                                        <span>${helper.round(sp['ratings_avg_rate'], 2) ?? '0'}</span>
                                     </div>
                                     <div class="star-show">
                                       ${render.ratings(sp)}
@@ -383,43 +383,43 @@ const render = {
                 html += ' <img src="https://img.icons8.com/ios-glyphs/30/CCCCCC/star--v1.png" />'
         return html;
     },
-    departure: function(id){
-        let html='';
-        let details=scheduleDetails[Number(id)];
-        for(let i=0;i<details.length-1;++i){
-            const e=details[i];
-            let label=e.name+'( '+e.district_name+', '+e.province_name+')';
-            html+=` <div class="form-check">
+    departure: function (id) {
+        let html = '';
+        let details = scheduleDetails[Number(id)];
+        for (let i = 0; i < details.length - 1; ++i) {
+            const e = details[i];
+            let label = e.name + '( ' + e.district_name + ', ' + e.province_name + ')';
+            html += ` <div class="form-check">
             <input class="form-check-input" type="radio" name="departure" value="${e.id}" id="departure${e.id}">
             <label class="form-check-label" for="departure${e.id}">
-            <img src="https://img.icons8.com/ios-filled/15/000000/marker.png" /> ${label}
+            <img src="https://img.icons8.com/ios-filled/15/000000/marker.png" /> <span data-name='departure${e.id}'> ${label} </span>
             </label>
         </div>`
         }
         return html;
     },
-    arrival: function(id){
-        let html='';
-        let details=scheduleDetails[Number(id)];
-        for(let i=1;i<details.length;++i){
-            const e=details[i];
-            let label=e.name+'( '+e.district_name+', '+e.province_name+')';
-            html+=` <div class="form-check">
+    arrival: function (id) {
+        let html = '';
+        let details = scheduleDetails[Number(id)];
+        for (let i = 1; i < details.length; ++i) {
+            const e = details[i];
+            let label = e.name + '( ' + e.district_name + ', ' + e.province_name + ')';
+            html += ` <div class="form-check">
             <input class="form-check-input" type="radio" name="arrival" value="${e.id}" id="arrival${e.id}">
             <label class="form-check-label" for="arrival${e.id}">
-            <img src="https://img.icons8.com/ios-filled/15/000000/marker.png" />${label}
+            <img src="https://img.icons8.com/ios-filled/15/000000/marker.png" /> <span data-name='arrival${e.id}'> ${label} </span>
             </label>
         </div>`
         }
         return html;
-        
+
     },
     choose_locations: function (target) {
         const tS = target.querySelector.bind(target);
         const infor = tS('.route-line-left');
         const price = tS('.transaction-footer .count ');
         let html = `  
-        <h4>XÁC NHẬN LỘ TRÌNH ĐI</h4>
+        <h4>XÁC NHẬN LỘ TRÌNH DI CHUYỂN</h4>
         <div class="slogan"> An tâm được đón đúng nơi, trả đúng chỗ đã chọn và dễ dàng thay đổi khi cần.</div>
         ${infor.outerHTML}
         <h5 class="ticket_number d-flex">
@@ -453,5 +453,18 @@ const render = {
         `
         return html;
     },
+    assignDataPaymentPage: function ({ ticket, trip }) {
+        $('[data-name=payment-name]').textContent = formInfor['name'].value;
+        $('[data-name=payment-phone]').textContent = formInfor['phone_number'].value;
+        $('[data-name=payment-email]').textContent = formInfor['email'].value;
+        $('[data-name=payment-provider_name]').textContent = trip.serviceProvider;
+        $('[data-name=payment-departure_time]').textContent = trip.departure_time+' '+trip.departure_date;
+        $$('[data-name=payment-trip_name]').forEach(e => e.textContent = trip.departure + '⇒' + trip.arrival)
+        $('[data-name=payment-departure_station]').textContent = ticket.departure_station.name;
+        $('[data-name=payment-arrival_station]').textContent = ticket.arrival_station.name;
+        $('[data-name=payment-numticket]').textContent = ticket.seats.count;
+        $('[data-name=payment-stringticket]').textContent = ticket.seats.str;
+        $('[data-name=payment-total]').textContent = ticket.total_price;
+    }
 
 }

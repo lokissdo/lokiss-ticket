@@ -1,0 +1,108 @@
+.title-page{
+    font-family: 'Roboto',sans-serif;
+    margin: 5vh auto;
+    text-align: center;
+}
+.content_wrap_container{
+    display: flex;
+    padding: 0px 12%;
+    margin-bottom: 20vh;
+}
+.header-account{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.item_list{
+    display: flex;
+    font-size: 1.1rem;
+    margin: 20px 0px;
+    height: 25px;
+}
+.icon-infor{
+    margin-right: 7px;
+}
+.content-text{
+    color: red;
+}
+.content_wrap{
+    flex: 85;
+}
+.account_wrap{
+    width: 30%;
+}
+.border_account{
+   background-color: red;
+   width: 50px;
+   height: 3px;
+}
+.content-update{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: rgba(255, 255, 255, 0.918);
+    background-color: rgb(0, 40, 114);
+}
+.header-account-content{
+    background-color: rgba(53, 50, 50, 0.205);
+   width: 100%;
+   height: 1px;
+   margin-bottom: 2px;
+}
+.chosen-page{
+    color: #0926aa;
+}
+.payment{
+    flex: 1;
+}
+.payment .footer-bar{
+    justify-content: space-between;
+}
+.see-detail .btn{
+    font-size: 0.8rem !important;
+    padding: 3px 8px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+.payment .title-bar-bg{
+    background-color:#00613d;
+}
+.payment .title-bar-bg.canceled{
+    background-color:#890505;
+}
+.payment .title-bar-bg.wait{
+    background-color:#495350;
+}
+.payment .sub-tit {
+    width: 45%;
+}
+.detail-ticket{
+    animation: SlideUpDown .7s ease-in-out .0s forwards;
+    max-height: 300px;
+}
+.linked{
+    position: relative;
+}
+.linked a{
+    position: absolute;
+    top:0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+@keyframes 
+SlideUpDown{
+    from{
+        opacity: 0.5;
+        /* transform: translate3d(0, -40px, 0); */
+        max-height: 0;
+    }
+    to{
+        opacity: 1;
+        /* transform: translate3d(0, 0, 0); */
+        max-height: 300px;
+    }
+}

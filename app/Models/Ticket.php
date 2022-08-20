@@ -74,4 +74,27 @@ class Ticket extends Model
     {
         return self::where('trip_id', $trip_id)->get('seat_position');
     }
+    public static function get_tickets_by_user_id(int $user_id)
+    {
+        $tickets = Ticket::where('user_id', $user_id)
+            ->with(['arrival_station.province', 'arrival_station.district', 'departure_station.province', 'departure_station.district'])
+            ->with(['trip.schedule.departure_province', 'trip.schedule.arrival_province','trip.service_provider'])
+            ->get();
+        $ticketGroup = self::group_tickets_by_seats($tickets);
+        return $ticketGroup;
+    }
+    public static function group_tickets_by_seats($ticketList)
+    {
+        $arr = [];
+        foreach ($ticketList->toArray() as $ticket) {
+            $key = $ticket['trip_id'] . '_' . strtotime($ticket['created_at']) ;
+            if (empty($arr[$key])){
+                $temp=$ticket['seat_position'];
+                $ticket['seat_position']=array($temp);
+                $arr[$key] = $ticket;
+            }
+            else $arr[$key]['seat_position'][] = $ticket['seat_position'];
+        }
+        return $arr;
+    }
 }

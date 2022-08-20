@@ -5,7 +5,6 @@
     .error-modal {
         background-color: var(--orange-color);
         color: whitesmoke;
-        height: 70px;
         padding: 20px;
         position: fixed;
         top: 50%;
@@ -39,7 +38,7 @@
     let myTimeout;
     function displayError(errorContent) {
         if (time_on == 1) return;
-        errorModal.textContent = errorContent;
+        errorModal.innerHTML = errorContent;
         errorModal.classList.remove('d-none');
         time_on = 1;
         myTimeout = setTimeout(() => {

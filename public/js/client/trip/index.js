@@ -1,10 +1,12 @@
 let detailButtons, chooseButtons, openBoxes,
     imgChooseCheckBoxes, routeOptions, closeInforButtons,
     tripInforButtons, activeSeats, nextStepButtons,
-    chooseLocationsCont,fillInformationCont;
+    chooseLocationsCont, fillInformationCont, paymentCont, transaction, seats = {}, formInfor;
 
 const sortItemButtons = $$('.sort-item');
 const filterItemSelects = $$('.filter-select')
+const title = $('.title-page');
+const path = window.location.href.split('/').at(-1);
 let dataSort = null;
 let isFilter = 0, pageNum = 0;
 var arrival_id, departure_id;
@@ -67,7 +69,6 @@ const AssignEventInTrip = {
         })
     },
     clickChooseSeat: function () {
-        console.log(activeSeats)
         activeSeats.forEach(e => {
             e.addEventListener('click', () => {
                 const gTag = e.querySelector('g.active,g.selecting')
@@ -123,7 +124,6 @@ const AssignEventInit = {
         const selectCoach = $('#select_coach');
         selectCoach.innerHTML += render.coaches(coaches);
     },
-
     run: function () {
         for (const key in this) {
             if (Object.hasOwnProperty.call(this, key)) {
@@ -157,10 +157,11 @@ const Handler = {
             Seatsstr += e.parentNode.parentNode.querySelector('tspan').textContent;
         })
         countSeats.innerHTML = `${selecteds.length} vé: ` + Seatsstr;
-        tS('.transaction-footer .total').innerHTML = helper.number_format(Number(pricePerSeat) * selecteds.length) + 'đ';
+        seats.str = Seatsstr;
+        seats.count = selecteds.length;
+        tS('.transaction-footer .total').innerHTML = helper.number_format(Number(pricePerSeat) * selecteds.length) + ' đ';
     },
     HideShowInforDetail: function (target) {
-        console.log(target)
         $(`.infor-title-item.selected[data-trip='${target.dataset.trip}']`).classList.remove('selected');
         target.classList.add('selected');
         const container = target.parentNode.parentNode;
@@ -208,27 +209,107 @@ const Handler = {
         }
         loading.classList.add('d-none');
     },
-    processStepLineInfor: function(){
-        Handler.increaseStepCircle();
-         const Line=$('.line ')
-        Line.innerHTML=`<div class="current-line"></div>
-        <div class="current-line"></div>
-        <div class="next-line"></div>`
+    processStepLineInfor: function () {
+        this.increaseStepCircle();
+        this.lineInforPage();
+        title.textContent = "Thông tin khách hàng";
+
     },
-    increaseStepCircle: function(){
-        const currentCircleStep=$('.step-line .current-step');
+    increaseStepCircle: function () {
+        const currentCircleStep = $('.step-line .current-step');
         console.log(currentCircleStep)
         $('.step-item:not(.previous-step):not(.current-step)').classList.add('current-step')
         currentCircleStep.classList.remove('current-step');
         currentCircleStep.classList.add('previous-step');
     },
-    decreaseStepCirle: function(){
-        const currentCircleStep=$('.step-line .current-step');
-        const previous=$$('.step-line .previous-step')
-        const lastPrevious= previous[previous.length-1];
+    decreaseStepCirle: function () {
+        const currentCircleStep = $('.step-line .current-step');
+        const previous = $$('.step-line .previous-step')
+        const lastPrevious = previous[previous.length - 1];
         lastPrevious.classList.add('current-step')
         lastPrevious.classList.remove('previous-step')
         currentCircleStep.classList.remove('current-step');
+    },
+    moveToPaymentPage: function () {
+        paymentCont = $('.payment');
+        const loading = $('.wrapper-loading[data-name=loadingroutes');
+        loading.classList.remove('d-none');
+        this.increaseStepCircle();
+        Handler.linePaymentPage();
+        title.textContent = "Thanh toán";
+        window.history.pushState("", "", '/payment');
+        transaction = Handler.getInforTransaction();
+        render.assignDataPaymentPage(transaction);
+        EventsAfterLoad.clickConfirmTransaction();
+        paymentCont.classList.remove('d-none');
+        fillInformationCont.classList.add('d-none');
+        loading.classList.add('d-none');
+
+    },
+    getInforTransaction: function () {
+        const selectedRoute = $('.route-option.selected');
+        const S = selectedRoute.querySelector.bind(selectedRoute);
+        const trip = {}, ticket = {};
+
+        trip.id = selectedRoute.dataset.trip_container
+        trip.serviceProvider = S('.route-infor-provicer-text').textContent;
+        let rawProvince = $('[name=departure_province_code] option[selected]').textContent;
+        trip.departure = helper.removePrefixProvince(rawProvince);
+        rawProvince = $('[name=arrival_province_code] option[selected]').textContent
+        trip.arrival = helper.removePrefixProvince(rawProvince);
+        trip.departure_date = $('[data-name=departure-date]').textContent;
+        trip.departure_time = S('[data-name=departure-time]').textContent;
+        ticket.total_price = helper.number_format(helper.StringtoPrice(S('.transaction-footer .total').textContent));
+        ticket.departure_station = {};
+        ticket.arrival_station = {};
+        let departureRadios = $$('input[name=departure]'), arrivalRadios = $$('input[name=arrival]');
+        for (let i = 0; i < departureRadios.length; ++i)
+            if (departureRadios[i].checked === true) {
+                let input = departureRadios[i];
+                ticket.departure_station.id = input.value;
+                ticket.departure_station.name = $(`[data-name='${input.id}']`).textContent;
+            }
+        for (let i = 0; i < arrivalRadios.length; ++i)
+            if (arrivalRadios[i].checked === true) {
+                let input = arrivalRadios[i];
+                ticket.arrival_station.id = input.value;
+                ticket.arrival_station.name = $(`[data-name='${input.id}']`).textContent;
+            }
+        ticket.seats = seats;
+        return {
+            ticket: ticket,
+            trip: trip
+        }
+
+    },
+    lineInforPage: function () {
+        const Line = $('.line ')
+        Line.innerHTML = `<div class="current-line"></div>
+        <div class="current-line"></div>
+        <div class="next-line"></div>`
+    },
+    lineIndexPage: function () {
+        const Line = $('.line ')
+        Line.innerHTML = `<div class="current-line"></div>
+        <div class="next-line"></div>
+        <div class="next-line"></div>`
+    },
+    linePaymentPage: function () {
+        const Line = $('.line ')
+        Line.innerHTML = `<div class="current-line"></div>
+        <div class="current-line"></div>
+        <div class="current-line"></div>`
+    },
+    createTicketsParams: function(){
+        const paramsTicket = new URLSearchParams([...new FormData(formInfor).entries()]);
+
+        paramsTicket.append('trip_id',transaction.trip.id)
+        paramsTicket.append('departure_station_id',transaction.ticket.departure_station.id)
+        paramsTicket.append('arrival_station_id',transaction.ticket.arrival_station.id)
+        let seat_positions=transaction.ticket.seats.str.replace(/\n|\s/g,'').split(',');
+        seat_positions.forEach(seat=>paramsTicket.append('seat_position[]',seat))
+        console.log(paramsTicket.toString());
+        return paramsTicket;
     }
 }
 const API = {
@@ -294,6 +375,30 @@ const API = {
                 return data;
             })
         return res;
+    },
+    isExistUser: async function (paramsUser) {
+        let res = await fetch(isUserAPIUrl, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method: "POST",
+            body: paramsUser,
+        }).then(res => res.json());
+        console.log(res)
+        return res;
+    },
+    createTickets: async function (params) {
+        let res = await fetch(createTicketAPIUrl, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method: "POST",
+            body: params,
+        }).then(res => res.json());
+        console.log(res)
+        return res;
     }
 }
 
@@ -302,7 +407,7 @@ const helper = {
         return string.charAt(0).toUpperCase() + string.slice(1);
     },
     number_format: function (string) {
-        return new Intl.NumberFormat().format(string);
+        return new Intl.NumberFormat().format(Number(string));
     },
     asset: function (string) {
         return asset + string;
@@ -325,8 +430,14 @@ const helper = {
     },
     StringtoPrice: function (string) {
         const stringPrice = string.split(' ')[0].split(',').join('');
-
         return Number(stringPrice);
+    },
+    removePrefixProvince: function (string) {
+        return string.replace(/(Tỉnh|Thành phố)/g, '');
+    },
+    round: function(num,correction){
+        let pow=Math.pow(10,correction);
+        return Math.round(Number(num)*pow)/pow;
     }
 }
 const app = {

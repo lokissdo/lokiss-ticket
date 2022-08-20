@@ -1,0 +1,260 @@
+.payment .ticket-info-container {
+    font-weight: 400;
+    color: #141414;
+    font-size: 15px
+}
+
+.payment .customer-info-container,
+.payment .title-bar {
+    width: 100%;
+}
+
+
+.payment .title-txt {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 24px;
+    color: #141414
+}
+
+
+.payment .title-bar {
+    height: 38px;
+    border-top: .5px solid hsla(0, 0%, 59.2%, .5);
+    border-bottom: .5px solid hsla(0, 0%, 59.2%, .5);
+    background-color: #f6f6f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+
+.payment .title-txt p {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.payment .green {
+    color: #00613d !important
+}
+
+.payment .sub-tit {
+    font-size: 15px;
+    color: #637280;
+    white-space: nowrap;
+    margin-left: 24px;
+}
+
+.payment .orange-value {
+    font-weight: 600;
+    color: #f15a24
+}
+.payment{
+    animation: SlideLtoR .7s ease-in-out .0s forwards;
+
+}
+.payment .address {
+    color: #637280
+}
+
+.payment .field {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    width: 100%;
+}
+
+.infor-customer .field {
+    justify-content: space-between;
+}
+
+
+
+
+
+
+.payment .ticket-info-container {
+    font-weight: 400;
+    color: #141414;
+    font-size: 15px
+}
+
+.payment .ticket-info-container,
+.payment .title-bar {
+    width: 100%;
+
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal
+}
+
+.payment .title-bar {
+    height: 38px;
+    background-color: #f6f6f6;
+    border: .5px solid hsla(0, 0%, 59 .2%, .5);
+    border-right: none;
+    border-left: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.payment .title-txt {
+    font-weight: 500;
+    color: var(--green-color)
+}
+
+.title-bar-bg .title-txt {
+    color: #fff
+}
+
+
+.payment .green {
+    color: #00613d !important
+}
+
+
+
+.payment .orange-value {
+    font-weight: 600;
+    color: #f15a24
+}
+
+
+
+
+
+.payment .total {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top: .5px solid #dce1e6;
+    background-color: #f6f6f6;
+    padding-left: 24px;
+    padding-right: 24px;
+    flex-direction: column;
+    text-align: right
+}
+
+.payment .total p {
+    margin: 0
+}
+
+
+
+
+
+.payment .buy-info-container {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #dce1e6;
+    background-color: #fff;
+    position: relative;
+    margin-bottom: 24px;
+    overflow: hidden
+}
+
+.payment .title-bar-bg {
+    width: 100%;
+    height: 51px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #f15a24;
+    justify-content: center;
+    display: flex;
+    align-items: center
+}
+
+.payment .title-txt {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.payment .footer-bar {
+    width: 100%;
+    height: 80px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top: .5px solid #dce1e6;
+    background-color: #f6f6f6;
+    padding-left: 24px;
+    padding-right: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end
+}
+
+.payment .footer-bar p {
+    margin: 0
+}
+
+.payment .footer-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #141414;
+    margin-bottom: 4px !important
+}
+
+.payment .footer-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f15a24
+}
+
+
+
+
+.payment .total-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right
+}
+
+.infor-ticket .sub-tit {
+    padding-right: 30px;
+    width: 33%;
+}
+
+@media (max-width: 480px) {
+    .payment .sub-tit {
+        white-space:break-spaces;
+    }
+}
+
+.infor-ticket .col-xs-8 {
+    width: 66.66666667%;
+}
+/* method */
+.method-item{
+    background-color: rgba(99,114,128,.06);
+    border: 1px dashed rgba(99,114,128,.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0px;
+    width: 300px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+}
+.method-content{
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width: 360px) {
+    .method-item{
+    width: 200px;
+
+}
+}
+.pay{
+    margin-left: 20px;
+    background-color: #00613d;
+}

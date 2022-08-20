@@ -36,6 +36,9 @@
     border-radius: 20px;
     letter-spacing: .5px;
 }
+.topbar_last_item.chosen-page{
+    color: var(--orange-color)
+}
 .topbar_social_item{
     height: 100%;
     margin-left: 20px;

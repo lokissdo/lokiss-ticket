@@ -1,6 +1,6 @@
 @extends('layout.client')
 @section('topbar')
-    @include('layout/topbar')
+    @include('layout/topbar',['title'=>'home'])
 @endsection
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/client/index.css') }}">
