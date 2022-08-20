@@ -6,6 +6,7 @@ use App\Models\Province;
 use App\Models\Rating;
 use App\Models\Schedule;
 use App\Models\ScheduleDetail;
+use App\Models\Ticket;
 use App\Models\Trip;
 use DateTime;
 use Illuminate\Http\Request;
@@ -48,5 +49,14 @@ class ClientController extends Controller
             'trips' => $trips,
             'scheduleDetails' => $scheduleDetails
         ]);
+    }
+    public function ticket(){
+      $tickets=Ticket::get_tickets_by_user_id(session('user')['id']);
+    //   $ticketsArray=array_map(function($item){
+    //     return collect($item)->toArray();
+    //   },$tickets);
+    //   dd($ticketsArray);
+    //dd($tickets);
+        return view('client.ticket')->with(['tickets'=>$tickets]);
     }
 }

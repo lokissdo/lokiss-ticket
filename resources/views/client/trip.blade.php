@@ -1,15 +1,19 @@
 @extends('layout.client')
 @section('topbar')
-    @include('layout/topbar')
+    @include('layout/topbar',['title'=>'trip'])
 @endsection
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/client/trip.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/client/infor-ticket.css') }}">
 @endpush
 @section('content')
     <div class="content position-relative">
         <div class="container">
-            <h2 class="mt-3">{{ $departure_province }}-{{ $arrival_province }}</h2>
-            <h4>{{ date('d/m/Y', strtotime($departure_date)) }}</h4>
+            <div class=" cont-item">
+                <h2 class="mt-3">{{ $departure_province }}-{{ $arrival_province }}</h2>
+                <h4 data-name="departure-date">{{ date('d/m/Y', strtotime($departure_date)) }}</h4>
+            </div>
+            <h3 class="title-page d-none"></h3>
             <div class="step-line-container">
                 <div class="step-line">
                     <div class="step-circles">
@@ -107,8 +111,8 @@
 
                         <div class="route-line-container">
                             <div class="route-image">
-                                <img alt="water utilitie" src="{{ asset('storage/img/' . $coach['photo']) }}" width="150px"
-                                    height="150px">
+                                <img alt="water utilitie" src="{{ asset('storage/img/' . $coach['photo']) }}"
+                                    width="150px" height="150px">
                             </div>
 
                             <div class="route-line-list d-flex">
@@ -121,7 +125,7 @@
                                     </div>
 
                                     <div class="route-time">
-                                        {{ date('H:i', strtotime($schedule['departure_time'])) }}
+                                       <span data-name='departure-time'>{{ date('H:i', strtotime($schedule['departure_time'])) }}</span> 
                                         <img alt="fromto" width="28" height="7"
                                             src="{{ asset('img/fromto.png') }}">
                                         {{ date('H:i', strtotime($schedule['departure_time'] . ' + ' . $schedule['duration'] . ' minutes')) }}
@@ -349,94 +353,271 @@
                                 <form id="form-steps" name="form" autocomplete="off" method="post">
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="f1">*Họ và tên </label>
-                                        <input id="f1" class="form-control"  pattern="\D+" name='name' value="{{session('user')['name']??''}}" required/>
+                                        <input id="f1" class="form-control" pattern="\D+" name='name' 
+                                            value="{{ session('user')['name'] ?? '' }}" required />
                                     </div>
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="f2">*Email </label>
-                                        <input type="email" id="f2" pattern="\w+@\w+.\w+" class="form-control" name='email' value="{{session('user')['email']??''}}"
-                                        required  />
+                                        <input type="email" id="f2" class="form-control"
+                                            name='email' value="{{ session('user')['email'] ?? '' }}" required />
                                     </div>
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="f3">*SDT </label>
-                                        <input id="f3" class="form-control" pattern="0[1-9][0-9]{8}" name='phone_number' value="{{session('user')['phone_number']??''}}"
-                                        required   />
+                                        <input id="f3" class="form-control" pattern="0[1-9][0-9]{8}"
+                                            name='phone_number' value="{{ session('user')['phone_number'] ?? '' }}"
+                                            required />
                                     </div>
-                                   
+
                                     <div class="form-group d-flex ">
                                         <div style="margin-right: 10px;">
                                             <label for="select_pro"> Tỉnh / thành </label>
-                                            <select required name="province_ticketinfor" class="hoverable" id="select_pro">
+                                            <select required data-name="province_ticketinfor" name="address" class="hoverable"
+                                                id="select_pro">
                                                 <option data-code="null" value="null"> Chọn tỉnh / thành </option>
                                             </select>
                                         </div>
-                                        <div >
+                                        <div>
                                             <label for="select_dis"> Quận / huyện </label>
-                                            <select required name="district_ticketinfor" class="hoverable" id="select_dis">
+                                            <select required data-name="district_ticketinfor" name="address2" class="hoverable"
+                                                id="select_dis">
                                                 <option data-code="null" value="null"> Chọn quận / huyện </option>
                                             </select>
                                         </div>
                                     </div>
-                            </form>
-                            <div class="terms-and-policies"><input type="checkbox" id="terms-policies-checkbox"
-                                    class="terms-policies-checkbox"> <label for="terms-policies-checkbox"
-                                    class="terms-label"><span class="term-text">
-                                        Chấp nhận
-                                        <span href="" class="link">điều khoản đặt
-                                            vé</span>
-                                        của {{env('APP_NAME')}}
-                                    </span></label></div>
+                                </form>
+                                <div class="terms-and-policies"><input type="checkbox" id="terms-policies-checkbox"
+                                        class="terms-policies-checkbox"> <label for="terms-policies-checkbox"
+                                        class="terms-label"><span class="term-text">
+                                            Chấp nhận
+                                            <span href="" class="link">điều khoản đặt
+                                                vé</span>
+                                            của {{ env('APP_NAME') }}
+                                        </span></label></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="notes-container">
+                                <p class="title">ĐIỀU KHOẢN &amp; LƯU Ý</p>
+                                <p class="txt">
+                                    (*) Quý khách vui lòng mang email có chứa mã vé đến văn phòng để đổi vé lên xe trước giờ
+                                    xuất bến ít nhất
+                                    <span class="high-light">60 phút</span>
+                                    để chúng tôi trung chuyển.
+                                </p>
+                                <p class="txt">(*) Thông tin hành khách phải chính xác, nếu không sẽ
+                                    không thể lên xe hoặc hủy/đổi vé.</p>
+                                <p class="txt">
+                                    (*) Quý khách không được đổi/trả vé vào các ngày Lễ Tết (ngày thường quý khách được
+                                    quyền chuyển đổi hoặc hủy vé
+                                    <span class="high-light">một lần</span>
+                                    duy nhất trước giờ xe chạy 24 giờ), phí hủy vé 10%.
+                                </p>
+                                <p class="txt">
+                                    (*) Nếu quý khách có nhu cầu trung chuyển, vui lòng liên hệ số điện thoại
+                                    <a href="tel:1900 6067" class="high-light">1900 6067</a>
+                                    trước khi đặt vé. Chúng tôi không đón/trung chuyển tại những điểm xe trung chuyển không
+                                    thể tới được.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="notes-container">
-                            <p class="title">ĐIỀU KHOẢN &amp; LƯU Ý</p>
-                            <p class="txt">
-                                (*) Quý khách vui lòng mang email có chứa mã vé đến văn phòng để đổi vé lên xe trước giờ
-                                xuất bến ít nhất
-                                <span class="high-light">60 phút</span>
-                                để chúng tôi trung chuyển.
-                            </p>
-                            <p class="txt">(*) Thông tin hành khách phải chính xác, nếu không sẽ
-                                không thể lên xe hoặc hủy/đổi vé.</p>
-                            <p class="txt">
-                                (*) Quý khách không được đổi/trả vé vào các ngày Lễ Tết (ngày thường quý khách được
-                                quyền chuyển đổi hoặc hủy vé
-                                <span class="high-light">một lần</span>
-                                duy nhất trước giờ xe chạy 24 giờ), phí hủy vé 10%.
-                            </p>
-                            <p class="txt">
-                                (*) Nếu quý khách có nhu cầu trung chuyển, vui lòng liên hệ số điện thoại
-                                <a href="tel:1900 6067" class="high-light">1900 6067</a>
-                                trước khi đặt vé. Chúng tôi không đón/trung chuyển tại những điểm xe trung chuyển không
-                                thể tới được.
-                            </p>
-                        </div>
+                    <div class="navigations">
+                        <button class="back"><img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAASKADAAQAAAABAAAASAAAAACQMUbvAAACSklEQVR4Ae3aT07CQBQGcKrAyh22cAiDngGix/BwHMOoW9eohygV1iRAqO/FEppaoJH58435utDpFN7M/CxD5zmtFg8KUIACFKAABShAAQpQgAIUoAAFKPCvBKKQRjMYDOLVavWofe52u5M0Tb9s9z8YoCRJbjebzVOe54miRFGUCtLQNtKl7b+AifiKs16vXyRWXIp3td1uZ8vl8q1UZ7x4YTyi4YAlnJ7h0I3CQQMdw5GPWKbzUKNRnvEiWKBjODLeebvdvrc9/6gr5CR9CqfT6YyzLHs/48Zo/FY4ICQcuDsIDQcKCBEHBggVBwIIGcc7EDqOV6AQcLwBhYKjQM4Xq3Ec38mqXBeedWurucuHQAU4dTh9UCxwnqVTQeAonjOgEHGcAYWK4wSo3+8nkib9lMbKyS5tWw+4OeenW/uf7X3RTkkygZpDrsWR+pGsyj/stGwmqot8UH6gq5F8Y7lo/0Dzzaqtd1CzfpL9m9V0p6d5Zn0mqrkGU2UdSLN+kv17kBHPa0YNj+Tsa17ulGHxn4nrGqhF8YA4rbnmtcoZkI4yRCSnQCEiOQcKDckLUEhI3oBCQfIKFAKSdyB0JAggZCQYIFQkKCBEJDggNCRIoBLSq5Tr8tfO1m6wQKeQig1UN7b3CFlPd+hA/3roHiBZ5Y/k/YtqDN3MudvxWr1m8hwaSAdaII2l+AvJJMShWPBA2nFBmmq+SD9Wu4FIWbcBT3bntn5Dz0HVQfvYSF7tA88pQAEKUIACFKAABShAAQpQgAIUoEDgAt/KjWWzclDJlgAAAABJRU5ErkJggg=="
+                                alt="back" width="24" height="24" class="icon">
+                            Quay lại
+                        </button>
+                        <!---->
+                        <button class="next">
+                            Tiếp tục
+                            <img width="24" height="24" alt="next"
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAMKADAAQAAAABAAAAMAAAAADbN2wMAAABFklEQVRoBe2W3Q2DMAyESTeggTG6REdknw7RskZ3SM8VD1aUPEAgxOgsuaUoP3ef3ShdxyABEiABEiABEjBMIITQI6clvTkri3B8/eODz7GmidvOmz2w3qu2iSIPEOuRQl5H9UqUmhigniaKKO4xGVW4bCVmmKt6OhUVJFMJmiiiumXylSrxhhkdJtspZcLO3Qn45YiNTUxbWlPP2fsupNeOnx1exPuFeFCTv0F+RErf65Bq3JsUrEVBZE78oMc1+ZwRL5c+M+JTN1SKP7TdlrYh+UMppxaXPybSLHnT4r1Z8tJKED8hdUgbVTsq47tJqr3XvJsx+Omc+66ZdOpY0O6RUgVJO9fjU6lxcxIgARIgARK4CoEf/uti7K0v/UAAAAAASUVORK5CYII="></button>
                     </div>
                 </div>
-                <div class="navigations">
+
+
+            </div>
+
+            <div class="payment d-none">
+                <div id="ticket-infomation-container" class="buy-info-container">
+                    <div class="title-bar-bg">
+                        <p class="title-txt">THÔNG TIN MUA VÉ</p>
+                    </div>
+                    <div class="customer-info-container">
+                        <div class="title-bar">
+                            <p class="title-txt">Thông tin hành khách</p>
+                        </div>
+                        <div class="container mt-2 infor-customer">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ms-12">
+                                    <div class="col-xs-12 field">
+                                        <div class="col-xs-4 sub-tit" >Họ tên:</div>
+                                        <div class="col-xs-8 text-right" data-name='payment-name'>123</div>
+                                    </div>
+                                    <div class="col-xs-12 field">
+                                        <div class="col-xs-4 sub-tit">Số điện thoại:</div>
+                                        <div class="col-xs-8 text-right" data-name='payment-phone'>012xxxx812</div>
+                                    </div>
+                                    <div class="col-xs-12 field">
+                                        <div class="col-xs-4 sub-tit">Email:</div>
+                                        <div class="col-xs-8 text-right" data-name='payment-email'>123xxx@gmail.com</div>
+                                    </div>
+                                </div>
+                                <!---->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ticket-info-container">
+                            <div class="title-bar">
+                                <div class="title-txt">
+                                    <p>Thông tin chuyến: <span data-name='payment-trip_name'> Sai Gon ⇒ Ca Mau </span></p>
+                                </div>
+                            </div>
+                            <div class="container infor-ticket">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ms-12">
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Nhà xe:</div>
+                                            <div class="col-xs-8"><span data-name="payment-provider_name">Lokiss</span></div>
+                                        </div>
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Tuyến xe:</div>
+                                            <div class="col-xs-8"><span data-name='payment-trip_name'>Sai Gon ⇒ Ca
+                                                    Mau</span></div>
+                                        </div>
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Thời gian:</div>
+                                            <div class="col-xs-8"><span class="orange-value green" data-name='payment-departure_time'>07:00 21/08/2022
+                                                </span></div>
+                                        </div>
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Điểm lên xe:</div>
+                                            <div class="col-xs-8">
+                                                <p data-name='payment-departure_station'> VP Bến xe Trung Tâm Cần Thơ: P.Hưng Thạnh , Q. Cái Răng ,
+                                                    TP.Cần Thơ</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Điểm xuống xe:</div>
+                                            <div class="col-xs-8">
+                                                <p data-name='payment-arrival_station'>VP Bến xe Trung Tâm Cần Thơ: P.Hưng Thạnh , Q. Cái Răng ,
+                                                    TP.Cần Thơ</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ms-12">
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Số lượng ghế:</div>
+                                            <div class="col-xs-8" data-name='payment-numticket'>1</div>
+                                        </div>
+                                        <div class="col-xs-12 field">
+                                            <div class="col-xs-4 sub-tit">Số ghế:</div>
+                                            <div class="col-xs-8 orange-value green"><span data-name='payment-stringticket'>
+                                                    <!---->
+                                                    B18
+                                                </span></div>
+                                        </div>
+                                        <!---->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bar">
+                        <div class="total-info">
+                            <p class="footer-title">TỔNG TIỀN</p>
+                            <p class="footer-price">
+                               <span data-name='payment-total'> 230.000</span> <sup>₫</sup></p>
+                        </div>
+                    </div>
+                    <!---->
+                </div>
+                <div class="payment-method">
+                    <div class="container">
+                        <div width="100%" class="row justify-content-around">
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column">
+                                    <img width="40px" src="https://futabus.vn/_nuxt/img/momo.fc16949.png"
+                                        alt="">
+                                    Ví MoMo
+                                </div>
+                            </div>
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column">
+                                    <img width="40px" src="https://futabus.vn/_nuxt/img/shopeepay.9547921.png"
+                                        alt="">
+                                    Ví ShopeePay
+                                </div>
+                            </div>
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column">
+                                    <img width="40px" src="https://futabus.vn/_nuxt/img/zalopay.6498180.png"
+                                        alt="">
+                                    <div> Ví ZaloPay</div>
+                                </div>
+                            </div>
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column justify-content-center ">
+                                    <div class="d-flex justify-content-center">
+                                        <img width="40px" src="https://futabus.vn/_nuxt/img/visa.af41b0e.png"
+                                            alt="">
+                                        <img width="40px" src="https://futabus.vn/_nuxt/img/master.f966244.png"
+                                            alt="">
+                                        <img width="40px" src="https://futabus.vn/_nuxt/img/jcb.99dcd7f.png"
+                                            alt="">
+                                    </div>
+                                    <div>Thẻ Quốc tế Visa/Master/JCB</div>
+                                </div>
+                            </div>
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column">
+                                    <img width="40px" src="https://futabus.vn/_nuxt/img/vnpay.770573e.png"
+                                        alt="">
+                                    Ví VNPay
+                                </div>
+                            </div>
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column">
+                                    <img width="80px" src="https://futabus.vn/_nuxt/img/napas.e513efd.png"
+                                        alt="">
+                                    Thẻ Nội Địa
+                                </div>
+                            </div>
+                            <div class=" method-item hoverable ">
+                                <div class="method-content d-flex flex-column">
+                                    <img width="150px" src="{{ asset('img/logo.png') }}" alt="">
+                                    Ví LokissPay
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="navigations justify-content-center">
                     <button class="back"><img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAASKADAAQAAAABAAAASAAAAACQMUbvAAACSklEQVR4Ae3aT07CQBQGcKrAyh22cAiDngGix/BwHMOoW9eohygV1iRAqO/FEppaoJH58435utDpFN7M/CxD5zmtFg8KUIACFKAABShAAQpQgAIUoAAFKPCvBKKQRjMYDOLVavWofe52u5M0Tb9s9z8YoCRJbjebzVOe54miRFGUCtLQNtKl7b+AifiKs16vXyRWXIp3td1uZ8vl8q1UZ7x4YTyi4YAlnJ7h0I3CQQMdw5GPWKbzUKNRnvEiWKBjODLeebvdvrc9/6gr5CR9CqfT6YyzLHs/48Zo/FY4ICQcuDsIDQcKCBEHBggVBwIIGcc7EDqOV6AQcLwBhYKjQM4Xq3Ec38mqXBeedWurucuHQAU4dTh9UCxwnqVTQeAonjOgEHGcAYWK4wSo3+8nkib9lMbKyS5tWw+4OeenW/uf7X3RTkkygZpDrsWR+pGsyj/stGwmqot8UH6gq5F8Y7lo/0Dzzaqtd1CzfpL9m9V0p6d5Zn0mqrkGU2UdSLN+kv17kBHPa0YNj+Tsa17ulGHxn4nrGqhF8YA4rbnmtcoZkI4yRCSnQCEiOQcKDckLUEhI3oBCQfIKFAKSdyB0JAggZCQYIFQkKCBEJDggNCRIoBLSq5Tr8tfO1m6wQKeQig1UN7b3CFlPd+hA/3roHiBZ5Y/k/YtqDN3MudvxWr1m8hwaSAdaII2l+AvJJMShWPBA2nFBmmq+SD9Wu4FIWbcBT3bntn5Dz0HVQfvYSF7tA88pQAEKUIACFKAABShAAQpQgAIUoEDgAt/KjWWzclDJlgAAAABJRU5ErkJggg=="
-                        alt="back" width="24" height="24" class="icon" >
-                    Quay lại
-                </button>
-                <!---->
-                <button class="next">
-                    Tiếp tục
-                    <img width="24" height="24" alt="next"
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAMKADAAQAAAABAAAAMAAAAADbN2wMAAABFklEQVRoBe2W3Q2DMAyESTeggTG6REdknw7RskZ3SM8VD1aUPEAgxOgsuaUoP3ef3ShdxyABEiABEiABEjBMIITQI6clvTkri3B8/eODz7GmidvOmz2w3qu2iSIPEOuRQl5H9UqUmhigniaKKO4xGVW4bCVmmKt6OhUVJFMJmiiiumXylSrxhhkdJtspZcLO3Qn45YiNTUxbWlPP2fsupNeOnx1exPuFeFCTv0F+RErf65Bq3JsUrEVBZE78oMc1+ZwRL5c+M+JTN1SKP7TdlrYh+UMppxaXPybSLHnT4r1Z8tJKED8hdUgbVTsq47tJqr3XvJsx+Omc+66ZdOpY0O6RUgVJO9fjU6lxcxIgARIgARK4CoEf/uti7K0v/UAAAAAASUVORK5CYII="></button>
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAASKADAAQAAAABAAAASAAAAACQMUbvAAACSklEQVR4Ae3aT07CQBQGcKrAyh22cAiDngGix/BwHMOoW9eohygV1iRAqO/FEppaoJH58435utDpFN7M/CxD5zmtFg8KUIACFKAABShAAQpQgAIUoAAFKPCvBKKQRjMYDOLVavWofe52u5M0Tb9s9z8YoCRJbjebzVOe54miRFGUCtLQNtKl7b+AifiKs16vXyRWXIp3td1uZ8vl8q1UZ7x4YTyi4YAlnJ7h0I3CQQMdw5GPWKbzUKNRnvEiWKBjODLeebvdvrc9/6gr5CR9CqfT6YyzLHs/48Zo/FY4ICQcuDsIDQcKCBEHBggVBwIIGcc7EDqOV6AQcLwBhYKjQM4Xq3Ec38mqXBeedWurucuHQAU4dTh9UCxwnqVTQeAonjOgEHGcAYWK4wSo3+8nkib9lMbKyS5tWw+4OeenW/uf7X3RTkkygZpDrsWR+pGsyj/stGwmqot8UH6gq5F8Y7lo/0Dzzaqtd1CzfpL9m9V0p6d5Zn0mqrkGU2UdSLN+kv17kBHPa0YNj+Tsa17ulGHxn4nrGqhF8YA4rbnmtcoZkI4yRCSnQCEiOQcKDckLUEhI3oBCQfIKFAKSdyB0JAggZCQYIFQkKCBEJDggNCRIoBLSq5Tr8tfO1m6wQKeQig1UN7b3CFlPd+hA/3roHiBZ5Y/k/YtqDN3MudvxWr1m8hwaSAdaII2l+AvJJMShWPBA2nFBmmq+SD9Wu4FIWbcBT3bntn5Dz0HVQfvYSF7tA88pQAEKUIACFKAABShAAQpQgAIUoEDgAt/KjWWzclDJlgAAAABJRU5ErkJggg=="
+                            alt="back" width="24" height="24" class="icon">
+                        Quay lại
+                    </button>
+                    <!---->
+                    <button id="confirm_transaction"class="pay next">
+                        Thanh toán
+                       </button>
                 </div>
-                </div>
-               
-            
-        </div>
+            </div>
         @include('layout.footer_client')
 
-    </div>
-    {{-- trips --}}
+        </div>
 
-    @include('components.loading', ['name' => 'routes'])
+        {{-- trips --}}
+
+        @include('components.loading', ['name' => 'routes'])
     </div>
     @include('components.error')
+    @include('components.success_transaction');
 @endsection
 
 
@@ -452,8 +633,10 @@
             arrival_province_code: {{ $arrival_province_code }},
             departure_date: "{{ $departure_date }}",
         }
-        preAddressCode.push({{session('user')['address']??''}})
-        const preAddress2Code="{{session('user')['address2']??""}}"
+        preAddressCode.push({{ session('user')['address'] ?? '' }})
+        const preAddress2Code = "{{ session('user')['address2'] ?? '' }}";
+        const createTicketAPIUrl="{{route('create_ticket')}}";
+
         const images = {
             selected: '{{ asset('img/selected.png') }}',
             unselected: '{{ asset('img/checkbox.png') }}'
@@ -466,5 +649,4 @@
     <script src="{{ asset('js/components/address.js') }}"></script>
     <script src="{{ asset('js/client/trip/address_infor.js') }}"></script>
     <script src="{{ asset('js/client/trip/event_after_load.js') }}"></script>
-
 @endpush

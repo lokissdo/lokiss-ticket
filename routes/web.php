@@ -2,12 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\PassengerController;
 use App\Http\Middleware\CheckRememberToken;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
-use App\Http\Middleware\isPassenger;
 use App\Http\Middleware\Loggedin;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,8 +44,8 @@ Route::get('/auth/callback/{provider}',  [AuthController::class, 'callback'])->n
 
 Route::group([
     'as' => 'passenger.',
-    'middleware' => [Loggedin::class,isPassenger::class],
+    'middleware' => [Loggedin::class],
 ], function () {
-    // Route::get('/{user}', [PassengerController::class, 'show'])->name('show');
+    Route::get('/ticket', [ClientController::class, 'ticket'])->name('ticket');
     // Route::delete('/{user}', [PassengerController::class, 'destroy'])->name('destroy');
 });

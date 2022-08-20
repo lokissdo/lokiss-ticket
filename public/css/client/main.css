@@ -34,6 +34,7 @@ img{
 
 .hoverable,
 .hover-color {
+  pointer-events: unset;
   cursor: pointer;
 }
 

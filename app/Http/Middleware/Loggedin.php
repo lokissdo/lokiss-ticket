@@ -12,7 +12,7 @@ class Loggedin
     {
         
         if (!$request->session()->has('user')) {
-            return redirect()->route('login');
+            return redirect()->route('login')->with(['message'=>'Vui lòng đăng nhập để tiếp tục!']);
         }
         return $next($request);
     }

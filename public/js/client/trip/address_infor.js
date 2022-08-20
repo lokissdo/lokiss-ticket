@@ -1,5 +1,5 @@
-var province=document.querySelector("[name=province_ticketinfor]")
-var district=document.querySelector("[name=district_ticketinfor]")
+var province=document.querySelector("[data-name=province_ticketinfor]")
+var district=document.querySelector("[data-name=district_ticketinfor]")
 var defaultAddress={
     "district":`<option data-code="null" value="null"> Chọn quận / huyện </option>`,
 }

@@ -20,7 +20,8 @@ class User extends Authenticatable
         'password',
         'address',
         'address2',
-        'avatar'
+        'avatar',
+        'phone_number'
     ];
     const UPDATED_AT = null;
     protected $hidden = [
@@ -91,5 +92,8 @@ class User extends Authenticatable
             'totalPage' => $totalPage,
             'users' => $users
         ];
+    }
+    public static function isExist( $data){
+        return self::where('email',$data->email)->first('id');
     }
 }
