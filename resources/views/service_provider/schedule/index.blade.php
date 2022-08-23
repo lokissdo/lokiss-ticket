@@ -1,5 +1,5 @@
 @php
-$role= Session::get('user')['role'];
+$role = Session::get('user')['role'];
 @endphp
 @extends('layout.master')
 @section('content')
@@ -28,16 +28,27 @@ $role= Session::get('user')['role'];
                 <a class="nav-link" href={{ route('serviceprovider.schedule.create') }}>Thêm</a>
             </li>
         </div>
-        
+
     </ul>
-    <h2 class="text-center">@include('icons.company')  Nhà xe <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
-    <h3> @include('icons.schedule') Danh sách lịch trình</h3>
+    <h2 class="text-center">@include('icons.company') Nhà xe
+        <strong>{{ Session::get('user')['service_provider_name'] }}</strong></h2>
+    <div class="d-flex justify-content-between">
+        <h3> @include('icons.schedule') Danh sách lịch trình</h3>
+        <a href="{{ route('serviceprovider.schedule.export') }}"class="btn btn-success float-right h-75"><svg
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-download" viewBox="0 0 16 16">
+                <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path
+                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+            </svg>Tải file excel</a>
+    </div>
 
 
     <table class="table  mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">STT</th>
+                <th scope="col">ID</th>
                 <th scope="col">Giờ khởi hành</th>
                 <th scope="col">Địa điểm khởi hành</th>
                 <th scope="col">Thời gian di chuyển</th>

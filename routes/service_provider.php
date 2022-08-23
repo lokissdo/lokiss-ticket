@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\ServiceProviderController;
+use App\Http\Controllers\service_provider\SP_CoachController;
+use App\Http\Controllers\service_provider\SP_ScheduleController;
+use App\Http\Controllers\service_provider\SP_TripController;
 use App\Http\Middleware\isStaff;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Loggedin;
@@ -10,20 +12,27 @@ Route::group([
     'as' => 'serviceprovider.',
     'middleware' => [Loggedin::class, isStaff::class],
 ], function () {
-        Route::get('/schedule/index', [ServiceProviderController::class, 'schedule_index'])->name('schedule.index');
-        Route::get('/schedule/create', [ServiceProviderController::class, 'schedule_create'])->name('schedule.create');
-        Route::post('/schedule/store', [ServiceProviderController::class, 'schedule_store'])->name('schedule.store');
-        Route::get('/schedule/show/{id}', [ServiceProviderController::class, 'schedule_show'])->name('schedule.show');
-        Route::delete('/schedule/destroy/{id}', [ServiceProviderController::class, 'schedule_destroy'])->name('schedule.destroy');
+        Route::get('/schedule/index', [SP_ScheduleController::class, 'schedule_index'])->name('schedule.index');
+        Route::get('/schedule/create', [SP_ScheduleController::class, 'schedule_create'])->name('schedule.create');
+        Route::post('/schedule/store', [SP_ScheduleController::class, 'schedule_store'])->name('schedule.store');
+        Route::get('/schedule/show/{id}', [SP_ScheduleController::class, 'schedule_show'])->name('schedule.show');
+        Route::delete('/schedule/destroy/{id}', [SP_ScheduleController::class, 'schedule_destroy'])->name('schedule.destroy');
+        Route::get('/schedule/export', [SP_ScheduleController::class, 'schedule_export'])->name('schedule.export');
 
 
-        Route::get('/coach/index', [ServiceProviderController::class, 'coach_index'])->name('coach.index');
-        Route::get('/trip/index', [ServiceProviderController::class, 'trip_index'])->name('trip.index');
-        Route::get('/trip/create/{id}', [ServiceProviderController::class, 'trip_create'])->name('trip.create');
-        Route::post('/trip/store', [ServiceProviderController::class, 'trip_store'])->name('trip.store');
-        Route::delete('/trip/destroy/{id}', [ServiceProviderController::class, 'trip_destroy'])->name('trip.destroy');
-        Route::get('/trip/show/{id}', [ServiceProviderController::class, 'trip_show'])->name('trip.show');
 
+
+    Route::get('/coach/index', [SP_CoachController::class, 'coach_index'])->name('coach.index');
+    Route::get('/coach/export', [SP_CoachController::class, 'coach_export'])->name('coach.export');
+
+
+        Route::get('/trip/index', [SP_TripController::class, 'trip_index'])->name('trip.index');
+        Route::get('/trip/create/{id}', [SP_TripController::class, 'trip_create'])->name('trip.create');
+        Route::post('/trip/store', [SP_TripController::class, 'trip_store'])->name('trip.store');
+        Route::delete('/trip/destroy/{id}', [SP_TripController::class, 'trip_destroy'])->name('trip.destroy');
+        Route::get('/trip/show/{id}', [SP_TripController::class, 'trip_show'])->name('trip.show');
+        Route::get('/trip/import', [SP_TripController::class, 'trip_import'])->name('trip.import');
+        Route::post('/trip/import', [SP_TripController::class, 'trip_importing'])->name('trip.importing');
 
 
 

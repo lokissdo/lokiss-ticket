@@ -2,6 +2,7 @@
 @section('content')
     @push('css')
         <link rel="stylesheet" href={{ asset('css/admin/provider_create.css') }}>
+        
     @endpush
 @section('sidebar')
 @include('admin.sidebar',['site' => 'provider'])
