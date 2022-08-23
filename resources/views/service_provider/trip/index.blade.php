@@ -41,13 +41,17 @@ $role = Session::get('user')['role'];
         <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
     {{-- {{dd($trips)}} --}}
-    <h3> @include('icons.trip')Danh sách chuyến đi</h3>
+    <div class="d-flex justify-content-between">
+        <h3> @include('icons.trip')Danh sách chuyến đi</h3>
+        <a href="{{ route('serviceprovider.trip.import') }}"class="btn btn-success d-flex align-items-center float-right h-75">
+            <img src="https://img.icons8.com/ios-filled/20/FFFFFF/upload-document.png"/>Thêm hàng loạt</a>
+    </div>
     <table class="table  mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">
                     <div class="d-flex justify-content-between" data-sortcol='id'>
-                        <div> STT</div>
+                        <div> ID</div>
                         @include('icons.sort')
                     </div>
                 </th>

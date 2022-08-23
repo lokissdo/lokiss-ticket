@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoggedinRequest;
 use App\Jobs\SendTicketMailJob;
 use App\Models\Rating;
 use App\Models\Schedule;
 use App\Models\ScheduleDetail;
+use App\Models\ServiceProvider;
 use App\Models\Ticket;
 use App\Models\Trip;
 use App\Models\User;
@@ -82,5 +84,31 @@ class APIController extends Controller
         if ($isExist)
             return ['status' => 1];
         return ['status' => 1, 'user_password' => $newUser['password']];
+    }
+    public function infor_ratings(LoggedinRequest $req){
+        if(!$req->trip_id) return ['status' => -1,'message'=>'Unvalid'];
+        $infor=Rating::get_comments_by_user_and_trip($req->trip_id,session('user')['id']);
+        return ['status' => 1,'data'=>$infor];
+    }
+    public function create_rating(LoggedinRequest $req){
+        if(!$req->trip_id) return ['status' => -1,'message'=>'Unvalid'];
+        $trip_id=$req->trip_id;
+        $user_id=session('user')['id'];
+        $isValidRate=Ticket::where('user_id',$user_id)->where('trip_id',$trip_id)->exists();
+        if(!$isValidRate) return ['status' => -1,'message'=>'Unvalid'];
+        $service_provider_id=Trip::find($trip_id)->service_provider_id;
+        try{
+            Rating::updateOrCreate(
+                [
+                    'user_id'=>$user_id,
+                    'trip_id'=>$trip_id,
+                    'service_provider_id'=>$service_provider_id
+                ],
+                ['comment'=>$req->comment,'rate'=>$req->rate]
+            );
+        }catch(Exception $e){
+            return $e;
+        }
+       return 1;
     }
 }

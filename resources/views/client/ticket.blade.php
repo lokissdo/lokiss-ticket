@@ -4,8 +4,8 @@
 @endsection
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/client/infor-ticket.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/client/ticket.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 @endpush
 @section('content')
     <div class="position-relative">
@@ -17,7 +17,7 @@
                     <div class="account_wrap ">
                         <div class="header-account ">TÀI KHOẢN</div>
                         <div class="border_account"></div>
-                        <div class="item_list chosen-page linked">
+                        <div class="item_list  linked">
                             <div class="icon-infor">
                                 <img src="https://img.icons8.com/ios-glyphs/20/000000/user--v1.png">
                             </div>
@@ -25,11 +25,11 @@
                             </div>
                             <a href="#"></a>
                         </div>
-                        <div class="item_list linked ">
+                        <div class="item_list linked chosen-page">
                             <div class="icon-infor">
                                 <img src="https://img.icons8.com/ios-filled/20/000000/list.png">
                             </div>
-                            <div class=" item-text-account">Quản lí đơn hàng</div>
+                            <div class=" item-text-account">Vé đã đặt</div>
                             <a href="#"></a>
                         </div>
                         <div class="item_list linked">
@@ -39,34 +39,34 @@
                             </div>
                             <div class="linked item-text-account">Đăng xuất</div>
 
-                            <a href="{{route('signOut')}}"></a>
+                            <a href="{{ route('signOut') }}"></a>
                         </div>
                     </div>
                     {{-- {{dd($tickets)}} --}}
                     <div style="flex:1">
-                        @foreach ($tickets as $key=> $ticket)
+                        @foreach ($tickets as $key => $ticket)
                             @php
                                 $schedule = $ticket['trip']['schedule'];
                                 $trip = $ticket['trip'];
                                 $arrival_station = $ticket['arrival_station'];
                                 $departure_station = $ticket['departure_station'];
-                                
+                                $success_ticket = $ticket['deleted_at'] === null && strtotime($trip['departure_date'] . ' ' . $schedule['departure_time']) < time() ? true : false;
                             @endphp
                             {{-- {{dd($key)}} --}}
-                            <div class="payment " data-name="{{'a'.$key}}">
+                            <div class="payment " data-name="{{ 'a' . $key }}" data-trip="{{ $trip['id'] }}">
                                 <div id="ticket-infomation-container" class="buy-info-container">
-                                    @if ($ticket['is_canceled'])
+                                    @if ($ticket['deleted_at'])
                                         <div class="title-bar-bg canceled d-flex ">
                                             <p class="title-txt ">TRẠNG THÁI: ĐÃ HỦY</p>
                                         </div>
-                                    @elseif(strtotime($trip['departure_date'].' '.$schedule['departure_time']) > time())
-                                    <div class="title-bar-bg wait d-flex ">
-                                        <p class="title-txt ">TRẠNG THÁI: CHỜ KHỞI HÀNH</p>
-                                    </div>
+                                    @elseif($success_ticket)
+                                        <div class="title-bar-bg d-flex ">
+                                            <p class="title-txt ">TRẠNG THÁI: ĐÃ KHỞI HÀNH</p>
+                                        </div>
                                     @else
-                                    <div class="title-bar-bg d-flex ">
-                                        <p class="title-txt ">TRẠNG THÁI: ĐÃ KHỞI HÀNH</p>
-                                    </div>
+                                        <div class="title-bar-bg wait d-flex ">
+                                            <p class="title-txt ">TRẠNG THÁI: CHỜ KHỞI HÀNH</p>
+                                        </div>
                                     @endif
 
 
@@ -142,13 +142,18 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="footer-bar">
                                         <div class="action">
                                             <div class="see-detail">
-                                                <button data-target="{{'a'.$key}}" data-name="see_detail" type="button"
-                                                    class="btn btn-primary">Xem chi tiết</button>
+                                                <button data-target="{{ 'a' . $key }}" data-name="see_detail"
+                                                    type="button" class="btn btn-primary">Xem chi tiết</button>
                                                 <button type="button" class="btn btn-danger">Hủy vé</button>
-
+                                                @if ($success_ticket)
+                                                    <button data-trip_id="{{ $trip['id'] }}"
+                                                        data-target="{{ 'r' . $key }}" data-name="rate_button"
+                                                        type="button" class="btn btn-warning">Đánh giá chuyến đi</button>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="total-info">
@@ -159,8 +164,47 @@
                                                 <sup>₫</sup>
                                             </p>
                                         </div>
-
                                     </div>
+                                    <div data-name="{{ 'r' . $key }}" data-rendered="0" class="d-none rate-wrapper position-relative">
+                                        <div class="rating__container">
+                                            <h4>Đánh giá chuyến đi</h4>
+
+                                            <div class="rating-post d-none" data-key="{{$key}}">
+                                                <div class="rating-text">Thanks for rating us!</div>
+                                                <div class="rating-edit" data-key="{{$key}}">EDIT</div> 
+                                            </div>
+                                            <div class="star-widget" data-key="{{$key}}">
+                                                <input class="rating-input rate-5"  type="radio" value="5" name="rate{{$key}}"
+                                                    id="rate-5{{$key}}">
+                                                <label for="rate-5{{$key}}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-4" type="radio" value="4" name="rate{{$key}}"
+                                                    id="rate-4{{$key}}">
+                                                <label for="rate-4{{$key}}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-3" type="radio" value="3" name="rate{{$key}}"
+                                                    id="rate-3{{$key}}">
+                                                <label for="rate-3{{$key}}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-2" type="radio" value="2" name="rate{{$key}}"
+                                                    id="rate-2{{$key}}">
+                                                <label for="rate-2{{$key}}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-1" type="radio" value="1" name="rate{{$key}}"
+                                                    id="rate-1{{$key}}">
+                                                <label for="rate-1{{$key}}" class="fas fa-star"></label>
+                                                <form id="rating-form" action="{{route('create_rating')}}" method="POST">
+                                                    @csrf
+                                                    <header class="rating-header"></header>
+                                                    <input value="{{$trip['id']}}" name="trip_id" hidden>
+                                                    <div class="textarea">
+                                                        <textarea cols="30" id="rate-comment" placeholder="Describe your experience....." maxlength="500"></textarea>
+                                                    </div>
+                                                    <div class="rating-btn" data-key="{{$key}}">
+                                                        <button id="rating-btn"  type="submit">Post</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        @include('components.loading', ['name' => 'ratingr' . $key])
+                                    </div>
+
                                     <!---->
                                 </div>
 
@@ -179,5 +223,8 @@
 
 
     @push('js')
+        <script type="text/javascript">
+            const getRatingsInforAPIURL = "{{ route('infor_ratings') }}";
+        </script>
         <script src="{{ asset('js/client/ticket.js') }}"></script>
     @endpush

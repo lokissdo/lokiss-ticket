@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-
+use Thiagoprz\CompositeKey\HasCompositeKey;
 class Rating extends Model
 {
     use HasFactory;
+    use HasCompositeKey;
     protected $fillable = [
         'trip_id',
         'service_provider_id',
@@ -19,6 +20,7 @@ class Rating extends Model
         'user_id'
     ];
     const UPDATED_AT = null;
+    protected $primaryKey = ['user_id', 'trip_id'];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -65,5 +67,8 @@ class Rating extends Model
     }
     public static function get_comments_by_service_provider($service_provider_id,$offset=0,$take=ItemsPerPage::COMMENTS){
         return self::where('service_provider_id',$service_provider_id)->with('user:id,name,avatar')->offset($offset)->take($take)->get();
+    }
+    public static function get_comments_by_user_and_trip(int $trip_id,int $user_id ){
+        return self::where('trip_id',$trip_id)->where('user_id',$user_id)->first();
     }
 }

@@ -19,6 +19,8 @@ class CheckRememberToken
                 if ($user !== null) {
                     $role = strtolower(UserRoleEnum::getKey($user->role));
                     User::setUserSession($user, $role);
+                    if($role!=='passenger')
+                        return redirect()->route($role.'.index');
                 }
             }
         }
