@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     public $timestamps = false;
     protected $fillable = [
         'arrival_station_id',
@@ -76,7 +78,8 @@ class Ticket extends Model
     }
     public static function get_tickets_by_user_id(int $user_id)
     {
-        $tickets = Ticket::where('user_id', $user_id)
+        $tickets = Ticket::withTrashed()
+        ->where('user_id', $user_id)
             ->with(['arrival_station.province', 'arrival_station.district', 'departure_station.province', 'departure_station.district'])
             ->with(['trip.schedule.departure_province', 'trip.schedule.arrival_province','trip.service_provider'])
             ->get();

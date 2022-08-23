@@ -60,6 +60,7 @@
 }
 .payment .footer-bar{
     justify-content: space-between;
+
 }
 .see-detail .btn{
     font-size: 0.8rem !important;
@@ -93,6 +94,7 @@
     right: 0;
     left: 0;
 }
+
 @keyframes 
 SlideUpDown{
     from{
@@ -105,4 +107,170 @@ SlideUpDown{
         /* transform: translate3d(0, 0, 0); */
         max-height: 300px;
     }
+}
+
+/* rating */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.rating__wrapper{
+    display: grid;
+    height: 100%;
+    place-items: center;
+    text-align: center;
+
+}
+.rating__container{
+    position: relative;
+    width: 335px;
+    background: rgb(255, 255, 255);
+    padding: 20px 30px;
+    border: 1px solid rgb(24, 23, 23);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.rating-post{
+    margin-top: 20px;
+}
+.rating__container .rating-text{
+    font-size: 25px;
+    color: #666;
+    font-weight: 500;
+
+}
+.rating__container .rating-edit{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+
+}
+.rating__container .rating-edit:hover{
+    text-decoration: underline;
+}
+.rating__container .star-widget input{
+    display: none;
+
+}
+.star-widget label{
+    font-size: 30px;
+    color: #444;
+    padding: 10px;
+    float: right;
+    transition: all 0.2s ease;
+}
+.star-widget input:not(:checked) ~ label:hover,
+.star-widget input:not(:checked) ~ label:hover ~ label{
+    color: rgb(255, 208, 0);
+
+}
+input:checked ~ label{
+    color: rgb(255, 243, 68);
+}
+input.rate-5:checked ~ label{
+    color: rgb(255, 252, 52);
+    text-shadow: 0 0 20px rgb(173, 91, 28);
+
+}
+.rate-1:checked ~ #rating-form .rating-header:before{
+    content: "I just hate it 😡";
+}
+.rate-2:checked ~ #rating-form .rating-header:before{
+    content: "I don't like it 😒";
+}
+.rate-3:checked ~ #rating-form .rating-header:before{
+    content: "It is awesome😄";
+}
+.rate-4:checked ~ #rating-form .rating-header:before{
+    content: "I just like it 😎";
+}
+.rate-5:checked ~ #rating-form .rating-header:before{
+    content: "I just love it 🥰";
+}
+.rating__container #rating-form{
+    display: none;
+
+}
+input:checked ~ #rating-form{
+    display: block;
+}
+#rating-form .rating-header{
+    width: 100%;
+    font-size: 25px;
+    color: rgb(0, 60, 255);
+    font-weight: 500;
+    margin: 5px 0 20px 0;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+#rating-form .textarea{
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+
+}
+#rating-form .textarea textarea{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    color: rgb(0, 0, 0);
+    border: 1px solid #333;
+    background: rgb(246, 255, 220);
+    padding: 10px;
+    font-size: 17px;
+    resize: none;
+
+}
+#rating-form .rating-btn{
+    height: 45px;
+    width: 100%;
+    margin: 15px 0;
+}
+#rating-form .rating-btn #rating-btn{
+    height: 100%;
+    width: 100%;
+    border: 1px solid #444;
+    outline: none;
+    background: rgb(246, 255, 220);
+    color:  rgb(0, 0, 0);
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+#rating-form .rating-btn #rating-btn:hover{
+    background: #96969691;
+}
+.rating-message{
+    color:red;
+    text-align: center;
+    height: 25px;
+    font-size: 1.1rem;
+}
+.hidden{
+    display: none;
+}
+.display-rating{
+    color:rgb(255, 243, 68);
+    font-size: 30px;
+}
+
+.rate-wrapper{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 20px;
+
 }

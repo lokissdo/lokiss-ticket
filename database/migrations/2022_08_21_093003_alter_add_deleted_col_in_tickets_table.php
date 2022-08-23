@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterAddIsCanceledColInTicketsTable extends Migration
+class AlterAddDeletedColInTicketsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AlterAddIsCanceledColInTicketsTable extends Migration
     public function up()
     {
         Schema::table('tickets', function (Blueprint $table) {
-                    $table->boolean('is_canceled')->default(0);
-
+            $table->softDeletes();
         });
     }
 

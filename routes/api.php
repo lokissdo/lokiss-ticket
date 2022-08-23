@@ -33,6 +33,10 @@ Route::get('/comments/{id}', [APIController::class,'get_comments'])->name('comme
 Route::get('/seats/{trip_id}', [APIController::class,'get_seats'])->name('seats');
 Route::get('/trips', [APIController::class,'get_trips'])->name('trips');
 Route::post('/create_ticket', [APIController::class,'create_ticket'])->name('create_ticket');
+Route::get('/infor_ratings', [APIController::class,'infor_ratings'])->name('infor_ratings');
+Route::post('/create_rating', [APIController::class,'create_rating'])->name('create_rating');
+
+
 
 
 
