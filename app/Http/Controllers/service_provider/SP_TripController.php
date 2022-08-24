@@ -18,6 +18,7 @@ use Maatwebsite\Excel\Validators\ValidationException;
 class SP_TripController extends Controller
 {
     private $service_provider_id;
+
     public function __construct()
     {
         if (session()->has('user'))
@@ -78,7 +79,6 @@ class SP_TripController extends Controller
         } catch (ValidationException $e) {
             $failures = $e->failures();
             return $failures;
-        
         }
         return 1;
     }
