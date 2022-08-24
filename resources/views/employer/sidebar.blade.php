@@ -10,13 +10,13 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-          <a href="#" class="nav-link {{$site=='index'?'active':'text-white'}}" aria-current="page">
+          <a href="{{route('serviceprovider.index')}}" class="nav-link {{$site=='index'?'active':'text-white'}}" aria-current="page">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
             Home
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link text-white">
+          <a href="{{route('serviceprovider.index')}}" class="nav-link {{$site=='dashboard'?'active':'text-white'}}">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
             Dashboard
           </a>
