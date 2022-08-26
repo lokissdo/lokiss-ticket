@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\service_provider\SP_CoachController;
+use App\Http\Controllers\service_provider\SP_IndexController;
 use App\Http\Controllers\service_provider\SP_ScheduleController;
 use App\Http\Controllers\service_provider\SP_TripController;
 use App\Http\Middleware\isStaff;
@@ -12,6 +13,8 @@ Route::group([
     'as' => 'serviceprovider.',
     'middleware' => [Loggedin::class, isStaff::class],
 ], function () {
+    Route::get('/index', [SP_IndexController::class, 'index'])->name('index');
+
         Route::get('/schedule/index', [SP_ScheduleController::class, 'schedule_index'])->name('schedule.index');
         Route::get('/schedule/create', [SP_ScheduleController::class, 'schedule_create'])->name('schedule.create');
         Route::post('/schedule/store', [SP_ScheduleController::class, 'schedule_store'])->name('schedule.store');

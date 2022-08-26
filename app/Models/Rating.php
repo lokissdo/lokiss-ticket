@@ -25,6 +25,10 @@ class Rating extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class);
+    }
     public function getRatingAvgCacheKey($service_provider_id)
     {
         return sprintf('rating-avg-%d', $service_provider_id);
