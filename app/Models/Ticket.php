@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Ticket extends Model
 {
@@ -79,9 +81,9 @@ class Ticket extends Model
     public static function get_tickets_by_user_id(int $user_id)
     {
         $tickets = Ticket::withTrashed()
-        ->where('user_id', $user_id)
+            ->where('user_id', $user_id)
             ->with(['arrival_station.province', 'arrival_station.district', 'departure_station.province', 'departure_station.district'])
-            ->with(['trip.schedule.departure_province', 'trip.schedule.arrival_province','trip.service_provider'])
+            ->with(['trip.schedule.departure_province', 'trip.schedule.arrival_province', 'trip.service_provider'])
             ->get();
         $ticketGroup = self::group_tickets_by_seats($tickets);
         return $ticketGroup;
@@ -90,14 +92,20 @@ class Ticket extends Model
     {
         $arr = [];
         foreach ($ticketList->toArray() as $ticket) {
-            $key = $ticket['trip_id'] . '_' . strtotime($ticket['created_at']) ;
-            if (empty($arr[$key])){
-                $temp=$ticket['seat_position'];
-                $ticket['seat_position']=array($temp);
+            $key = $ticket['trip_id'] . '_' . strtotime($ticket['created_at']);
+            if (empty($arr[$key])) {
+                $temp = $ticket['seat_position'];
+                $ticket['seat_position'] = array($temp);
                 $arr[$key] = $ticket;
-            }
-            else $arr[$key]['seat_position'][] = $ticket['seat_position'];
+            } else $arr[$key]['seat_position'][] = $ticket['seat_position'];
         }
         return $arr;
+    }
+    public static function serviceprovider_total_tickets($service_provider_id)
+    {
+        return Cache::remember('total-tickets-' . $service_provider_id, 60 * 60, function ()use($service_provider_id) {
+            return self::select(DB::raw('COUNT(*) AS total_tickets'))
+                ->join('trips', 'trips.id', '=', 'tickets.trip_id')->where('trips.service_provider_id', $service_provider_id)->first()->total_tickets;
+        });
     }
 }

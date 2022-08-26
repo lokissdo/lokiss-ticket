@@ -149,7 +149,6 @@ class Trip extends Model
                     ->select('trips.*');
                 break;
 
-                break;
             default:
                 $query->orderBy($sortCol, $sortType);
         }
