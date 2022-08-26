@@ -103,6 +103,8 @@ class ServiceProvider extends Model
         $labels = array_column($data, 'date');
         $revenues = array_column($data, 'revenue');
         $count_trips = array_column($data, 'count');
+        $totalTickets = array_column($data, 'totalTickets');
+
         $chartjs = app()->chartjs
             ->name('barChartTest')
             // ->type(['bar'])
@@ -133,6 +135,7 @@ class ServiceProvider extends Model
                     "pointHoverBorderColor" => "rgba(220,220,220,1)",
                     'data' => $count_trips,
                     'label' => "Số chuyến đi ",
+                    'totalTickets'=> $totalTickets
 
                     // This binds the dataset to the right y axis
                 ],
@@ -145,7 +148,18 @@ class ServiceProvider extends Model
                         font: {
                             size: 20
                         }
+                    },
+                    tooltip: {
+                        callbacks: {
+                           afterBody: function(context) {
+                            if(context[0].datasetIndex===1){
+                                let totalTickets=context[0].dataset.totalTickets[context[0].dataIndex]
+                              return 'Tổng số vé: '+totalTickets;
+                           }
+                           return;
+                        }
                     }
+                }
                 },
             scales: {
                 rightaxis: {
@@ -169,11 +183,14 @@ class ServiceProvider extends Model
         for ($i = 0; $i < 7; ++$i) {
             $revenues[$i]['date'] = date("d-m-Y", strtotime("- " . "$i" . " days"));
             $revenues[$i]['revenue'] = 0;
+            $revenues[$i]['totalTickets'] = 0;
             $trips = Trip::where('service_provider_id', $service_provider_id)->where('departure_date', date("Y-m-d", strtotime("- " . "$i" . " days")))
                 ->withCount('tickets')->get();
             $revenues[$i]['count'] = count($trips);
+
             foreach ($trips as $each) {
                 $revenues[$i]['revenue'] += $each->price * $each->tickets_count;
+                $revenues[$i]['totalTickets'] += $each->tickets_count;
             }
         }
         return array_reverse($revenues);
@@ -195,7 +212,7 @@ class ServiceProvider extends Model
             ], [
                 'label' => 'Tỉ lệ lấp đầy',
                 'yAxisID' => "rightaxis",
-                'detail'=>$data['occupied_rate'],
+                'detail' => $data['occupied_rate'],
                 'data' => array_column($data['occupied_rate'], 'rate'),
                 'backgroundColor' => "rgba(255,0,0,1)"
             ]])
@@ -279,33 +296,38 @@ class ServiceProvider extends Model
             'occupied_rate' => $occupiedRate
         ];
     }
-    public static function total_revenue_this_week($service_provider_id){
-       $trips= Trip::where('service_provider_id',$service_provider_id)->whereBetween('departure_date', [date('Y-m-d',strtotime(now()->startOfWeek())), date('Y-m-d',strtotime(now()->endOfWeek()))])->withCount('tickets')->get();
-      return self::get_total_revenue_from_trips($trips);
+    public static function total_revenue_this_week($service_provider_id)
+    {
+        $trips = Trip::where('service_provider_id', $service_provider_id)->whereBetween('departure_date', [date('Y-m-d', strtotime(now()->startOfWeek())), date('Y-m-d', strtotime(now()->endOfWeek()))])->withCount('tickets')->get();
+        return self::get_total_revenue_from_trips($trips);
     }
-    private static function get_total_revenue_from_trips($trips){
-        $total=0;
+    private static function get_total_revenue_from_trips($trips)
+    {
+        $total = 0;
         foreach ($trips as $trip) {
-         $total+=$trip->price*$trip->tickets_count;
+            $total += $trip->price * $trip->tickets_count;
         }
-       return $total;
+        return $total;
     }
-    public static function total_revenue_this_month($service_provider_id){
-        $trips= Trip::where('service_provider_id',$service_provider_id)->whereBetween('departure_date', [date('Y-m-d',strtotime(now()->startOfmonth())), date('Y-m-d',strtotime(now()->endOfMonth()))])->withCount('tickets')->get();
-      return self::get_total_revenue_from_trips($trips);
-     }
-     public static function total_revenue_today($service_provider_id){
-        $trips= Trip::where('service_provider_id',$service_provider_id)->where('departure_date', date('Y-m-d'))->withCount('tickets')->get();
-      return self::get_total_revenue_from_trips($trips);
-     }
-    public static function revenue_numbers($service_provider_id){
-        $week=self::total_revenue_this_week($service_provider_id);
-        $month=self::total_revenue_this_month($service_provider_id);
-        $day=self::total_revenue_today($service_provider_id);
+    public static function total_revenue_this_month($service_provider_id)
+    {
+        $trips = Trip::where('service_provider_id', $service_provider_id)->whereBetween('departure_date', [date('Y-m-d', strtotime(now()->startOfmonth())), date('Y-m-d', strtotime(now()->endOfMonth()))])->withCount('tickets')->get();
+        return self::get_total_revenue_from_trips($trips);
+    }
+    public static function total_revenue_today($service_provider_id)
+    {
+        $trips = Trip::where('service_provider_id', $service_provider_id)->where('departure_date', date('Y-m-d'))->withCount('tickets')->get();
+        return self::get_total_revenue_from_trips($trips);
+    }
+    public static function revenue_numbers($service_provider_id)
+    {
+        $week = self::total_revenue_this_week($service_provider_id);
+        $month = self::total_revenue_this_month($service_provider_id);
+        $day = self::total_revenue_today($service_provider_id);
         return [
-            'month'=>$month,
-            'week'=>$week,
-            'day'=>$day
+            'month' => $month,
+            'week' => $week,
+            'day' => $day
         ];
     }
 }
