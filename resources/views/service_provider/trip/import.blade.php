@@ -49,11 +49,12 @@ $role= Session::get('user')['role'];
     @endif
     <h3>Bao gồm các cột:</h3>
     <div class="d-flex ">
-        <div class="instruction-col">ID Lịch trình</div>
-        <div class="instruction-col">ID Xe</div>
-        <div class="instruction-col">Ngày khởi hành</div>
-        <div class="instruction-col">Giá</div>
+        <div class="instruction-col">schedule_id( ID Lịch trình )</div>
+        <div class="instruction-col">schedule_id (ID Xe)</div>
+        <div class="instruction-col">departure_date(Ngày khởi hành)</div>
+        <div class="instruction-col">price (Giá)</div>
     </div>
+    
     <div class="card-body min-20 px-md-5 d-none" id="message_display">
     </div>
     <form id="form"action="{{ route('serviceprovider.trip.importing') }}" method="POST" enctype='multipart/form-data'>
