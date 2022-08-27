@@ -148,11 +148,14 @@ const EventsAfterLoad = {
     clickConfirmTransaction: function () {
         const confirmButton = $('#confirm_transaction')
         confirmButton.onclick = async () => {
+        const loading = $('.wrapper-loading[data-name=loadingroutes');  
+        loading.classList.remove('d-none');
             let ticketParams = Handler.createTicketsParams();
             let res = await API.createTickets(ticketParams);
             console.log(res, res == 1, res === 1);
             if (res.status === -1) {
-                console.log('loi')
+                console.log('loi');
+            loading.classList.add('d-none');
                 displayError("Rất tiếc vé đã bị mua mất rôi!!!<br>Tải lại trang để cập nhật");
                 return;
             }
@@ -167,10 +170,11 @@ const EventsAfterLoad = {
                     `
                     this.copyToClipBoard();
                 }
-
                 console.log('Mo')
                 $('.modal-message').classList.remove('d-none');
             }
+            loading.classList.add('d-none');
+
         }
     },
     copyToClipBoard: function () {

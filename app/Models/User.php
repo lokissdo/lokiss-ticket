@@ -94,6 +94,6 @@ class User extends Authenticatable
         ];
     }
     public static function isExist( $data){
-        return self::where('email',$data->email)->first('id');
+        return self::where('email',$data->email)->first();
     }
 }

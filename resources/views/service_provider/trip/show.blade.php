@@ -42,6 +42,28 @@ $seat_number = $trip['coach']['seat_number'];
     <h2 class="text-center"> @include('icons.company') Nhà xe
         <strong>{{ Session::get('user')['service_provider_name'] }}</strong>
     </h2>
+    <div class="d-flex justify-content-end mb-1">
+        <h4 class="align-self-center txtelegantshadow  ">Tải danh sách theo: </h4>
+        <a href="{{ route('serviceprovider.trip.export_byseat', $trip['id']) }}"
+            style="margin-right:20px; background-color:#990c04" class="btn btn-danger float-right  "><svg
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-download" viewBox="0 0 16 16">
+                <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path
+                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+            </svg> Vị trí ngồi</a>
+        <a href="{{ route('serviceprovider.trip.export_bystation', $trip['id']) }}"
+            style="background-color:#a70d05"class="btn btn-danger float-right   "><svg
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-download" viewBox="0 0 16 16">
+                <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path
+                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+            </svg> Bến đón trả </a>
+    </div>
+
     <table class="table mr-auto bg-light border-1 align-self-stretch">
         <thead class="thead-dark">
             <tr>
@@ -60,11 +82,11 @@ $seat_number = $trip['coach']['seat_number'];
             <tr>
                 <th scope="row">{{ $trip['id'] }}</th>
                 <td>{{ $trip['schedule']['departure_province_name'] }}</td>
-                <td>{{ date('H:i',strtotime($trip['schedule']['departure_time'])) . ' | ' . date('d-m-Y', strtotime($trip['departure_date'])) }}
+                <td>{{ date('H:i', strtotime($trip['schedule']['departure_time'])) . ' | ' . date('d-m-Y', strtotime($trip['departure_date'])) }}
                 </td>
 
                 <td>{{ $trip['schedule']['arrival_province_name'] }}</td>
-                <td>{{ $trip['schedule']['hour_duration']}}
+                <td>{{ $trip['schedule']['hour_duration'] }}
                 </td>
                 <td>{{ $trip['coach']['name'] . ' (' . $seat_number . ' chỗ )' }}</td>
                 <td>{{ number_format($trip['price']) . ' VND' }}</td>
@@ -129,10 +151,10 @@ $seat_number = $trip['coach']['seat_number'];
                         </div>
                         <div class=" infor-ticket">
                             <div> Đi từ
-                                :{{ $seats[$i]['arrival_station']['name'] . '(' . $seats[$i]['arrival_station']['district_name'] . ',' . $seats[$i]['arrival_station']['province_name'] . ')' }}
+                                :{{ $seats[$i]['departure_station']['name'] . '(' . $seats[$i]['departure_station']['district_name'] . ',' . $seats[$i]['departure_station']['province_name'] . ')' }}
                             </div>
                             <div> Đến
-                                :{{ $seats[$i]['departure_station']['name'] . '(' . $seats[$i]['departure_station']['district_name'] . ',' . $seats[$i]['departure_station']['province_name'] . ')' }}
+                                :{{ $seats[$i]['arrival_station']['name'] . '(' . $seats[$i]['arrival_station']['district_name'] . ',' . $seats[$i]['arrival_station']['province_name'] . ')' }}
                             </div>
                         </div>
                     </div>
@@ -151,6 +173,7 @@ $seat_number = $trip['coach']['seat_number'];
         $ticketsByStation = [];
         foreach ($tickets as $ticket) {
             $ticketsByStation[$ticket['departure_station']['name']][] = $ticket;
+            $ticketsByStation[$ticket['arrival_station']['name']][] = $ticket;
         }
     @endphp
 
@@ -179,6 +202,15 @@ $seat_number = $trip['coach']['seat_number'];
                                 {{ $ticket['user']['name'] }}
 
                                 <div class=" position-absolute ticket-detail">
+                                    @if ($station['name'] == $ticket['departure_station']['name'])
+                                        <div style="font-weight:600;color:rgb(14, 166, 14)" class="text-center">
+                                           ĐÓN
+                                        </div>
+                                    @else
+                                        <div style="font-weight:600;color:#a70d05" class="text-center">
+                                           TRẢ
+                                        </div>
+                                    @endif
                                     <div class="d-flex infor-ticket">
                                         <img src="{{ $ticket['user']['avatar'] }}" alt="" width="32"
                                             height="32" class="rounded-circle me-2">
@@ -194,7 +226,7 @@ $seat_number = $trip['coach']['seat_number'];
 
                                         Đi từ
                                         :{{ $ticket['departure_station']['name'] . '(' . $ticket['departure_station']['district_name'] . ',' . $ticket['departure_station']['province_name'] . ')' }}
-                                       
+
                                     </div>
 
                                     <div class=" infor-ticket">
@@ -202,7 +234,7 @@ $seat_number = $trip['coach']['seat_number'];
                                         :{{ $ticket['arrival_station']['name'] . '(' . $ticket['arrival_station']['district_name'] . ',' . $ticket['arrival_station']['province_name'] . ')' }}
                                     </div>
                                     <div class=" infor-ticket">
-                                       Mã chỗ: {{$ticket['seat_position']}}
+                                        Mã chỗ: {{ $ticket['seat_position'] }}
                                     </div>
                                 </div>
                             </div>

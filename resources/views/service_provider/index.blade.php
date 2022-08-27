@@ -69,7 +69,7 @@ $role = Session::get('user')['role'];
             <div class="card mb-3 widget-content bg-midnight-bloom">
                 <div class="widget-content-wrapper text-white">
                     <div class="widget-content-left">
-                        <div class="widget-heading">Tickets Sold Today</div>
+                        <div class="widget-heading">Tickets Sold </div>
                         <div class="widget-subheading">Incomings streams</div>
                     </div>
                     <div class="widget-content-right">

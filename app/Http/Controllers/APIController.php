@@ -49,10 +49,12 @@ class APIController extends Controller
     }
     public function create_ticket(Request $request)
     {
-        $isExist = User::isExist($request);
-        if ($isExist === null) {
+        $fields=['address', 'address2', 'name', 'phone_number', 'email'];
+        if(!$request->has($fields)) return  ['status' => -1,'message'=>'unvalid'];
+        $user = User::isExist($request);
+        if ($user === null) {
             try {
-                $newUser = $request->only(['address', 'address2', 'name', 'phone_number', 'email']);
+                $newUser = $request->only($fields);
                 $temp = Str::random(8);
                 $newUser['password'] = bcrypt($temp);
                 $newUser['id'] = User::create($newUser)->id;
@@ -61,7 +63,13 @@ class APIController extends Controller
                 return ['status' => -1,'message'=>$e->getMessage()];
             }
             $user_id = $newUser['id'];
-        } else $user_id = $isExist->id;
+        } else {
+            $user_id = $user->id;
+            if(!$user->phone_number) {
+                $user->phone_number=$request->phone_number;
+                $user->save();
+            }
+        }
 
         $tickets = [];
         for ($i = 0; $i < count($request->seat_position); $i++)
@@ -81,7 +89,7 @@ class APIController extends Controller
         $dispatchedData = $request->toArray();
         if (isset($newUser)) $dispatchedData['password'] = $newUser['password'];
         dispatch(new SendTicketMailJob($dispatchedData));
-        if ($isExist)
+        if ($user)
             return ['status' => 1];
         return ['status' => 1, 'user_password' => $newUser['password']];
     }
