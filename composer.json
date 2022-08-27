@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "barryvdh/laravel-dompdf": "^2.0",
         "bensampo/laravel-enum": "^4.2",
         "coconutcraig/laravel-postmark": "^2.11",
         "doctrine/dbal": "^3.3",

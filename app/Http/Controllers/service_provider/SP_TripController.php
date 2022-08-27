@@ -8,13 +8,13 @@ use App\Models\Schedule;
 use App\Models\ScheduleDetail;
 use App\Models\Ticket;
 use App\Models\Trip;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
-
 class SP_TripController extends Controller
 {
     private $service_provider_id;
@@ -58,6 +58,7 @@ class SP_TripController extends Controller
         View::share('title', 'Trip');
         //Schedule
         $trip = Trip::get_trip($this->service_provider_id, $id);
+        if(!$trip) return redirect()->back();
         $scheduleDetail = ScheduleDetail::get_schedule_detail($trip['schedule_id']);
         $ticketsArr = Ticket::get_tickets($id);
         return view("service_provider.trip.show")->with([
@@ -82,4 +83,31 @@ class SP_TripController extends Controller
         }
         return 1;
     }
+    public function trip_export_byseat(int $id)
+    {
+        $trip=Trip::get_trip($this->service_provider_id,$id);
+        if(!$trip) return;
+        $ticketsArr = Ticket::get_tickets($id);
+        $pdf = Pdf::loadView('exports.trip_byseat', [
+            'trip'=>$trip,
+            'tickets'=>$ticketsArr
+        ]);
+        return $pdf->download('trip_seats.pdf');
+    }
+    public function trip_export_bystation(int $id)
+    {
+        $trip=Trip::get_trip($this->service_provider_id,$id);
+        if(!$trip) return;
+        $ticketsArr = Ticket::get_tickets($id);
+        $scheduleDetail = ScheduleDetail::get_schedule_detail($trip['schedule_id']);
+
+        $pdf = Pdf::loadView('exports.trip_bystation', [
+            'trip'=>$trip,
+            'tickets'=>$ticketsArr,
+            'scheduleDetail'=>$scheduleDetail
+        ]);
+        return $pdf->download('trip_station.pdf');
+    
+    }
 }
+

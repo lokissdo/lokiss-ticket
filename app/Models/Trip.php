@@ -41,6 +41,7 @@ class Trip extends Model
     static function get_trip($service_provider_id, $trip_id = null)
     {
         $trip = Trip::where('service_provider_id', $service_provider_id)->find($trip_id);
+        if(!$trip) return null;
         $trip->get_necessary_informations_trip();
         return $trip->toArray();
     }
@@ -81,12 +82,13 @@ class Trip extends Model
         $query = Trip::query();
         $withScheduleLocations = true;
         //Eager loading
+        $query->select('trips.*');
         if ($isFromClient) {
             $withScheduleLocations = false;
+            $query->selectRaw('(select `seat_number` from `coaches` WHERE  `coaches`.`id`= `trips`.`coach_id` ) as `seat_number`')->withCount('tickets')->havingRaw("`tickets_count` < `seat_number` ");
             $query->with(['service_provider' => function ($each) {
                 $each->withCount('ratings')->withAvg('ratings', 'rate');
             }, 'coach', 'schedule']);
-            $query->withCount('tickets');
         } else {
             if ($service_provider_id) {
                 $query->where('trips.service_provider_id', $service_provider_id);
@@ -116,7 +118,7 @@ class Trip extends Model
         if ($rate) $query->whereHas('service_provider', function (Builder $subQuery) use ($rate) {
             $subQuery->withAvg('ratings', 'rate')->having('ratings_avg_rate', '>=', $rate);
         });
-        //totalPage if not sorting
+        //totalPage if not sort
         $totalPage = $isIncludeTotalPage ? ceil(($query->count()) / $itemsPerPage) : -1;
 
         //sort
@@ -129,7 +131,6 @@ class Trip extends Model
             $item->get_necessary_informations_trip($withScheduleLocations);
             return $item;
         });
-        // dd($trips->toArray());
         return [
             'trips' => $trips->toArray(),
             'total_page' => $totalPage,
@@ -140,13 +141,11 @@ class Trip extends Model
         switch ($sortCol) {
             case 'duration':
                 $query->join('schedules', 'trips.schedule_id', '=', 'schedules.id')
-                    ->orderBy('schedules.duration', $sortType)
-                    ->select('trips.*');
+                    ->orderBy('schedules.duration', $sortType);
                 break;
             case 'departure_time':
                 $query->join('schedules', 'trips.schedule_id', '=', 'schedules.id')
-                    ->orderBy('schedules.departure_time', $sortType)
-                    ->select('trips.*');
+                    ->orderBy('schedules.departure_time', $sortType);
                 break;
 
             default:
