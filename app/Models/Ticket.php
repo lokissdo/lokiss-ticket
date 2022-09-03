@@ -103,9 +103,9 @@ class Ticket extends Model
     }
     public static function serviceprovider_total_tickets($service_provider_id)
     {
-        return Cache::remember('total-tickets-' . $service_provider_id, 60 * 60, function ()use($service_provider_id) {
-            return self::select(DB::raw('COUNT(*) AS total_tickets'))
-                ->join('trips', 'trips.id', '=', 'tickets.trip_id')->where('trips.service_provider_id', $service_provider_id)->first()->total_tickets;
+        return Cache::remember('total-tickets-' . $service_provider_id,3600, function ()use($service_provider_id) {
+             return self::select(DB::raw('COUNT(*) AS total_tickets'))
+                 ->join('trips', 'trips.id', '=', 'tickets.trip_id')->where('trips.service_provider_id', $service_provider_id)->first()->total_tickets;
         });
     }
 }

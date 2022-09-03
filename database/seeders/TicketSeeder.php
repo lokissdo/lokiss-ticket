@@ -19,16 +19,12 @@ class TicketSeeder extends Seeder
     }
     public function run()
     {
-        $trips_all = Trip::with(['coach:id,seat_number'])->get()->toArray();
-
+        $tripsInserted = Trip::with(['coach:id,seat_number'])->withCount('tickets')->havingRaw("`tickets_count` = 0 ")
+        ->inRandomOrder()->take($this->tripsPerBatch)->get()->toArray();
+        $user_ids=User::orderByRaw('RAND()')->get('id')->toArray();
+        $iterator_ids=0;
         //Get random trips inserted
         $ticketsInsertedAll = [];
-        $tripsInserted = [];
-        for ($i = 0; $i < $this->tripsPerBatch; ++$i) {
-            $key_rand = array_rand($trips_all);
-            $tripsInserted[] = $trips_all[$key_rand];
-            unset($trips_all[$key_rand]);
-        }
         //Generate random tickets per those trips
         foreach ($tripsInserted as $trip) {
             $schedule = Schedule::get_schedules_list($trip['service_provider_id'], $trip['schedule_id'])[0];
@@ -44,8 +40,9 @@ class TicketSeeder extends Seeder
                     'departure_station_id' => $schedule['schedule_detail'][$locations[0]]['id'],
                     'arrival_station_id' => $schedule['schedule_detail'][$locations[1]]['id'],
                     'trip_id' => $trip['id'],
-                    'user_id' => User::orderByRaw('RAND()')->first()->id
+                    'user_id' =>$user_ids[$iterator_ids]['id'],
                 ];
+                if($iterator_ids==count($user_ids)) $iterator_ids=0;
                 $ticketsInsertedAll[] = $ticket;
                 unset($positions[$key_rand]);
             }

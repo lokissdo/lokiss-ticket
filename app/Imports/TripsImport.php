@@ -21,7 +21,7 @@ class TripsImport implements ToModel, WithBatchInserts, WithHeadingRow, WithVali
     public function prepareForValidation($data, $index)
     {
 
-        if (strtotime($data['departure_date']) === false) {
+        if (isset($data['departure_date'])&&strtotime($data['departure_date']) === false) {
            preg_match_all("/[0-9]+/i", $data['departure_date'],$dateArgs);
            $data['departure_date']=implode('-',$dateArgs[0]);
         }

@@ -28,6 +28,8 @@ Route::group([
     Route::get('/coach/index', [SP_CoachController::class, 'coach_index'])->name('coach.index');
     Route::get('/coach/export', [SP_CoachController::class, 'coach_export'])->name('coach.export');
 
+    Route::get('/trip/export/byseat/{id}', [SP_TripController::class, 'trip_export_byseat'])->name('trip.export_byseat');
+    Route::get('/trip/export/bystation/{id}', [SP_TripController::class, 'trip_export_bystation'])->name('trip.export_bystation');
 
         Route::get('/trip/index', [SP_TripController::class, 'trip_index'])->name('trip.index');
         Route::get('/trip/create/{id}', [SP_TripController::class, 'trip_create'])->name('trip.create');

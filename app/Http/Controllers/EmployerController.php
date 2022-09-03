@@ -28,12 +28,14 @@ class EmployerController extends Controller
     public function index()
     {
         $user = session('user');
-        $provider = ServiceProvider::where('employer_id', $user['id'])->first();
-        $user['service_provider_id'] = $provider->id;
-        $user['service_provider_name'] = $provider->name;
+        if(empty(session('user')['service_provider_id']) || empty(session('user')['service_provider_name']) ){
+            $provider = ServiceProvider::where('employer_id', $user['id'])->first();
+            $user['service_provider_id'] = $provider->id;
+            $user['service_provider_name'] = $provider->name;
+            session(['user' => $user]);
+        }     
+        return redirect()->route('serviceprovider.index');
 
-        session(['user' => $user]);
-        return view('employer.index');
     }
     public function employee_index()
     {
