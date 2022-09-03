@@ -104,7 +104,6 @@ class ServiceProvider extends Model
         $revenues = array_column($data, 'revenue');
         $count_trips = array_column($data, 'count');
         $totalTickets = array_column($data, 'totalTickets');
-
         $chartjs = app()->chartjs
             ->name('barChartTest')
             // ->type(['bar'])
@@ -136,8 +135,6 @@ class ServiceProvider extends Model
                     'data' => $count_trips,
                     'label' => "Số chuyến đi ",
                     'totalTickets'=> $totalTickets
-
-                    // This binds the dataset to the right y axis
                 ],
             ])
             ->optionsRaw("{
