@@ -50,7 +50,7 @@ $role= Session::get('user')['role'];
     <h3>Bao gồm các cột:</h3>
     <div class="d-flex ">
         <div class="instruction-col">schedule_id( ID Lịch trình )</div>
-        <div class="instruction-col">schedule_id (ID Xe)</div>
+        <div class="instruction-col">coach_id (ID Xe)</div>
         <div class="instruction-col">departure_date(Ngày khởi hành)</div>
         <div class="instruction-col">price (Giá)</div>
     </div>

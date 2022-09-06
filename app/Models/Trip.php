@@ -90,9 +90,8 @@ class Trip extends Model
                 $each->withCount('ratings')->withAvg('ratings', 'rate');
             }, 'coach', 'schedule']);
         } else {
-            if ($service_provider_id) {
+            if ($service_provider_id) 
                 $query->where('trips.service_provider_id', $service_provider_id);
-            }
             $query->with(['coach', 'schedule.arrival_province', 'schedule.departure_province']);
         }
 

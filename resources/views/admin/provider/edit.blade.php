@@ -74,7 +74,6 @@
                                             city </option>
                                     </select>
                                 </div>
-                                <script>const preAddressCode={{$provider->address}};</script>
                             </div>
                         </div>
                     </div>
@@ -89,6 +88,9 @@
     </form>
 </div>
 @push('js')
+    <script type="text/javascript">
+     const   preAddressCode =['{{$provider->address}}'];
+    </script>
     <script src="{{ asset('js/components/address.js') }}"></script>
     <script src="{{ asset('js/admin/edit_provider.js') }}"></script>
 

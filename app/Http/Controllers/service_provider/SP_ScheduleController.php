@@ -70,8 +70,11 @@ class SP_ScheduleController extends Controller
     public function schedule_destroy(int $id)
     {
         try {
+            $schedule= Schedule::where('service_provider_id',$this->service_provider_id)->find($id);
+           if($schedule){
+            $schedule->delete();
             ScheduleDetail::where('schedule_id', $id)->delete();
-            Schedule::find($id)->delete();
+           }
         } catch (Exception $e) {
             return back()->withError('Không thể xóa lịch trình này vì đã được chọn trong chuyến đi'); //$e->getMessage()
         }

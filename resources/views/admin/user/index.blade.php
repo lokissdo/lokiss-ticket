@@ -40,7 +40,7 @@
             <tr>
                 <th scope="col">
                     <div class="d-flex justify-content-between" data-sortcol='id'>
-                        <div> STT</div>
+                        <div> ID</div>
                         @include('icons.sort')
                     </div>
                 </th>

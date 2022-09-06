@@ -119,4 +119,13 @@ class APIController extends Controller
         }
        return 1;
     }
+    public function delete_tickets(LoggedinRequest $req)
+    {
+        $user_id=session('user')['id'];
+        $trip_id=$req->trip_id;
+        $trip=Trip::with('schedule')->find($trip_id);
+        if(strtotime($trip->departure_date.' '.$trip->schedule->departure_time) < strtotime("+1 day")) return 0;
+        $created_at=$req->created_at;
+        return Ticket::delete_tickets($user_id,$trip_id,$created_at);
+    }
 }

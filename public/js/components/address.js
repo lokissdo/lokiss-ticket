@@ -12,7 +12,7 @@ const GetAddressByFetchAPI= ()=>{
             }
             province.innerHTML=html;
         })
-        if(ProvinceChangeListenter) ProvinceChangeListenter()
+        if(typeof ProvinceChangeListenter !=='undefined') ProvinceChangeListenter()
     });
 }
 window.addEventListener('load',GetAddressByFetchAPI)

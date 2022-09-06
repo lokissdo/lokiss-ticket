@@ -341,6 +341,13 @@
 
 
             </div>
+            <div class="load-more-trips d-flex justify-content-center">
+                <div class="d-flex flex-column hoverable">
+                    <img class="align-self-center" width="30px"src="https://img.icons8.com/color/30/000000/connection-status-off--v1.png"/>
+                    <div style="font-size: 0.8rem;font-weight: 400 ">View more</div>
+                </div>
+
+            </div>
             <div class="route-option choose-locations d-none">
             </div>
 

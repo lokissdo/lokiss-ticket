@@ -42,6 +42,31 @@ const initEvent = {
             }
         })
     },
+    deleteTicket: function(){
+        $$('[data-name="delete-tickets"]').forEach(ele=>{
+            ele.onclick= async()=>{
+                if(confirm('Bạn có chắc chắn muốn hủy vé/những vé này')){
+                    const params=new URLSearchParams();
+                    let tripId=ele.dataset.trip_id
+                    params.append('trip_id',tripId);
+                    params.append('created_at',ele.dataset.created_at);
+                    const res = await fetch(delete_ticketAPIURL, {
+                        method: "POST",
+                        body: params,
+                    })
+                        .then((response) => response.json());
+                    console.log(res);
+                    let timestamp=(new Date(ele.dataset.created_at)).getTime() / 1000;
+                    let container=$(`[data-name="a${tripId}_${timestamp}"]`);
+                    let titleCont= container.querySelector('.title-bar-bg.wait');
+                    titleCont.classList.remove('wait');
+                    titleCont.classList.add('canceled');
+                    titleCont.querySelector('.title-txt').textContent="TRẠNG THÁI: ĐÃ HỦY";
+                    ele.remove();
+                }
+            }
+        })
+    },
     run: function () {
         for (const key in this) {
             if (Object.hasOwnProperty.call(this, key)) {

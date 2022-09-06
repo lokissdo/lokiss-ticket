@@ -33,7 +33,7 @@
     <table class="table  mb-0 mr-auto bg-light border-1 align-self-stretch table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">STT</th>
+                <th scope="col">ID</th>
                 <th scope="col">Tên</th>
                 <th scope="col">Quận/Huyện</th>
                 <th scope="col">Tỉnh/Thành phố</th>

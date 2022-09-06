@@ -98,7 +98,7 @@ $isEmployer =$role == 'employer';
     deleteButtons.forEach(deleteButton => {
         deleteButton.onclick = (e) => {
             e.preventDefault();
-            if (window.confirm('Bạn có chắc chắn muốn xóa nhân viên  này?')) {
+            if (window.confirm('Bạn có chắc chắn muốn xóa xe này?')) {
                 e.target.parentNode.submit();
             }
         }

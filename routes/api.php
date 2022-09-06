@@ -35,6 +35,8 @@ Route::get('/trips', [APIController::class,'get_trips'])->name('trips');
 Route::post('/create_ticket', [APIController::class,'create_ticket'])->name('create_ticket');
 Route::get('/infor_ratings', [APIController::class,'infor_ratings'])->name('infor_ratings');
 Route::post('/create_rating', [APIController::class,'create_rating'])->name('create_rating');
+Route::post('/delete_tickets', [APIController::class,'delete_tickets'])->name('delete_tickets');
+
 
 
 
