@@ -102,6 +102,7 @@ class CreateScheduleRequest extends FormRequest
         return [
             'duration'   => 'Thời gian di chuyển',
             'station_id' => 'Bến xe',
+            'departure_time'=>"Thời gian khởi hành"
         ];
     }
 }

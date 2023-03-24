@@ -51,6 +51,7 @@
                                 $arrival_station = $ticket['arrival_station'];
                                 $departure_station = $ticket['departure_station'];
                                 $success_ticket = $ticket['deleted_at'] === null && strtotime($trip['departure_date'] . ' ' . $schedule['departure_time']) < time() ? true : false;
+
                             @endphp
                             {{-- {{dd($key)}} --}}
                             <div class="payment " data-name="{{ 'a' . $key }}" data-trip="{{ $trip['id'] }}">
@@ -148,7 +149,9 @@
                                             <div class="see-detail">
                                                 <button data-target="{{ 'a' . $key }}" data-name="see_detail"
                                                     type="button" class="btn btn-primary">Xem chi tiết</button>
-                                                <button type="button" class="btn btn-danger">Hủy vé</button>
+                                                @if (strtotime($trip['departure_date'].' '.$schedule['departure_time']) > strtotime("+1 day") && !$ticket['deleted_at'])
+                                                    <button data-name="delete-tickets" data-created_at="{{$ticket['created_at']}}" data-trip_id="{{$trip['id']}}" type="button" class="btn btn-danger">Hủy vé</button>
+                                                @endif
                                                 @if ($success_ticket)
                                                     <button data-trip_id="{{ $trip['id'] }}"
                                                         data-target="{{ 'r' . $key }}" data-name="rate_button"
@@ -165,39 +168,41 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div data-name="{{ 'r' . $key }}" data-rendered="0" class="d-none rate-wrapper position-relative">
+                                    <div data-name="{{ 'r' . $key }}" data-rendered="0"
+                                        class="d-none rate-wrapper position-relative">
                                         <div class="rating__container">
                                             <h4>Đánh giá chuyến đi</h4>
 
-                                            <div class="rating-post d-none" data-key="{{$key}}">
+                                            <div class="rating-post d-none" data-key="{{ $key }}">
                                                 <div class="rating-text">Thanks for rating us!</div>
-                                                <div class="rating-edit" data-key="{{$key}}">EDIT</div> 
+                                                <div class="rating-edit" data-key="{{ $key }}">EDIT</div>
                                             </div>
-                                            <div class="star-widget" data-key="{{$key}}">
-                                                <input class="rating-input rate-5"  type="radio" value="5" name="rate{{$key}}"
-                                                    id="rate-5{{$key}}">
-                                                <label for="rate-5{{$key}}" class="fas fa-star"></label>
-                                                <input class="rating-input rate-4" type="radio" value="4" name="rate{{$key}}"
-                                                    id="rate-4{{$key}}">
-                                                <label for="rate-4{{$key}}" class="fas fa-star"></label>
-                                                <input class="rating-input rate-3" type="radio" value="3" name="rate{{$key}}"
-                                                    id="rate-3{{$key}}">
-                                                <label for="rate-3{{$key}}" class="fas fa-star"></label>
-                                                <input class="rating-input rate-2" type="radio" value="2" name="rate{{$key}}"
-                                                    id="rate-2{{$key}}">
-                                                <label for="rate-2{{$key}}" class="fas fa-star"></label>
-                                                <input class="rating-input rate-1" type="radio" value="1" name="rate{{$key}}"
-                                                    id="rate-1{{$key}}">
-                                                <label for="rate-1{{$key}}" class="fas fa-star"></label>
-                                                <form id="rating-form" action="{{route('create_rating')}}" method="POST">
+                                            <div class="star-widget" data-key="{{ $key }}">
+                                                <input class="rating-input rate-5" type="radio" value="5"
+                                                    name="rate{{ $key }}" id="rate-5{{ $key }}">
+                                                <label for="rate-5{{ $key }}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-4" type="radio" value="4"
+                                                    name="rate{{ $key }}" id="rate-4{{ $key }}">
+                                                <label for="rate-4{{ $key }}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-3" type="radio" value="3"
+                                                    name="rate{{ $key }}" id="rate-3{{ $key }}">
+                                                <label for="rate-3{{ $key }}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-2" type="radio" value="2"
+                                                    name="rate{{ $key }}" id="rate-2{{ $key }}">
+                                                <label for="rate-2{{ $key }}" class="fas fa-star"></label>
+                                                <input class="rating-input rate-1" type="radio" value="1"
+                                                    name="rate{{ $key }}" id="rate-1{{ $key }}">
+                                                <label for="rate-1{{ $key }}" class="fas fa-star"></label>
+                                                <form id="rating-form" action="{{ route('create_rating') }}"
+                                                    method="POST">
                                                     @csrf
                                                     <header class="rating-header"></header>
-                                                    <input value="{{$trip['id']}}" name="trip_id" hidden>
+                                                    <input value="{{ $trip['id'] }}" name="trip_id" hidden>
                                                     <div class="textarea">
                                                         <textarea cols="30" id="rate-comment" placeholder="Describe your experience....." maxlength="500"></textarea>
                                                     </div>
-                                                    <div class="rating-btn" data-key="{{$key}}">
-                                                        <button id="rating-btn"  type="submit">Post</button>
+                                                    <div class="rating-btn" data-key="{{ $key }}">
+                                                        <button id="rating-btn" type="submit">Post</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -225,6 +230,7 @@
     @push('js')
         <script type="text/javascript">
             const getRatingsInforAPIURL = "{{ route('infor_ratings') }}";
+            const delete_ticketAPIURL="{{route('delete_tickets')}}";
         </script>
         <script src="{{ asset('js/client/ticket.js') }}"></script>
     @endpush

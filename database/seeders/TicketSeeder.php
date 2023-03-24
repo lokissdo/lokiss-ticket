@@ -19,7 +19,7 @@ class TicketSeeder extends Seeder
     }
     public function run()
     {
-        $tripsInserted = Trip::with(['coach:id,seat_number'])->withCount('tickets')->havingRaw("`tickets_count` = 0 ")
+        $tripsInserted = Trip::with(['coach:id,seat_number'])->where('id','>',8000)->withCount('tickets')->havingRaw("`tickets_count` = 0 ")
         ->inRandomOrder()->take($this->tripsPerBatch)->get()->toArray();
         $user_ids=User::orderByRaw('RAND()')->get('id')->toArray();
         $iterator_ids=0;

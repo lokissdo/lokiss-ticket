@@ -101,7 +101,7 @@ $role = Session::get('user')['role'];
                         <small class="agree-text">By submitting this form you agree to the</small>
                         <a href="#" class="terms">Terms & Conditions</a>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block confirm-button w-100">Confirm</button>
+                    <button type="submit" class="btn btn-primary btn-block confirm-button w-100">Submit</button>
                 </div>
             </div>
         </div>

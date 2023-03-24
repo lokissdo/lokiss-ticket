@@ -5,10 +5,10 @@ let detailButtons, chooseButtons, openBoxes,
 
 const sortItemButtons = $$('.sort-item');
 const filterItemSelects = $$('.filter-select')
-const title = $('.title-page');
+const title = $('.title-page'), viewMoreButton=$('.load-more-trips');
 const path = window.location.href.split('/').at(-1);
 let dataSort = null;
-let isFilter = 0, pageNum = 0;
+let isFilter = 0, pageNum = 1,isPagination=false;
 var arrival_id, departure_id;
 const AssignEventInTrip = {
     assignVariables: function () {
@@ -124,6 +124,14 @@ const AssignEventInit = {
         const selectCoach = $('#select_coach');
         selectCoach.innerHTML += render.coaches(coaches);
     },
+    clickLoadMoreTrips:  function () {
+        viewMoreButton.onclick = async () => {
+            pageNum+=1;
+         isPagination=true;
+         await Handler.renderTripsSortnFilter();
+         isPagination=false;
+        }
+    },
     run: function () {
         for (const key in this) {
             if (Object.hasOwnProperty.call(this, key)) {
@@ -200,11 +208,16 @@ const Handler = {
         loading.classList.remove('d-none');
         const data = await API.getRouteOptions();
         console.log(data);
-        if (data.trips.length === 0) {
-            $('.routes-container').innerHTML = 'Không có chuyến đi nào';
-        }
+        if (data.trips.length === 0){
+            if(!isPagination) {
+                $('.routes-container').innerHTML = 'Không có chuyến đi nào';
+            }
+            $('.load-more-trips').classList.add('d-none');
+        } 
         else {
-            $('.routes-container').innerHTML = render.trips(data)
+            if(isPagination)
+            $('.routes-container').innerHTML +=render.trips(data);
+            else  $('.routes-container').innerHTML =render.trips(data);
             AssignEventInTrip.run();
         }
         loading.classList.add('d-none');
@@ -237,7 +250,7 @@ const Handler = {
         this.increaseStepCircle();
         Handler.linePaymentPage();
         title.textContent = "Thanh toán";
-        window.history.pushState("", "", '/payment');
+        //window.history.pushState("", "", '/payment');
         transaction = Handler.getInforTransaction();
         render.assignDataPaymentPage(transaction);
         EventsAfterLoad.clickConfirmTransaction();
@@ -300,14 +313,14 @@ const Handler = {
         <div class="current-line"></div>
         <div class="current-line"></div>`
     },
-    createTicketsParams: function(){
+    createTicketsParams: function () {
         const paramsTicket = new URLSearchParams([...new FormData(formInfor).entries()]);
 
-        paramsTicket.append('trip_id',transaction.trip.id)
-        paramsTicket.append('departure_station_id',transaction.ticket.departure_station.id)
-        paramsTicket.append('arrival_station_id',transaction.ticket.arrival_station.id)
-        let seat_positions=transaction.ticket.seats.str.replace(/\n|\s/g,'').split(',');
-        seat_positions.forEach(seat=>paramsTicket.append('seat_position[]',seat))
+        paramsTicket.append('trip_id', transaction.trip.id)
+        paramsTicket.append('departure_station_id', transaction.ticket.departure_station.id)
+        paramsTicket.append('arrival_station_id', transaction.ticket.arrival_station.id)
+        let seat_positions = transaction.ticket.seats.str.replace(/\n|\s/g, '').split(',');
+        seat_positions.forEach(seat => paramsTicket.append('seat_position[]', seat))
         console.log(paramsTicket.toString());
         return paramsTicket;
     }
@@ -337,8 +350,8 @@ const API = {
             params.append('sortCol', dataSort.col);
             params.append('sortType', dataSort.type);
         }
-        if (isFilter) {
-            pageNum = 0;
+        if ( !isPagination) {
+            pageNum = 1;
         }
         params.append('isAPI', 1);
         params.append('pageNum', pageNum);
@@ -359,7 +372,8 @@ const API = {
         const data = await fetch(`${TripAPIURL}/?${params}`)
             .then(res => res.json())
             .then(data => {
-                scheduleDetails = data['scheduleDetails'];
+                scheduleDetails={...scheduleDetails,...data['scheduleDetails']};
+                console.log(scheduleDetails);
                 return data;
             })
         return data;
@@ -435,9 +449,9 @@ const helper = {
     removePrefixProvince: function (string) {
         return string.replace(/(Tỉnh|Thành phố)/g, '');
     },
-    round: function(num,correction){
-        let pow=Math.pow(10,correction);
-        return Math.round(Number(num)*pow)/pow;
+    round: function (num, correction) {
+        let pow = Math.pow(10, correction);
+        return Math.round(Number(num) * pow) / pow;
     }
 }
 const app = {

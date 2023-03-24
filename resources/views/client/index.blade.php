@@ -1,4 +1,4 @@
-@extends('layout.client')
+ @extends('layout.client')
 @section('topbar')
     @include('layout/topbar',['title'=>'home'])
 @endsection
@@ -212,4 +212,4 @@
 <script src="{{ asset('js/client/index.js') }}"></script>
 
     <script src="{{ asset('js/components/address.js') }}"></script>
-@endpush
+@endpush 

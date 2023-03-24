@@ -108,4 +108,10 @@ class Ticket extends Model
                  ->join('trips', 'trips.id', '=', 'tickets.trip_id')->where('trips.service_provider_id', $service_provider_id)->first()->total_tickets;
         });
     }
+    public static function delete_tickets($user_id,$trip_id,$created_at){
+        
+        return Ticket::where('user_id',$user_id)->where('trip_id',$trip_id)->where('created_at',$created_at)->update([
+            'deleted_at' => now()
+        ]);
+    } 
 }

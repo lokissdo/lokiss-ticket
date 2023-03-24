@@ -28,14 +28,13 @@ class EmployerController extends Controller
     public function index()
     {
         $user = session('user');
-        if(empty(session('user')['service_provider_id']) || empty(session('user')['service_provider_name']) ){
+        if (empty(session('user')['service_provider_id']) || empty(session('user')['service_provider_name'])) {
             $provider = ServiceProvider::where('employer_id', $user['id'])->first();
             $user['service_provider_id'] = $provider->id;
             $user['service_provider_name'] = $provider->name;
             session(['user' => $user]);
-        }     
+        }
         return redirect()->route('serviceprovider.index');
-
     }
     public function employee_index()
     {
@@ -63,8 +62,11 @@ class EmployerController extends Controller
     public function employee_destroy(int $id)
     {
         try {
-            EmployeesList::destroy($id);
-            DeleteEmployee::dispatch($id);
+            $employee = EmployeesList::where('service_provider_id', $this->service_provider_id)->find($id);
+            if ($employee) {
+                $employee->delete();
+                DeleteEmployee::dispatch($id);
+            }
         } catch (Exception $e) {
             return back()->withError('Cần phải xóa các hoạt động của nhân viên này trước');
         }
@@ -99,9 +101,12 @@ class EmployerController extends Controller
     public function coach_destroy($id)
     {
         try {
-            $coach=Coach::find($id);
-            Storage::delete('public/img/'.$coach->photo);
-            $coach->delete();
+            $coach = Coach::where('service_provider_id',$this->service_provider_id)->find($id);
+            if($coach){
+                Storage::delete('public/img/' . $coach->photo);
+                $coach->delete();
+            }
+          
         } catch (Exception $e) {
             return back()->withError('Phải xóa các chuyến đi trước đó có sử dụng xe này'); //$e->getMessage()
         }

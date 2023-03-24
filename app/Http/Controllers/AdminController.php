@@ -96,7 +96,7 @@ class AdminController extends Controller
             DeletedProviderProcessed::dispatch($id);
             ServiceProvider::destroy($id);
         } catch (Exception $e) {
-            return back()->withError('Phải xóa tất cả hoạt động và tài sản của nhà xe trước'); //$e->getMessage()
+            return back()->withError('Phải xóa các hoạt động của nhân viên'); //$e->getMessage()
         }
         return redirect()->route('admin.provider.index');
     }

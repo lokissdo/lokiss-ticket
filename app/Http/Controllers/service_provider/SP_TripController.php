@@ -46,8 +46,9 @@ class SP_TripController extends Controller
     }
     public function trip_destroy(int $id)
     {
+
         try {
-            Trip::find($id)->delete();
+            Trip::where('service_provider_id',$this->service_provider_id)->find($id)->delete();
         } catch (Exception $e) {
             return back()->withError('Không thể xóa chuyến đi này vì đã có người mua vé'); //$e->getMessage()
         }

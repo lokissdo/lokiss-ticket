@@ -12,6 +12,7 @@ const EventsAfterLoad = {
                 chooseLocationsCont.innerHTML = render.choose_locations(target);
                 $$('.cont-item').forEach(e => e.classList.add('d-none'))
                 chooseLocationsCont.classList.remove('d-none');
+                viewMoreButton.classList.add('d-none');
                 this.clickBackToSeatsButtons();
                 this.checkRadioLocations();
                 this.clickStepInforButtons();
@@ -28,6 +29,7 @@ const EventsAfterLoad = {
             chooseLocationsCont.classList.add('d-none');
             $('.selected.route-option').scrollIntoView();
             title.classList.add('d-none');
+            viewMoreButton.classList.remove('d-none');
 
         }
 
@@ -40,7 +42,7 @@ const EventsAfterLoad = {
             Handler.decreaseStepCirle()
             Handler.lineIndexPage();
             title.textContent = "Xác nhận lộ trình";
-            window.history.pushState("", "", path);
+           // window.history.pushState("", "", path);
             arrival_id = departure_id = 0;
         }
 
@@ -49,37 +51,39 @@ const EventsAfterLoad = {
         const nextButton = $('.fill-information .next');
         nextButton.onclick = () => {
             formInfor = $('form#form-steps')
-            if (!formInfor.checkValidity()) {
-                const inputs = formInfor.querySelectorAll('input,select');
-                let message = '';
-                inputs.forEach(e => {
-                    if (!e.checkValidity()) {
+            const inputs = formInfor.querySelectorAll('input,select');
+            let message = '';
 
-                        switch (e.name) {
-                            case 'email':
-                                message += 'Email không hợp lệ.<br>';
-                                break;
-                            case 'phone_number':
-                                message += 'Số điện thoại không hợp lệ.<br>';
-                                break;
-                            case 'name':
-                                message += 'Tên không hợp lệ.<br>';
-                                break;
-                        }
-                        if (e.validity.valueMissing) {
-                            let name = $(`label[for='${e.id}']`).textContent.replace('*', '');
-                            message += 'Vui lòng điền ' + name.toUpperCase() + '<br>';
+            inputs.forEach(e => {
+                if (!e.checkValidity()) {
 
-                        }
+                    switch (e.name) {
+                        case 'email':
+                            message += 'Email không hợp lệ.<br>';
+                            break;
+                        case 'phone_number':
+                            message += 'Số điện thoại không hợp lệ.<br>';
+                            break;
+                        case 'name':
+                            message += 'Tên không hợp lệ.<br>';
+                            break;
                     }
-                    if(e.name==='address' && e.value=='null')  message += 'Tỉnh/Thành Phố phải được chọn.<br>';
-                    if(e.name==='address2' && e.value=='null')  message += 'Quận/Huyện phải được chọn.<br>';
+                    if (e.validity.valueMissing) {
+                        let name = $(`label[for='${e.id}']`).textContent.replace('*', '');
+                        message += 'Vui lòng điền ' + name.toUpperCase() + '<br>';
 
-                })
+                    }
+                }
+                if (e.name === 'address' && e.value == 'null') message += 'Tỉnh/Thành Phố phải được chọn.<br>';
+                if (e.name === 'address2' && e.value == 'null') message += 'Quận/Huyện phải được chọn.<br>';
+            })
 
+           
+            if (message != '') {
                 displayError(message)
                 return;
             }
+
             Handler.moveToPaymentPage();
             this.clickBackToInformation()
 
@@ -94,7 +98,7 @@ const EventsAfterLoad = {
             Handler.decreaseStepCirle();
             Handler.lineInforPage();
             title.textContent = "Thông tin khách hàng";
-            window.history.pushState("", "", '/information');
+            //window.history.pushState("", "", '/information');
 
 
         }
@@ -140,7 +144,7 @@ const EventsAfterLoad = {
                 this.clickNextToTransactionButtons()
                 Handler.processStepLineInfor();
                 this.clickBackToLocationsButtons();
-                window.history.pushState("", "", '/information');
+               // window.history.pushState("", "", '/information');
 
             }
         }
@@ -148,14 +152,14 @@ const EventsAfterLoad = {
     clickConfirmTransaction: function () {
         const confirmButton = $('#confirm_transaction')
         confirmButton.onclick = async () => {
-        const loading = $('.wrapper-loading[data-name=loadingroutes');  
-        loading.classList.remove('d-none');
+            const loading = $('.wrapper-loading[data-name=loadingroutes');
+            loading.classList.remove('d-none');
             let ticketParams = Handler.createTicketsParams();
             let res = await API.createTickets(ticketParams);
             console.log(res, res == 1, res === 1);
             if (res.status === -1) {
                 console.log('loi');
-            loading.classList.add('d-none');
+                loading.classList.add('d-none');
                 displayError("Rất tiếc vé đã bị mua mất rôi!!!<br>Tải lại trang để cập nhật");
                 return;
             }
