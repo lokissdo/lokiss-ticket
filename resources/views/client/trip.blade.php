@@ -76,7 +76,6 @@
                         </select>
                     </div>
                 </div>
-            @endif
             <div class="routes-container cont-item ">
                 @foreach ($trips as $trip)
                     @php
@@ -348,6 +347,8 @@
                 </div>
 
             </div>
+            @endif
+
             <div class="route-option choose-locations d-none">
             </div>
 

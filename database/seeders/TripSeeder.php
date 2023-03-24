@@ -25,7 +25,7 @@ class TripSeeder extends Seeder
     private function randomDate($diffDay)
     {
        // return date('Y-m-d',strtotime(date('Y-m-d') . ' + ' . $diffDay . ' days'));
-       return "2022-09-15";
+       return "2022-09-20";
     }
     protected function withFaker()
     {
