@@ -54,7 +54,7 @@ class CoachSeeder extends Seeder
     }
     public function run()
     {
-        // Coach::factory()->count(10)->create();
-        //$this->update_photo_coach();
+        Coach::factory()->count(10)->create();
+        $this->update_photo_coach();
     }
 }

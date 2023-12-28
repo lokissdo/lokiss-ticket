@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeNameColumnInTickets extends Migration
+class AddPhotoToCoachesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class ChangeNameColumnInTickets extends Migration
      */
     public function up()
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            // $table->renameColumn('destination_name', 'departure_province_id');
-            // $table->renameColumn('arrival_name', 'arrival_province_id');
+        Schema::table('coaches', function (Blueprint $table) {
+             $table->string('photo')->nullable();
         });
     }
 
@@ -26,7 +25,7 @@ class ChangeNameColumnInTickets extends Migration
      */
     public function down()
     {
-        Schema::table('tickets', function (Blueprint $table) {
+        Schema::table('coaches', function (Blueprint $table) {
             //
         });
     }

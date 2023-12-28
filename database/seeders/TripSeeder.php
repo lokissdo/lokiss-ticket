@@ -24,8 +24,8 @@ class TripSeeder extends Seeder
     }
     private function randomDate($diffDay)
     {
-       // return date('Y-m-d',strtotime(date('Y-m-d') . ' + ' . $diffDay . ' days'));
-       return "2022-09-20";
+        return date('Y-m-d',strtotime(date('Y-m-d') . ' + ' . $diffDay . ' days'));
+       //return "2022-09-20";
     }
     protected function withFaker()
     {
@@ -39,10 +39,17 @@ class TripSeeder extends Seeder
             $numOfTrip = rand($this->minTripPerProvider, $this->maxTripPerProvider); 
             $coach_ids = Coach::where('service_provider_id', $each->id)->orderByRaw('RAND()')->get('id');
             $schedule_ids = Schedule::where('service_provider_id', $each->id)->orderByRaw('RAND()')->get('id');
+            $numOfCoaches = count($coach_ids);
+            $numOfSchedules = count($schedule_ids);
+        
+            if ($numOfCoaches === 0 || $numOfSchedules === 0) {
+                // Service provider has no coach or schedule, skip to the next one
+                continue;
+            }
             for ($i = 0; $i < $numOfTrip; $i++){
                 $coach_id = $this->faker->randomElement($coach_ids)->id;
                 $schedule_id =$this->faker->randomElement($schedule_ids)->id;
-                $diffDay=rand(0,60);
+                $diffDay=rand(0,30);
                 $TripsInserted[] = [
                     'coach_id' => $coach_id,
                     'schedule_id' => $schedule_id,

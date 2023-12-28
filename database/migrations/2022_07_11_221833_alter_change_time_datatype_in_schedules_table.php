@@ -14,8 +14,8 @@ class AlterChangeTimeDatatypeInSchedulesTable extends Migration
     public function up()
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->smallInteger('arrival_time')->change();
-            $table->smallInteger('departure_time')->change();
+            // $table->smallInteger('arrival_time')->change();
+            // $table->smallInteger('departure_time')->change();
 
         });
     }

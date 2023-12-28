@@ -14,7 +14,6 @@ class ChangeNameColumn extends Migration
     public function up()
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->renameColumn('destination_time', 'departure_time');
             $table->renameColumn('destination_province_id', 'departure_province_id');
         });
     }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Schedule extends Model
 {
@@ -95,6 +96,7 @@ class Schedule extends Model
     public static function get_popular_schedule()
     {
         $popularItemsJson = Cache::remember('popular-schedules', 60 * 60 * 24, function () {
+            //Log("getting popular-schedules");
             $itemReturnedNum = 6;
             $previousWeek = date('Y-m-d', strtotime(now() . ' - ' . '14 days'));
             $followingWeek = date('Y-m-d', strtotime(now() . ' + ' . '14 days'));

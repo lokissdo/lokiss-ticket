@@ -135,7 +135,7 @@ class Trip extends Model
             'total_page' => $totalPage,
         ];
     }
-    private function sort_scope_for_query($query, $sortCol = null, $sortType = null)
+    private static function sort_scope_for_query($query, $sortCol = null, $sortType = null)
     {
         switch ($sortCol) {
             case 'duration':

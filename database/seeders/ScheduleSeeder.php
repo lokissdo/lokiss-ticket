@@ -45,7 +45,7 @@ class ScheduleSeeder extends Seeder
     } 
     public function run()
     {
-        //Schedule::factory()->count(30)->create();
-        //$this->seed_schedule_all_service_providers();
+        Schedule::factory()->count(30)->create();
+        $this->seed_schedule_all_service_providers();
     }
 }
