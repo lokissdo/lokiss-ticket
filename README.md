@@ -52,7 +52,7 @@ Apply database migrations using the following command:
     
     php artisan migrate
     
-## Seeder Data (Optional)
+## Seed Data (Optional)
 If needed, you can seed the database with sample data in a specific order. Run the following command:
     
     php artisan db:seed
